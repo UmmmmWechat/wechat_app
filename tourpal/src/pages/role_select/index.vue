@@ -1,20 +1,42 @@
 <template>
   <div class="container" >
-    <div class="role-card" id="card-1">
-      <p class="title">踏着马蹄的过客</p>
-      <p class="extra">匆匆路过你的城南和城北</p>
+    <div 
+    class="role-card" 
+    id="card-1"
+    @click="handleChooseGuide">
+      <p class="title">游客</p>
+      <p class="extra">我达达的马蹄，美丽的错误</p>
     </div>
     <div class="role-card" id="card-2">
-      <p class="title">守着这城的故人</p>
-      <p class="extra">等待着谁的到来</p>
+      <p class="title">向导</p>
+      <p class="extra">守着这一方水土，等待着谁的到来</p>
     </div>
   </div>
 </template>
 
 <script>
+import guideApi from '../../api/guide'
 export default {
   data () {
     return {
+    }
+  },
+  methods: {
+    handleChooseGuide () {
+      console.log('选择了引路人');
+      guideApi.queryIfNew(
+        '',
+        (res) => {
+          // 是新的guide
+          if (res) {
+            const url = '../guide_sign_up/main';
+            wx.navigateTo({ url });
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      )
     }
   }
 }
@@ -22,13 +44,13 @@ export default {
 
 <style scoped>
 #card-1 {
-  background-color: rgb(230, 75, 70);
-  box-shadow: 0 0 30rpx rgb(230, 75, 70);
+  background-color: rgb(255, 127, 116);
+  box-shadow: 0 0 30rpx rgb(255, 127, 116);
   /* background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(rgb(230, 75, 70)), to(rgb(247, 147, 144))); */
 }
 #card-2 {
-  background-color: rgb(138, 207, 64);
-  box-shadow: 0 0 30rpx rgb(138, 207, 64);
+  background-color: rgb(254, 185, 126);
+  box-shadow: 0 0 30rpx rgb(254, 185, 126);
    /* background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(rgb(138, 207, 64)), to(rgb(198, 248, 144))); */
 }
 .role-card {
@@ -43,8 +65,10 @@ export default {
   justify-content: center;
 
   padding: 10rpx;
+}
 
-  box-shadow: 1px 1px 20rpx rgba(0,0,0,0.5);
+.role-card:active {
+  transform: translate(0rpx, 5rpx);
 }
 
 .title {
@@ -54,7 +78,7 @@ export default {
 }
 
 .extra {
-  font-size: 0.7em;
+  font-size: 0.9em;
   margin:10rpx;
   color: rgba(255,255,255,0.7);
 }
