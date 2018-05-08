@@ -3,11 +3,14 @@
     <div 
     class="role-card" 
     id="card-1"
-    @click="handleChooseGuide">
+   >
       <p class="title">游客</p>
       <p class="extra">我达达的马蹄，美丽的错误</p>
     </div>
-    <div class="role-card" id="card-2">
+    <div 
+    class="role-card" 
+    id="card-2"
+    @click="handleChooseGuide">
       <p class="title">向导</p>
       <p class="extra">守着这一方水土，等待着谁的到来</p>
     </div>
@@ -42,7 +45,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 #card-1 {
   background-color: rgb(255, 127, 116);
   box-shadow: 0 0 30rpx rgb(255, 127, 116);

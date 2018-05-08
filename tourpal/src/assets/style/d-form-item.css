@@ -1,0 +1,10 @@
+.label {
+    width: 100%;
+    color: gray;
+    font-weight: bold;
+}
+.info {
+    text-align: left;
+    padding: 5rpx;
+    color: rgba(0,0,0,0.3);
+}

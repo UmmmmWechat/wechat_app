@@ -12,8 +12,11 @@
   },
   "dependencies": {
     "animate.css": "^3.6.1",
+    "less": "^3.0.4",
+    "less-loader": "^4.1.0",
     "mint-ui": "^2.2.13",
     "mpvue": "^1.0.10",
+    "style-loader": "^0.21.0",
     "vant": "^1.1.1",
     "vuex": "^2.3.1"
   },

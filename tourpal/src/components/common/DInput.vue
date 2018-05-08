@@ -2,7 +2,7 @@
 /* 事件有 on-enter input */
 <template>
   <div id="wrapper">
-      <div id="label" v-if="label !== '' ">
+      <div class="label" v-if="label !== '' ">
           {{label}}
       </div>
       <div id="input-wrapper">
@@ -52,14 +52,11 @@ export default {
     /* box-shadow: rgba(0,0,0,0.1) 0 0 2px; */
 
 }
-#label {
-    width: 100%;
-    color: gray;
-    font-weight: bold;
-}
 #input-wrapper {
     margin: 10rpx 0 0 0;
     border-bottom: 1px rgba(0,0,0,0.2) solid;
     padding-bottom: 2rpx;
 }
 </style>
+
+<style scoped src="../../assets/style/d-form-item.css"/>

@@ -7,35 +7,49 @@
       <d-input placeholder="用于实名登记检验" label="身份证号"/>
     </div>
     <div class="item-wrapper">
-        <d-region-picker 
-        label="选择地区" 
-        :value="region"
-        @on-change="handleChange"
-        @on-cancel="handleCancel"/>
+      <d-selector 
+      :range="sex"  
+      label="性别"
+      @on-change="handleSexChange"/>
     </div>
-    
+    <div class="item-wrapper">
+        <d-choose-location
+        label="选择地点"
+        @on-location-chosen="handleLocationChosen"/>
+    </div>
+    <div class="item-wrapper">
+      <d-input placeholder="用于游客联系" label="微信号"/>
+    </div>
+    <div class="item-wrapper">
+      <d-input placeholder="用于游客联系" label="手机号"/>
+    </div>
   </div>
 </template>
 
 <script>
 import DInput from '../../components/common/DInput'
-import DRegionPicker from '../../components/common/DRegionPicker'
+import DChooseLocation from '../../components/common/DChooseLocation'
+import DSelector from '../../components/common/DSelector'
 export default {
   components: {
     DInput,
-    DRegionPicker
+    DChooseLocation,
+    DSelector
   },
   data () {
     return {
-      region: []
+      region: [],
+      location: {},
+      sex: ['男', '女']
     }
   },
   methods: {
-    handleChange (event) {
+    handleSexChange (event) {
       console.log(event);
     },
-    handleCancel (event) {
+    handleLocationChosen (event) {
       console.log(event);
+      this.location = event.target.value;
     }
   }
 }
