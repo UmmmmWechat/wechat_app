@@ -21,7 +21,8 @@ export default {
       'pages/index/main',
       'pages/role_select/main',
       'pages/guide_sign_up/main',
-      '^pages/tourist_main/main'
+      '^pages/tourist_main/main',
+      'pages/test/main'
     ],
     window: {
       backgroundTextStyle: 'light',

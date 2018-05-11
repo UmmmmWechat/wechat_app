@@ -2,11 +2,15 @@
 /* 事件有 on-enter input */
 <template>
   <div id="wrapper">
-      <div class="label" v-if="label !== '' ">
+      <label
+      for="d-input" 
+      class="label" 
+      v-if="label !== '' ">
           {{label}}
-      </div>
+      </label>
       <div id="input-wrapper">
           <input
+          id="d-input"
             :value="value"
             :placeholder="placeholder"
             @keyup.enter="handleEnter"

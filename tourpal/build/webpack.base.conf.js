@@ -110,6 +110,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new MpvuePlugin(),
+    new MpvuePlugin()
   ]
 }

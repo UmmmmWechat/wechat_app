@@ -30,7 +30,7 @@
         </div>     
       </div>
     </div>
-  
+
   <scroll-view
   id="scroll" 
   scroll-y
@@ -44,7 +44,14 @@
     :title="spot.title"
     :content="spot.introduction"/>
     </div>
+    <d-loading :loading="loading"/>
+    <div 
+    id="no-more-item" 
+    :style="{display: hasMore ? 'none' : 'block'}">
+    已经加载全部啦~
+    </div>
   </scroll-view>
+  
 </div>
   
 </template>
@@ -53,18 +60,22 @@
 <script>
 import SpotCard from '../../components/spot/SpotCard'
 import DInput from '../../components/common/DInput'
+import DLoading from '../../components/common/DLoading'
 import touristApi from '../../api/tourist';
 export default {
   components: {
     SpotCard,
-    DInput
+    DInput,
+    DLoading
   },
   data () {
     return {
       location: '南京',
       spots: [],
       touristName: '文向东',
-      filter: ''
+      filter: '',
+      loading: false,
+      hasMore: true
     }
   },
   computed: {
@@ -98,13 +109,25 @@ export default {
       this.location = value.reduce((x,y) => x + '-' + y);
     },
     handleGetMoreSpots (event) {
+      if(this.loading) return;
       console.log("到达底部")
+      if(this.spots.length > 30){
+        this.hasMore = false;
+        return;
+      }
+      this.loading = true;
       touristApi.querySpots(
         this.location,
         (res) => {
-          for(let key in res){
-            this.spots.push(res[key]);
-          }
+          setTimeout(
+            () => {
+              for(let key in res){
+                this.spots.push(res[key]);
+              }
+              this.loading = false;
+            },
+            2000
+          )
         },
         (err) => console.log(err)
         )
@@ -126,5 +149,10 @@ font-size: 0.8em;
 
 #scroll {
   height: 1000rpx;
+}
+
+#no-more-item {
+  color: #42b970;
+  text-align: center;
 }
 </style>
