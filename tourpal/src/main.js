@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import App from './App'
 import 'animate.css'
-// import './assets/style/index.css'
+// import iView from 'iview';
+// import 'iview/dist/styles/iview.css';
+import './assets/style/index.css'
 
 Vue.config.productionTip = false
 App.mpType = 'app'
+
 
 const app = new Vue(App)
 app.$mount()
@@ -16,8 +19,9 @@ export default {
     pages: [
       'pages/logs/main',
       'pages/index/main',
-      '^pages/role_select/main',
-      'pages/guide_sign_up/main'
+      'pages/role_select/main',
+      'pages/guide_sign_up/main',
+      '^pages/tourist_main/main'
     ],
     window: {
       backgroundTextStyle: 'light',

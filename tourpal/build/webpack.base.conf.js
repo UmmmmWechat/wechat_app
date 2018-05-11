@@ -63,8 +63,13 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        loader: "style-loader!css-loader!less-loader",
-        },
+        // loader: "style-loader!css-loader!less-loader",
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+          'less-loader'
+        ]
+      },
       {
         test: /\.js$/,
         include: [resolve('src'), resolve('test')],
@@ -105,6 +110,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new MpvuePlugin()
+    new MpvuePlugin(),
   ]
 }

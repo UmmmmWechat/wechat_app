@@ -7,5 +7,9 @@ export default {
      */
     queryIfNew (id, resolve, reject) {
         resolve(true);
+    },
+
+    signUp (form, resolve, reject) {
+        resolve('success');
     }
 }

@@ -37,7 +37,7 @@ export default {
           this.$emit('on-enter', event);
       },
       handleInput (event) {
-          this.$emit('input', event);
+          this.$emit('input',event.target.value);
       }
   }
 }
