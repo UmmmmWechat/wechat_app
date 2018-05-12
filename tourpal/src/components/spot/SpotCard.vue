@@ -42,7 +42,15 @@ export default {
     },
     methods: {
         handleClick (event) {
-            
+            wx.setStorage({
+                key: 'spot',
+                data: this.title,
+                success: () => {
+                    wx.navigateTo({
+                        url: '/pages/show_spot_guide/main'
+                    })
+                }
+            })  
         }
     },
     mounted () {
@@ -89,4 +97,4 @@ export default {
 }
 </style>
 
-<style src="../../assets/style/card.css" scoped/>
+<style src="../../assets/style/d-card.css" scoped/>

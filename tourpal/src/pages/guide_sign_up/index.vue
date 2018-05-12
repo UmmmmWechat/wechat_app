@@ -14,7 +14,7 @@
     </div>
     <div class="item-wrapper">
       <d-selector 
-      :range="sex"  
+      :range="gender"  
       label="性别"
       @on-change="handleSexChange"/>
     </div>
@@ -61,11 +61,11 @@ export default {
   data () {
     return {
       region: [],
-      sex: ['男', '女'],
+      gender: ['男', '女'],
       form: {
         realName: '',
         idCard: '',
-        sex: '',
+        gender: '',
         location: {},
         wechat: '',
         phone: ''
@@ -75,7 +75,7 @@ export default {
   methods: {
     handleSexChange (event) {
       console.log(event);
-      this.form.sex = event.target.value;
+      this.form.gender = event.target.value;
     },
     handleLocationChosen (event) {
       console.log(event);

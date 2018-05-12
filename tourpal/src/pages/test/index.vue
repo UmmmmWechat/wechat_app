@@ -1,15 +1,18 @@
 <template>
 <div>
-  <d-loading :loading="show"/>
-  <button @click="show = !show">click me</button>
+    <guide-profile-card v-for="i in 10" :key="i"/>
+    <progress :percent="89" show-info />
+  <!-- </div> -->
 </div>  
 </template>
 
 <script>
 import DLoading from '../../components/common/DLoading'
+import GuideProfileCard from '../../components/guide/GuideProfileCard'
 export default {
   components: {
-    DLoading
+    DLoading,
+    GuideProfileCard
   },
   data () {
     return {

@@ -2,8 +2,11 @@
 <div>
   <div id="head">
       <div>
-        <span>欢迎</span>
-        <span>{{ touristName }}</span>
+        <span>欢迎&emsp;</span>
+        <span
+        class="underline-span"
+        @click="handleToPersonCenter"
+        >{{ touristName }}</span>
       </div>
       <div>
         <span>你所旅游的城市：</span>
@@ -13,8 +16,7 @@
         @change="handleLocationChange"
         >
           <span
-          @click="changeCity" 
-          id="city-span">
+          class="underline-span" >
           {{ city }}
           </span>
         </picker>
@@ -80,7 +82,7 @@ export default {
   },
   computed: {
     city () {
-      return this.location
+      return this.location.slice(this.location.lastIndexOf('-') + 1);
     },
     filteredSpots () {
       return this.spots.filter(
@@ -109,6 +111,7 @@ export default {
       this.location = value.reduce((x,y) => x + '-' + y);
     },
     handleGetMoreSpots (event) {
+      if(this.filter !== '') return;
       if(this.loading) return;
       console.log("到达底部")
       if(this.spots.length > 30){
@@ -131,6 +134,9 @@ export default {
         },
         (err) => console.log(err)
         )
+    },
+    handleToPersonCenter (event) {
+      console.log("跳转到个人中心")
     }
   }
 }
@@ -143,7 +149,7 @@ background-color: #42b970;
 color: white;
 font-size: 0.8em;
 }
-#city-span {
+.underline-span {
   text-decoration: underline;
 }
 
