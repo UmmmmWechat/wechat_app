@@ -16,7 +16,7 @@
       </div>
       <div id="btn-wrapper">
               <a
-              id="btn-p" 
+              class="d-a"
               @click="handleClick">
                   感兴趣
               </a>
@@ -83,11 +83,9 @@ export default {
 #btn-wrapper {
     margin: 30rpx 10rpx 10rpx 10rpx;
     padding: 40rpx;
-}
-#btn-p {
-    color: #42b970;
     text-align: right;
 }
 </style>
 
 <style src="../../assets/style/d-card.css" scoped/>
+<style src="../../assets/style/d-a.css" scoped/>

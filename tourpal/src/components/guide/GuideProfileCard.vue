@@ -1,7 +1,8 @@
 /* 向导个人信息卡片，用于向游客展示 */
 /* contactable 表示是否允许联系， 也就是在通过邀请之后才能看到这个导游的联系方式 */
 <template>
-  <div class="d-card" id="out" >
+  <div class="d-card">
+      <div id="out" >
       <div id="avatar-wrapper">
           <img
           style="width: 200rpx; height:200rpx; border-radius:50%;" 
@@ -25,6 +26,17 @@
           </div>
       </div>
   </div>
+  <div 
+  v-if="invitable"
+  id="btn-wrapper"
+  style="text-align:right;padding: 0  40rpx 40rpx 0;">
+    <a 
+    class="d-a"
+    @click="handleInvite">
+        发起邀请
+    </a>
+  </div>
+  </div>
 </template>
 
 <script>
@@ -33,6 +45,10 @@ export default {
         contactable: {
             type: Boolean,
             default: false
+        },
+        invitable: {
+            type: Boolean,
+            default: true
         },
         guide: {
             type: Object,
@@ -48,11 +64,24 @@ export default {
                 }
             }
         }
+    },
+    methods: {
+        handleInvite (event) {
+            wx.setStorage({
+                key: 'guide',
+                data: this.guide,
+                success: () => {
+                    wx.navigateTo({
+                        url: '/pages/tourist_invite_guide/main'
+                    })
+                }
+            })
+        }
     }
 }
 </script>
 
-<style>
+<style scoped>
 #out {
     color: gray;
 
@@ -85,4 +114,4 @@ export default {
 </style>
 
 <style src="../../assets/style/d-card.css" scoped/>
-
+<style src="../../assets/style/d-a.css" scoped/>

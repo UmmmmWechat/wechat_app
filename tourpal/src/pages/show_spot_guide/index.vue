@@ -9,6 +9,7 @@
           <d-input
           v-model="searchWord"
           placeholder="搜索向导"
+          confirm-type="search"
           @on-focus="handleSearchFocus"
           @on-enter="handleSearch"
           />

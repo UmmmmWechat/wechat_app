@@ -1,7 +1,10 @@
 <template>
 <div>
-    <guide-profile-card v-for="i in 10" :key="i"/>
-    <progress :percent="89" show-info />
+    <d-navigator-bar 
+    :menus="menu"
+    :current="current"
+    @on-change="current = $event.target.value"/>
+    <order-card-tourist :order="order" />
   <!-- </div> -->
 </div>  
 </template>
@@ -9,14 +12,28 @@
 <script>
 import DLoading from '../../components/common/DLoading'
 import GuideProfileCard from '../../components/guide/GuideProfileCard'
+import OrderCardTourist from '../../components/order/OrderCardTourist'
+import DNavigatorBar from '../../components/common/DNavigatorBar';
 export default {
   components: {
     DLoading,
-    GuideProfileCard
+    GuideProfileCard,
+    OrderCardTourist,
+    DNavigatorBar
   },
   data () {
     return {
-      show: true
+      show: true,
+      order: {
+        spotId: 'dd',
+        guideId: 'dd',
+        touristId: 'dd',
+        generatedDate: new Date().toLocaleString(),
+        travelDate: new Date().toLocaleString(),
+        state: 'waiting'
+      },
+      menu: ['菜单一','菜单二','菜单三'],
+      current: 0
     }
   }
 }

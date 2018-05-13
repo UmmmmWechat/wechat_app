@@ -1,5 +1,5 @@
 /* 日期选择器，包装原组件 */
-/* 事件有 */
+/* 事件有 on-change */
 <template>
   <div id="wrapper">
       <div class="label" v-if="label !== '' ">
@@ -31,7 +31,7 @@ export default {
       },
       end: {
           type: String,
-          default: new Date().toLocaleString()
+          default: '2020-01-01'
       }
   },
   data () {

@@ -29,6 +29,7 @@
           <d-input
           v-model="searchWord"
           placeholder="搜索景点"
+          confirm-type="search"
           @on-focus="handleSearchFocus"
           @on-enter="handleSearch"/>
         </div>     

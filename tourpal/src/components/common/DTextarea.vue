@@ -9,7 +9,7 @@
           {{label}}
       </label>
       <div id="input-wrapper">
-          <input
+          <textarea
           id="d-input"
             :value="value"
             :placeholder="placeholder"
@@ -64,7 +64,7 @@ export default {
 }
 #input-wrapper {
     margin: 10rpx 0 0 0;
-    border-bottom: 1px rgba(0,0,0,0.2) solid;
+    border: 1px rgba(0,0,0,0.2) solid;
     padding-bottom: 2rpx;
 }
 </style>
