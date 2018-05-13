@@ -24,7 +24,7 @@
     scroll-with-animation
     >
       <guide-profile-card
-       v-for="guide in filteredGuides"
+       v-for="guide in toShowGuides"
       :key="guide.id"
       :guide="guide"/>
       <d-loading :loading="loading" />
@@ -48,7 +48,7 @@
         </button>
       </div>
       <guide-profile-card
-       v-for="guide in filteredGuides"
+       v-for="guide in toShowGuides"
       :key="guide.id"
       :guide="guide"/>
       <d-loading :loading="loading" />
@@ -113,6 +113,7 @@ export default {
     handleClickBack (event) {
       this.isSearch = false;
       this.searchGuides = [];
+      this.searchWord = '';
     },
     handleSearch (event) {
       this.loading = true;
