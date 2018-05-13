@@ -1,0 +1,9 @@
+.d-search-list {
+    background-color: #42b970;
+    animation: searchListAnimation 0.5s ease-in-out;
+    height: 1000rpx;
+}
+@keyframes searchListAnimation {
+    from { transform: translateY(-1000rpx); }  
+    to { transform: translateY(0); }
+  }

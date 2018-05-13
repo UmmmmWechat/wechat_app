@@ -3,15 +3,15 @@
       <div id="img-wrapper">
           <img
           id="image" 
-          :src="imageUrl" 
+          :src="spot.pictureUrl" 
           alt="景点图片加载失败">
       </div>
       <div id="text-wrapper">
           <div id="title-div">
-              {{ title }}
+              {{ spot.title }}
           </div>
           <div id="content-div">
-              {{ content }}
+              {{ spot.introduction }}
           </div>
       </div>
       <div id="btn-wrapper">
@@ -27,16 +27,8 @@
 <script>
 export default {
     props: {
-        imageUrl: {
-            type: String,
-            required: true
-        },
-        title: {
-            type: String,
-            required: true
-        },
-        content: {
-            type: String,
+        spot: {
+            type: Object,
             required: true
         }
     },
@@ -44,7 +36,7 @@ export default {
         handleClick (event) {
             wx.setStorage({
                 key: 'spot',
-                data: this.title,
+                data: this.spot,
                 success: () => {
                     wx.navigateTo({
                         url: '/pages/show_spot_guide/main'
@@ -62,6 +54,7 @@ export default {
 <style scoped>
 #wrapper {
     margin: 20rpx;
+    background-color: #fff;
 }
 #img-wrapper {
     text-align: center;

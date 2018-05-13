@@ -1,5 +1,5 @@
 /* 输入框，包装原组件 */
-/* 事件有 on-enter input */
+/* 事件有 on-enter input  on-focus */
 <template>
   <div id="wrapper">
       <label
@@ -13,8 +13,9 @@
           id="d-input"
             :value="value"
             :placeholder="placeholder"
-            @keyup.enter="handleEnter"
-            @input="handleInput"/>
+            @confirm="handleEnter"
+            @input="handleInput"
+            @focus="handleFocus"/>
       </div>
   </div>
 </template>
@@ -38,11 +39,15 @@ export default {
   },
   methods: {
       handleEnter (event) {
+          console.log('on-enter');
           this.$emit('on-enter', event);
       },
       handleInput (event) {
           this.$emit('input',event.target.value);
-      }
+      },
+      handleFocus (event) {
+          this.$emit('on-focus', event);
+      },
   }
 }
 </script>

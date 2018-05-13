@@ -1,11 +1,11 @@
 /* 加载中的波浪条组件 */
 <template>
   <div id="out" :style="{display:loading ? 'block' : 'none'}">
-            <div class="item" id="rect1"></div>
-            <div class="item" id="rect2"></div>
-            <div class="item" id="rect3"></div>
-            <div class="item" id="rect4"></div>
-            <div class="item" id="rect5"></div>
+            <div class="item" id="rect1" :style="{backgroundColor: color}"></div>
+            <div class="item" id="rect2" :style="{backgroundColor: color}"></div>
+            <div class="item" id="rect3" :style="{backgroundColor: color}"></div>
+            <div class="item" id="rect4" :style="{backgroundColor: color}"></div>
+            <div class="item" id="rect5" :style="{backgroundColor: color}"></div>
   </div>
 </template>
 
@@ -15,6 +15,10 @@ export default {
      loading: {
          type: Boolean,
          default: true
+     },
+     color: {
+         type: String,
+         default:'#42b970'
      }
  }
 }
@@ -29,7 +33,6 @@ export default {
 .item {
     display: inline-block;
     margin: 0 2px;
-    background-color: #42b970;
     width: 4px;
     height: 20px;
 
