@@ -70,7 +70,7 @@ import touristApi from '../../api/tourist'
 import DNavigatorBar from '../../components/common/DNavigatorBar';
 import DInput from '../../components/common/DInput';
 import DLoading from '../../components/common/DLoading';
-import OrderListTourist from '../../components/order/OrderListTourist';
+import OrderListTourist from '../../components/order/OrderList';
 
 export default {
   components: {

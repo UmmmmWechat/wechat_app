@@ -1,5 +1,5 @@
 
-/* 邀请卡片，也就是一项订单，这个是为tourist准备的*/
+/* 邀请卡片，也就是一项订单，这个是为guide准备的*/
 
 <template>
   <div class="d-card">
@@ -8,15 +8,19 @@
       </div>
       <div id="body">
         <div><span class="title-span">景点：</span><span class="link">{{ spotName }}</span></div>
-        <div><span class="title-span">向导：</span><span class="link">{{ guideName }}</span></div>
+        <div><span class="title-span">游客：</span><span class="link">{{ touristName }}</span></div>
         <div><span class="title-span">邀请日期：</span>{{ order.generatedDate }}</div>
         <div><span class="title-span">旅游日期：</span>{{ order.travelDate }}</div>
       </div>
       <div 
       id="foot"
       v-if="order.state === 'waiting'">
-        <button class="d-a" size="mini">
-          撤回
+        <button class="op-btn"
+        size="mini">
+          婉拒
+        </button>
+        <button class="d-a op-btn" size="mini">
+          同意
         </button>
       </div>
   </div>
@@ -34,7 +38,7 @@ export default {
   data () {
     return {
       spotName: '',
-      guideName: '',
+      touristName: '',
     }
   },
   mounted () {
@@ -43,9 +47,9 @@ export default {
       (res) => {this.spotName = res.name;},
       (err) => {}
     );
-    orderApi.queryGuideById(
+    orderApi.queryTouristById(
       this.order.guideId,
-      (res) => {this.guideName = res.realName;},
+      (res) => {this.touristName9 = res.name;},
       (err) => {}
     )
   }
@@ -74,6 +78,13 @@ export default {
 .link {
   text-decoration: underline;
 }
+
+.op-btn {
+    margin-left: 30rpx;
+    display: inline-block;
+    background-color: transparent;
+}
+
 </style>
 <style scoped src="../../assets/style/d-card.css"/>
 <style scoped src="../../assets/style/d-a.css"/>

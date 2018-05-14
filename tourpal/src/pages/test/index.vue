@@ -4,6 +4,7 @@
     :menus="menu"
     :current="current"
     @on-change="current = $event.target.value"/>
+    <order-card-guide :order="order" />
     <order-card-tourist :order="order" />
   <!-- </div> -->
 </div>  
@@ -13,12 +14,14 @@
 import DLoading from '../../components/common/DLoading'
 import GuideProfileCard from '../../components/guide/GuideProfileCard'
 import OrderCardTourist from '../../components/order/OrderCardTourist'
+import OrderCardGuide from '../../components/order/OrderCardGuide'
 import DNavigatorBar from '../../components/common/DNavigatorBar';
 export default {
   components: {
     DLoading,
     GuideProfileCard,
     OrderCardTourist,
+    OrderCardGuide,
     DNavigatorBar
   },
   data () {

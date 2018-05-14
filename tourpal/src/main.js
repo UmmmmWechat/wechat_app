@@ -21,8 +21,8 @@ export default {
       'pages/guide_sign_up/main',
       'pages/tourist_main/main',
       'pages/tourist_invite_guide/main',
-      '^pages/tourist_orders/main',
-      'pages/test/main',
+      'pages/tourist_orders/main',
+      '^pages/test/main',
       'pages/show_spot_guide/main'
     ],
     window: {

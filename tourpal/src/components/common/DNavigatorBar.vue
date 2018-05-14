@@ -36,7 +36,7 @@ export default {
 <style scoped>
 #out {
 
-    padding: 20rpx;
+    padding: 10rpx;
 
     display: flex;
     flex-direction: row;
