@@ -1,0 +1,22 @@
+server:
+  port: 8090
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/tourpal?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 123456
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+    open-in-view: false
+
