@@ -19,10 +19,12 @@ export default {
     pages: [
       'pages/role_select/main',
       'pages/guide_sign_up/main',
-      'pages/tourist_main/main',
+      '^pages/tourist_main/main',
       'pages/tourist_invite_guide/main',
+      'pages/tourist_rate_order/main',
       'pages/tourist_orders/main',
-      '^pages/test/main',
+      'pages/tourist_travel_records/main',
+      'pages/test/main',
       'pages/show_spot_guide/main'
     ],
     window: {
@@ -30,6 +32,19 @@ export default {
       navigationBarBackgroundColor: '#42b970',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'white'
-    }
+    },
+    // "tabBar": {
+    //   backgroundColor: '#42b970',
+    //   color: '#ffffff',
+    //   borderStyle: 'white',
+    //   "list": [{
+    //     "pagePath": "pages/tourist_main/main",
+    //     "text": "景点",
+    //     iconPath: 'assets/image/spot.svg'
+    //   }, {
+    //     "pagePath": "pages/tourist_orders/main",
+    //     "text": "个人中心"
+    //   }]
+    // }
   }
 }

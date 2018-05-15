@@ -14,7 +14,9 @@
               {{ spot.introduction }}
           </div>
       </div>
-      <div id="btn-wrapper">
+      <div 
+      v-if="!noAction"
+      id="btn-wrapper">
               <a
               class="d-a"
               @click="handleClick">
@@ -30,6 +32,10 @@ export default {
         spot: {
             type: Object,
             required: true
+        },
+        noAction: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {

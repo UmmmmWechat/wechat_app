@@ -51,11 +51,7 @@
     />
     </div>
     <d-loading :loading="loading"/>
-    <div 
-    id="no-more-item" 
-    :style="{display: hasMore ? 'none' : 'block'}">
-    已经加载全部啦~
-    </div>
+    <d-no-more :has-more="hasMore" />
   </scroll-view>
 
   <scroll-view
@@ -82,11 +78,7 @@
     :spot="spot"/>
     </div>
     <d-loading :loading="loading" color="white"/>
-    <div 
-    id="no-more-item" 
-    :style="{display: hasMore ? 'none' : 'block'}">
-    已经加载全部啦~
-    </div>
+    <d-no-more :has-more="hasMore" color="white"/>
   </scroll-view>
 </div>
 </template>
@@ -96,13 +88,15 @@
 import SpotCard from '../../components/spot/SpotCard'
 import DInput from '../../components/common/DInput'
 import DLoading from '../../components/common/DLoading'
+import DNoMore from '../../components/common/DNoMore'
 import touristApi from '../../api/tourist'
 import spotApi from '../../api/spot'
 export default {
   components: {
     SpotCard,
     DInput,
-    DLoading
+    DLoading,
+    DNoMore
   },
   data () {
     return {
@@ -113,7 +107,8 @@ export default {
       },
       spots: [],
       searchSpots: [],
-      touristName: '文向东',
+      touristName: '用户',
+      touristId: 'id',
       filter: '',
       loading: false,
       hasMore: true,
@@ -138,7 +133,28 @@ export default {
     }
   },
   mounted () {
+    // wx.showTabBar();
+    wx.login({
+      success: (res) => {
+        console.log(res.code);
+        wx.getUserInfo({
+          success: (res2) => {
+            var userInfo = res2.userInfo;
+            console.log(userInfo);
+            this.touristName = userInfo.nickName;
+          }
+        })
+      }
+    })
     this.getSpots();
+    wx.getSystemInfo({
+      success: (res) => {
+        wx.setStorage({
+          key: 'screenHeight',
+          data: res.screenHeight
+        })
+      }
+    })
   },
   methods: {
     getSpots () {
@@ -152,14 +168,13 @@ export default {
         this.location,
         lastIndex,
         (res) => {
+          if(res === undefined || res.length === 0) {
+            this.hasMore = false;
+          }
           for (let key in res) {
             this.spots.push(res[key]);
           }
           this.loading = false;
-          // 比较下
-          if (lastIndex === this.spots.length){
-            this.hasMore = false;
-          }
         },
         (err) => {console.log(err);}
       )
@@ -177,7 +192,16 @@ export default {
       this.getSpots();
     },
     handleToPersonCenter (event) {
-      console.log("跳转到个人中心")
+      console.log("跳转到个人中心");
+      wx.setStorage({
+        key: 'touristId',
+        data: this.touristId,
+        success: () => {
+          wx.navigateTo({
+            url: '/pages/tourist_center/main'
+          })
+        }
+      })
     },
     handleSearchFocus (event) {
       this.isSearch = true;
@@ -189,6 +213,9 @@ export default {
         this.searchWord,
         this.searchSpots.length,
         (res) => {
+          if (res === undefined || res.length === 0) {
+            this.hasMore = false;
+          }
           for (let item in res) {
             this.searchSpots.push(res[item]);
           }
@@ -210,7 +237,6 @@ export default {
 <style scoped>
 #head {
 color: white;
-font-size: 0.8em;
 z-index: 100;
 }
 .underline-span {
@@ -221,22 +247,12 @@ z-index: 100;
   height: 1000rpx;
 }
 
-
-#no-more-item {
-  color: #42b970;
-  text-align: center;
-}
-
 #back-btn {
   background-color: transparent;
   color: white;
   border-color: white;
 }
 
-@keyframes searchListAnimation {
-  from { transform: translateY(-1000rpx); }  
-  to { transform: translateY(0); }
-}
 
 </style>
 

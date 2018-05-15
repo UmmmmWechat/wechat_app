@@ -51,11 +51,11 @@
           <d-loading :loading="loading" />
         </swiper-item>
         <swiper-item class="swiper-item">
-          <order-list-tourist :orders="finishedOrders"/>
-          <d-loading :loading="loading"/>
-        </swiper-item>
-        <swiper-item class="swiper-item">
           <order-list-tourist :orders="invalidOrders"/>
+          <d-loading :loading="loading" />
+        </swiper-item>
+         <swiper-item class="swiper-item">
+          <order-list-tourist :orders="finishedOrders"/>
           <d-loading :loading="loading" />
         </swiper-item>
         </swiper>
@@ -84,27 +84,34 @@ export default {
       isSearch: false,
       searchWord: '',
       loading: false,
-      menus: ['等待中','进行中','已完成','失效'],
+      menus: ['等待中','进行中','失效','已完成'],
       current: 0,
       waitingOrders: [],
       ongoingOrders: [],
       finishedOrders: [],
       invalidOrders: [],
-      searchOrders: []
+      searchOrders: [],
+      touristId: ''
     }
   },
   mounted() {
-    this.loading = true;
-    touristApi.queryOrders(
-      'touristId',
-      'waiting',
-      -1,
-      (res) => {
-        this.waitingOrders = res;
-        this.loading = false;
-      },
-      (err) => {}
-    )
+    wx.getStorage({
+      key: 'touristId',
+      success: (res) => {
+        this.touristId = res.data;
+        this.loading = true;
+        touristApi.queryOrders(
+          this.touristId,
+          'waiting',
+          -1,
+          (res) => {
+            this.waitingOrders = res;
+            this.loading = false;
+          },
+          (err) => {}
+        )
+      }
+    })
   },
   methods: {
     handleSwiperChange (event) {
@@ -112,7 +119,7 @@ export default {
       this.loading = true;
       let current = event.target.current;
       this.current = current;
-      var states = ['waiting', 'ongoing', 'finished', 'invalid'];
+      var states = ['waiting', 'ongoing', 'invalid','finished'];
       touristApi.queryOrders(
         'touristId',
         states[current],
@@ -121,8 +128,8 @@ export default {
           switch (current) {
             case 0: this.waitingOrders = res; break;
             case 1: this.ongoingOrders = res; break;
-            case 2: this.finishedOrders = res; break;
-            case 3: this.invalidOrders = res; break;
+            case 3: this.finishedOrders = res; break;
+            case 2: this.invalidOrders = res; break;
           }
           this.loading = false;
         },

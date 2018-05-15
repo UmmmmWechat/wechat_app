@@ -1,4 +1,8 @@
 .d-a {
     color: #42b970;
     background-color: transparent;
+    display: inline-block;
+}
+.d-a:hover {
+    background-color: rgba(0,0,0,0.1);
 }

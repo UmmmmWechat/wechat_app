@@ -29,6 +29,7 @@
       :key="guide.id"
       :guide="guide"/>
       <d-loading :loading="loading" />
+      <d-no-more :has-more="hasMore" />
     </scroll-view>
     <scroll-view 
     v-else
@@ -52,7 +53,8 @@
        v-for="guide in toShowGuides"
       :key="guide.id"
       :guide="guide"/>
-      <d-loading :loading="loading" />
+      <d-loading :loading="loading" color="white" />
+      <d-no-more :has-more="hasMore" color="white"/>
     </scroll-view>
   </div>
 </template>
@@ -62,12 +64,14 @@ import touristApi from '../../api/tourist'
 
 import GuideProfileCard from '../../components/guide/GuideProfileCard'
 import DLoading from '../../components/common/DLoading'
-import DInput from '../../components/common/DInput';
+import DInput from '../../components/common/DInput'
+import DNoMore from '../../components/common/DNoMore'
 export default {
   components: {
     GuideProfileCard,
     DLoading,
-    DInput
+    DInput,
+    DNoMore
   },
   data () {
     return {
@@ -75,6 +79,7 @@ export default {
       guides: [],
       searchGuides: [],
       loading: false,
+      hasMore: true,
       searchWord: '',
       isSearch: false
     }
@@ -100,6 +105,9 @@ export default {
         this.spot.id,
         this.guides.length,
         (guides) => {
+          if(guides === undefined || guides.length === 0) {
+            this.hasMore = false;
+          }
           for (let key in guides) {
             this.guides.push(guides[key]);
           }
@@ -119,7 +127,7 @@ export default {
     handleSearch (event) {
       this.loading = true;
       touristApi.queryGuideByKeyword(
-        searchWord,
+        this.searchWord,
         (res) => {
           for (let key in item) {
             this.searchGuides.push(item[key]);

@@ -13,10 +13,23 @@
         <div><span class="title-span">旅游日期：</span>{{ order.travelDate }}</div>
       </div>
       <div 
-      id="foot"
+      class="foot"
       v-if="order.state === 'waiting'">
-        <button class="d-a" size="mini">
+        <button 
+        class="d-a" 
+        size="mini"
+        @click="handleCancel">
           撤回
+        </button>
+      </div>
+      <div 
+      class="foot"
+      v-if="order.state === 'finished'">
+        <button 
+        class="d-a" 
+        size="mini"
+        @click="handleRate">
+          评价
         </button>
       </div>
   </div>
@@ -48,6 +61,30 @@ export default {
       (res) => {this.guideName = res.realName;},
       (err) => {}
     )
+  },
+  methods: {
+    handleCancel (event) {
+      wx.showModal({
+        title: '你确定要撤回这个邀请么？',
+        success: (res) => {
+          console.log(res);
+          if(res.confirm) {
+            // api
+          }
+        }
+      })
+    },
+    handleRate (event) {
+      wx.setStorage({
+        key: 'order',
+        data: this.order,
+        success: () => {
+          wx.navigateTo({
+            url: '/pages/tourist_rate_order/main'
+          })
+        }
+      })
+    }
   }
 }
 </script>
@@ -64,7 +101,7 @@ export default {
   color: gray;
 }
 
-#foot {
+.foot {
   text-align:right;
   padding: 0 20rpx 20rpx 0;
 }

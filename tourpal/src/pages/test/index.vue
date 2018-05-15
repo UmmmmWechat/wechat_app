@@ -6,7 +6,7 @@
     @on-change="current = $event.target.value"/>
     <order-card-guide :order="order" />
     <order-card-tourist :order="order" />
-  <!-- </div> -->
+    <d-timeline :events="events" />
 </div>  
 </template>
 
@@ -16,13 +16,15 @@ import GuideProfileCard from '../../components/guide/GuideProfileCard'
 import OrderCardTourist from '../../components/order/OrderCardTourist'
 import OrderCardGuide from '../../components/order/OrderCardGuide'
 import DNavigatorBar from '../../components/common/DNavigatorBar';
+import DTimeline from '../../components/common/DTimeline'
 export default {
   components: {
     DLoading,
     GuideProfileCard,
     OrderCardTourist,
     OrderCardGuide,
-    DNavigatorBar
+    DNavigatorBar,
+    DTimeline
   },
   data () {
     return {
@@ -36,7 +38,21 @@ export default {
         state: 'waiting'
       },
       menu: ['菜单一','菜单二','菜单三'],
-      current: 0
+      current: 0,
+      events: []
+    }
+  },
+  mounted () {
+    for (let i = 0; i < 10; i++) {
+      let content = '';
+      for (let j = 0; j <= i; j++) {
+        content += 'contentcontent'
+      }
+      let date = new Date().toLocaleString();
+      this.events.push({
+        date: date,
+        content: content
+      })
     }
   }
 }
