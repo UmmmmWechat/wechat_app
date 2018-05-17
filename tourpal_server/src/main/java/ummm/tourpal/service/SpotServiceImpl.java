@@ -9,12 +9,12 @@ import java.util.List;
 @Service
 public class SpotServiceImpl implements SpotService {
     @Override
-    public List<Spot> querySpots(Location location, long lastIndex) {
+    public List<Spot> querySpots(Location location, int lastIndex) {
         return null;
     }
 
     @Override
-    public List<Spot> querySpotsByKeyword(String keyword, long lastIndex) {
+    public List<Spot> querySpotsByKeyword(String keyword, int lastIndex) {
         return null;
     }
 }

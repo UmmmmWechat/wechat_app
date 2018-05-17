@@ -10,4 +10,6 @@ import ummm.tourpal.service.SpotService;
 public class SpotController {
     @Autowired
     private SpotService spotService;
+
+    
 }

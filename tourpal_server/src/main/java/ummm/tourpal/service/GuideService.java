@@ -7,13 +7,13 @@ import java.util.List;
 public interface GuideService {
     boolean queryIfNew(String code);
 
-    long signUp(Object form);
+    int signUp(Object form);
 
-    boolean acceptOrder(long orderId);
+    boolean acceptOrder(int orderId);
 
-    boolean rejectOrder(long orderId);
+    boolean rejectOrder(int orderId);
 
-    List<Order> queryOrders(long guideId, String state, long lastIndex);
+    List<Order> queryOrders(int guideId, String state, int lastIndex);
 
-    List<Order> queryOrdersByKeyword(long guideId, String keyword, long lastIndex);
+    List<Order> queryOrdersByKeyword(int guideId, String keyword, int lastIndex);
 }

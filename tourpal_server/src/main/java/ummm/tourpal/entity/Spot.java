@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Spot implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     private String name;
 
@@ -21,11 +21,11 @@ public class Spot implements Serializable {
 
     private int recommendLevel;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

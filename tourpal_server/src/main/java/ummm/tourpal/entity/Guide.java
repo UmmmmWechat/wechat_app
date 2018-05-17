@@ -8,7 +8,7 @@ import java.util.List;
 public class Guide implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id; //
+    private int id; //
 
     private String openId;
 
@@ -33,15 +33,15 @@ public class Guide implements Serializable {
 
     private int numOfFinishOrder;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable
-    private List<Long> favorSpots;
+    private List<Integer> favorSpots;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -133,11 +133,11 @@ public class Guide implements Serializable {
         this.numOfFinishOrder = numOfFinishOrder;
     }
 
-    public List<Long> getFavorSpots() {
+    public List<Integer> getFavorSpots() {
         return favorSpots;
     }
 
-    public void setFavorSpots(List<Long> favorSpots) {
+    public void setFavorSpots(List<Integer> favorSpots) {
         this.favorSpots = favorSpots;
     }
 }

@@ -8,21 +8,21 @@ import ummm.tourpal.entity.Tourist;
 import java.util.List;
 
 public interface TouristService {
-    long login(String code);
+    int login(String code);
 
-    Tourist queryById(long id);
+    Tourist queryById(int id);
 
-    List<Guide> queryGuideBySpot(long spotId, long lastIndex);
+    List<Guide> queryGuideBySpot(int spotId, int lastIndex);
 
-    List<Guide> queryGuideByKeyword(String keyword, long lastIndex);
+    public List<Guide> queryGuideByKeyword(String keyword, int lastIndex);
 
-    long inviteGuide(long touristId, long spotId, long guideId, String message);
+    int inviteGuide(int touristId, int spotId, int guideId, String message);
 
-    List<Order> queryOrders(long touristId, String state, long lastIndex);
+    List<Order> queryOrders(int touristId, String state, int lastIndex);
 
-    List<Order> queryOrdersByKeyword(long touristId, String keyword, long lastIndex);
+    List<Order> queryOrdersByKeyword(int touristId, String keyword, int lastIndex);
 
-    boolean cancelOrder(long orderId, String cancelMessage);
+    boolean cancelOrder(int orderId, String cancelMessage);
 
-    boolean commendOrder(long orderId, Feedback feedback);
+    boolean commendOrder(int orderId, Feedback feedback);
 }
