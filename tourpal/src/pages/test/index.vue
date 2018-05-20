@@ -4,6 +4,7 @@
     :menus="menu"
     :current="current"
     @on-change="current = $event.target.value"/>
+    <button open-type="getUserInfo" @getuserinfo="handleGetUserInfo">用户</button>
     <order-card-guide :order="order" />
     <order-card-tourist :order="order" />
     <d-timeline :events="events" />
@@ -43,6 +44,13 @@ export default {
     }
   },
   mounted () {
+    wx.login(
+      {
+        success: (res) => {
+          console.log(res);
+        }
+      }
+    )
     for (let i = 0; i < 10; i++) {
       let content = '';
       for (let j = 0; j <= i; j++) {
@@ -53,6 +61,11 @@ export default {
         date: date,
         content: content
       })
+    }
+  },
+  methods: {
+    handleGetUserInfo(event) {
+      console.log(event)
     }
   }
 }

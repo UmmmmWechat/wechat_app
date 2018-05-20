@@ -32,15 +32,14 @@ export default {
       navigationBarBackgroundColor: '#42b970',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'white'
-    },
+    }
     // "tabBar": {
-    //   backgroundColor: '#42b970',
-    //   color: '#ffffff',
+    //   backgroundColor: '#ffffff',
+    //   color: 'black',
     //   borderStyle: 'white',
     //   "list": [{
     //     "pagePath": "pages/tourist_main/main",
-    //     "text": "景点",
-    //     iconPath: 'assets/image/spot.svg'
+    //     "text": "景点"
     //   }, {
     //     "pagePath": "pages/tourist_orders/main",
     //     "text": "个人中心"

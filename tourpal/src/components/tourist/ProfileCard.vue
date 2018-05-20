@@ -2,14 +2,15 @@
 
 <template>
   <div id="wrapper">
-      <div>
-          <img 
-          id="avatar"
+      <div id="avatar"> 
+          <!-- <img 
+            id="avatar"
             :src="avatar" 
             alt="头像加载失败"
-            >
+            > -->
+            <open-data style="margin:auto;" type="userAvatarUrl"/>
       </div>
-      <div id="text">{{ name }}</div>
+      <div id="text"><open-data type="userNickName"/></div>
   </div>
 </template>
 
@@ -24,15 +25,15 @@ export default {
             type:String,
             required: true
         }
+    },
+    mounted () {
     }
 }
 </script>
 
 <style scoped>
 #wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+   
     text-align: center;
     padding: 20rpx;
 }
@@ -42,9 +43,10 @@ export default {
 }
 
 #avatar {
-    margin: 20rpx;
     height: 200rpx;
     width: 200rpx;
-    border-radius: 50%;
+    text-align: center;
+    position: relative;
+    left: 265rpx;
 }
 </style>

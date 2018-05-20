@@ -1,9 +1,7 @@
 <template>
   <div id="out">
     <div id="profile">
-      <tourist-profile-card 
-      :name="tourist.name" 
-      :avatar="tourist.avatar"/>
+      <tourist-profile-card />
     </div>
     <div id="operation">
       <div 
@@ -25,21 +23,16 @@ export default {
   },
   data () {
     return {
-      tourist: {},
+        name: '',
+        avatar: ''
     }
   },
   mounted () {
     wx.getStorage({
-      key: 'touristId',
+      key: 'tourist',
       success: (res) => {
-        console.log(res.data);
-        touristApi.queryTouristById(
-          res.data,
-          (res) => {
-            this.tourist = res;
-          },
-          (err) => {}
-        );
+        this.name = res.name;
+        this.avatar = res.avatar;
       },
       fail: (err) => {
         wx.showToast({
