@@ -1,15 +1,18 @@
 package ummm.tourpal.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import ummm.tourpal.dao.GuideRepository;
 import ummm.tourpal.dao.OrderRepository;
+import ummm.tourpal.dao.SpotRepository;
 import ummm.tourpal.dao.TouristRepository;
-import ummm.tourpal.entity.Feedback;
-import ummm.tourpal.entity.Guide;
-import ummm.tourpal.entity.Order;
-import ummm.tourpal.entity.Tourist;
+import ummm.tourpal.entity.*;
+import ummm.tourpal.util.APIUtil;
+import ummm.tourpal.util.NumberUtil;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,89 +26,192 @@ public class TouristServiceImpl implements TouristService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private SpotRepository spotRepository;
+
     @Override
     public int login(String code) {
-        String openId = null;
-
-        //TODO（根据code拿openId）
+        String openId = APIUtil.getOpenId(code);
 
         Tourist tourist = touristRepository.findByOpenId(openId);
 
         if (tourist == null) {
             //TODO (完善tourist)
+            touristRepository.saveAndFlush(tourist);
         }
 
         return tourist.getId();
     }
 
+
+    @Cacheable(value = "tourist", key = "#tourist.id")
     @Override
     public Tourist queryById(int id) {
-        return touristRepository.findById(id).get();
+        return touristRepository.getOne(id);
     }
 
+
+    @Cacheable(value = "guide", key = "#guide.id")
     @Override
     public List<Guide> queryGuideBySpot(int spotId, int lastIndex) {
-        if (lastIndex == -1)
+        if (lastIndex == NumberUtil.ALL_INDEX)
             return guideRepository.findByFavorSpots(spotId, Integer.MAX_VALUE);
 
-        List<Guide> guides = guideRepository.findByFavorSpots(spotId, lastIndex + 10);
+        int limit = lastIndex + NumberUtil.SEARCH;
+
+        List<Guide> guides = guideRepository.findByFavorSpots(spotId, limit);
 
         int size = guides.size();
 
-        if (size - lastIndex < 10)
-            return guides.subList(lastIndex, size);
+        if (size >= limit)
+            return guides.subList(lastIndex, limit);
 
-        return guides.subList(lastIndex, lastIndex + 10);
+        return guides.subList(lastIndex, size);
     }
 
+    @Cacheable(value = "guide", key = "#guide.id")
     @Override
     public List<Guide> queryGuideByKeyword(String keyword, int lastIndex) {
-        if (lastIndex == -1)
+        if (lastIndex == NumberUtil.ALL_INDEX)
             return guideRepository.findByKeyword(keyword, Integer.MAX_VALUE);
 
-        List<Guide> guides = guideRepository.findByKeyword(keyword, lastIndex + 10);
+        int limit = lastIndex + NumberUtil.SEARCH;
+
+        List<Guide> guides = guideRepository.findByKeyword(keyword, limit);
 
         int size = guides.size();
 
-        if (size - lastIndex < 10)
-            return guides.subList(lastIndex, size);
+        if (size >= limit)
+            return guides.subList(lastIndex, limit);
 
-        return guides.subList(lastIndex, lastIndex + 10);
+        return guides.subList(lastIndex, size);
     }
 
+    @CachePut(value = "order", key = "#order.id")
     @Override
-    public int inviteGuide(int touristId, int spotId, int guideId, String message) {
+    public int inviteGuide(OrderPre orderPre) {
         Order order = new Order();
 
-        order.setTouristId(touristId);
-        order.setTouristName(touristRepository.findById(touristId).get().getName());
-        order.setSpotId(spotId);
-        order.setSpotName(touristRepository.findById(spotId).get().getName());
-        order.setGuideId(guideId);
-        order.setGuideName(guideRepository.findById(guideId).get().getRealName());
-        order.setState("waiting");
-        order.setMessage(message);
+        order.setTouristId(orderPre.touristId);
+        order.setSpotId(orderPre.spotId);
+        order.setGuideId(orderPre.guideId);
+        order.setGeneratedDate(orderPre.generatedDate);
+        order.setTravelDate(orderPre.travelDate);
+        order.setMessage(orderPre.message);
+        order.setState(State.WAITING);
 
         return orderRepository.saveAndFlush(order).getId();
     }
 
+    @Cacheable(value = "order", key = "#order.id")
     @Override
-    public List<Order> queryOrders(int touristId, String state, int lastIndex) {
-        return null;
+    public List<Order> queryOrders(int touristId, State state, int lastIndex) {
+        if (state == State.ALL) {
+            if (lastIndex == NumberUtil.ALL_INDEX)
+                return orderRepository.findByTouristId(touristId, Integer.MAX_VALUE);
+            else {
+                int limit = lastIndex + NumberUtil.SEARCH;
+
+                List<Order> orders = orderRepository.findByTouristId(touristId, limit);
+
+                int size = orders.size();
+
+                if (size >= limit)
+                    return orders.subList(lastIndex, limit);
+
+                return orders.subList(lastIndex, size);
+            }
+        }
+
+        if (lastIndex == NumberUtil.ALL_INDEX)
+            return orderRepository.findByTouristIdAndState(touristId, state, Integer.MAX_VALUE);
+
+        int limit = lastIndex + NumberUtil.SEARCH;
+
+        List<Order> orders = orderRepository.findByTouristIdAndState(touristId, state, limit);
+
+        int size = orders.size();
+
+        if (size >= limit)
+            return orders.subList(lastIndex, limit);
+
+        return orders.subList(lastIndex, size);
     }
 
+    @Cacheable(value = "order", key = "#order.id")
     @Override
     public List<Order> queryOrdersByKeyword(int touristId, String keyword, int lastIndex) {
-        return null;
+        if (lastIndex == NumberUtil.ALL_INDEX)
+            return orderRepository.findByTouristIdAndKeyword(touristId, keyword, Integer.MAX_VALUE);
+
+        int limit = lastIndex + NumberUtil.SEARCH;
+
+        List<Order> orders = orderRepository.findByTouristIdAndKeyword(touristId, keyword, limit);
+
+        int size = orders.size();
+
+        if (size >= limit)
+            return orders.subList(lastIndex, limit);
+
+        return orders.subList(lastIndex, size);
     }
 
+
+    @Cacheable(value = "order", key = "#order.id")
+    @CachePut(value = "order", key = "#order.id")
     @Override
-    public boolean cancelOrder(int orderId, String cancelMessage) {
-        return false;
+    public ResultMessage cancelOrder(int orderId, String cancelMessage) {
+        Order order = orderRepository.getOne(orderId);
+
+        State state = order.getState();
+
+        if (state == State.ONGOING)
+            return ResultMessage.ALREADY_ACCEPTED;
+        else if (state == State.REJECTED)
+            return ResultMessage.ALREADY_REJECTED;
+        else if (order.getTravelDate().before(new Date())) {
+            order.setState(State.ONGOING);
+            return ResultMessage.ALREADY_TIMEOUT;
+        }
+
+        order.setState(State.CANCELED);
+
+        orderRepository.saveAndFlush(order);
+
+        return ResultMessage.OK;
     }
 
+
+    @Cacheable(value = "order", key = "#order.id")
+    @CachePut(value = "order", key = "#order.id")
     @Override
-    public boolean commendOrder(int orderId, Feedback feedback) {
-        return false;
+    public ResultMessage commendOrder(int orderId, Feedback feedback) {
+        Order order = orderRepository.getOne(orderId);
+
+        order.setFeedback(feedback);
+        order.setState(State.FINISHED);
+
+
+        Guide guide = guideRepository.getOne(order.getGuideId());
+        int numOfFinishOrder = guide.getNumOfFinishOrder();
+        int goodFeedbackRate = guide.getGoodFeedbackRate();
+
+        guide.setGoodFeedbackRate(Math.round((numOfFinishOrder++ * goodFeedbackRate + feedback.getGuidePoint() * NumberUtil.GUIDE_RATE) / numOfFinishOrder));
+        guide.setNumOfFinishOrder(numOfFinishOrder);
+
+
+        Spot spot = spotRepository.getOne(order.getSpotId());
+        int popularity = spot.getPopularity();
+        int recommendLevel = spot.getRecommendLevel();
+
+        spot.setRecommendLevel(Math.round((popularity++ * recommendLevel + feedback.getSpotPoint() * NumberUtil.SPOT_RATE) / popularity));
+        spot.setPopularity(popularity);
+
+
+        orderRepository.saveAndFlush(order);
+        guideRepository.saveAndFlush(guide);
+        spotRepository.saveAndFlush(spot);
+
+        return ResultMessage.OK;
     }
 }

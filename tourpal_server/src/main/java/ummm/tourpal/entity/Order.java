@@ -13,15 +13,9 @@ public class Order implements Serializable {
 
     private int touristId;
 
-    private String touristName;
-
     private int guideId;
 
-    private String guideName;
-
     private int spotId;
-
-    private String spotName;
 
     private Date generatedDate;
 
@@ -29,7 +23,7 @@ public class Order implements Serializable {
 
     private String message;
 
-    private String state;
+    private State state;
 
     private String cancelReason;
 
@@ -53,14 +47,6 @@ public class Order implements Serializable {
         this.touristId = touristId;
     }
 
-    public String getTouristName() {
-        return touristName;
-    }
-
-    public void setTouristName(String touristName) {
-        this.touristName = touristName;
-    }
-
     public int getGuideId() {
         return guideId;
     }
@@ -69,28 +55,12 @@ public class Order implements Serializable {
         this.guideId = guideId;
     }
 
-    public String getGuideName() {
-        return guideName;
-    }
-
-    public void setGuideName(String guideName) {
-        this.guideName = guideName;
-    }
-
     public int getSpotId() {
         return spotId;
     }
 
     public void setSpotId(int spotId) {
         this.spotId = spotId;
-    }
-
-    public String getSpotName() {
-        return spotName;
-    }
-
-    public void setSpotName(String spotName) {
-        this.spotName = spotName;
     }
 
     public Date getGeneratedDate() {
@@ -117,11 +87,11 @@ public class Order implements Serializable {
         this.message = message;
     }
 
-    public String getState() {
+    public State getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(State state) {
         this.state = state;
     }
 
