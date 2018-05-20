@@ -13,27 +13,27 @@ public class GuideServiceImpl implements GuideService {
     }
 
     @Override
-    public long signUp(Object form) {
+    public int signUp(Object form) {
         return 0;
     }
 
     @Override
-    public boolean acceptOrder(long orderId) {
+    public boolean acceptOrder(int orderId) {
         return false;
     }
 
     @Override
-    public boolean rejectOrder(long orderId) {
+    public boolean rejectOrder(int orderId) {
         return false;
     }
 
     @Override
-    public List<Order> queryOrders(long guideId, String state, long lastIndex) {
+    public List<Order> queryOrders(int guideId, String state, int lastIndex) {
         return null;
     }
 
     @Override
-    public List<Order> queryOrdersByKeyword(long guideId, String keyword, long lastIndex) {
+    public List<Order> queryOrdersByKeyword(int guideId, String keyword, int lastIndex) {
         return null;
     }
 }

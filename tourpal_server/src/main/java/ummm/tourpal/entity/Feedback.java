@@ -9,13 +9,21 @@ import javax.persistence.Id;
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     private int spotPoint;
 
     private int guidePoint;
 
     private String comment;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getSpotPoint() {
         return spotPoint;

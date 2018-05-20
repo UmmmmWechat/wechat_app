@@ -9,13 +9,19 @@ import java.util.Date;
 public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
-    private long touristId;
+    private int touristId;
 
-    private long guideId;
+    private String touristName;
 
-    private long spotId;
+    private int guideId;
+
+    private String guideName;
+
+    private int spotId;
+
+    private String spotName;
 
     private Date generatedDate;
 
@@ -31,36 +37,60 @@ public class Order implements Serializable {
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public long getTouristId() {
+    public int getTouristId() {
         return touristId;
     }
 
-    public void setTouristId(long touristId) {
+    public void setTouristId(int touristId) {
         this.touristId = touristId;
     }
 
-    public long getGuideId() {
+    public String getTouristName() {
+        return touristName;
+    }
+
+    public void setTouristName(String touristName) {
+        this.touristName = touristName;
+    }
+
+    public int getGuideId() {
         return guideId;
     }
 
-    public void setGuideId(long guideId) {
+    public void setGuideId(int guideId) {
         this.guideId = guideId;
     }
 
-    public long getSpotId() {
+    public String getGuideName() {
+        return guideName;
+    }
+
+    public void setGuideName(String guideName) {
+        this.guideName = guideName;
+    }
+
+    public int getSpotId() {
         return spotId;
     }
 
-    public void setSpotId(long spotId) {
+    public void setSpotId(int spotId) {
         this.spotId = spotId;
+    }
+
+    public String getSpotName() {
+        return spotName;
+    }
+
+    public void setSpotName(String spotName) {
+        this.spotName = spotName;
     }
 
     public Date getGeneratedDate() {
