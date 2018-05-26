@@ -29,10 +29,10 @@ export default {
 
             /** 向导 */
             'pages/guide_sign_up/main',
-            '^pages/guide_main/main',
+            'pages/guide_main/main',
             'pages/guide_check_order/main',
             'pages/guide_calendar/main',
-            'pages/guide_center/main',
+            '^pages/guide_center/main',
 
             'pages/test/main',
             'pages/z_test/main',
