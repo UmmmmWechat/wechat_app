@@ -1,12 +1,23 @@
+import * as mockData from "./mock/guide_mock_data";
+
 export default {
+
+    guideLogin() {
+
+    },
+
     /**
      * 查询是否是新的guide
-     * @param {string} id 
+     * @param {string} code 临时登陆凭证
      * @param {Function} resolve 
      * @param {Function} reject 
      */
-    queryIfNew (code, resolve, reject) {
-        resolve(true);
+    queryIfNew(code, resolve, reject) {
+        // 将临时登陆凭证发给服务器 服务器传回 用户ID （不是新的guide）/null（是新的guide）
+        // 是新的引路人，需要注册
+        // resolve(true);
+        // 不是新的引路人，直接跳转引路人主页
+        resolve(false);
     },
 
     /**
@@ -23,7 +34,7 @@ export default {
         phone: ''
       }
      */
-    signUp (form, resolve, reject) {
+    signUp(form, resolve, reject) {
         resolve('success');
     },
 
@@ -36,8 +47,8 @@ export default {
      * @param {*} resolve 
      * @param {*} reject 
      */
-    queryOrders (guideId, state, lastIndex, resolve, reject) {
-
+    queryOrders(guideId, state, lastIndex, resolve, reject) {
+        resolve(mockData.mockOrders);
     },
 
     /**
@@ -47,7 +58,7 @@ export default {
      * @param {*} reject 
      * 
      */
-    acceptOrder (orderId, resolve, reject) {
+    acceptOrder(orderId, resolve, reject) {
 
     },
 
@@ -57,7 +68,7 @@ export default {
      * @param {*} resolve 
      * @param {*} reject 
      */
-    rejectOrder (orderId, resolve, reject) {
+    rejectOrder(orderId, resolve, reject) {
 
     },
 
@@ -67,7 +78,7 @@ export default {
      * @param {*} resolve 
      * @param {*} reject 
      */
-    modifyUserInfo (info, resolve, reject) {
+    modifyUserInfo(info, resolve, reject) {
 
     },
 
@@ -77,8 +88,8 @@ export default {
      * @param {*} resolve 
      * @param {*} reject 
      */
-    queryUserInfo (id, resolve, reject) {
-
+    queryUserInfo(id, resolve, reject) {
+        resolve(mockData.mockGuide[0]);
     },
 
     /**
@@ -92,8 +103,16 @@ export default {
      *  []
      * }
      */
-    queryOrdersByKeyword (keyword, userId ,resolve, reject) {
-        
+    queryOrdersByKeyword(keyword, userId, resolve, reject) {
+        resolve({
+            "finished": mockData.mockOrders,
+            "waiting": mockData.mockOrders,
+            "ongoing": mockData.mockOrders,
+            "invalid": mockData.mockOrders,
+            "rejected": mockData.mockOrders,
+            "canceled": mockData.mockOrders,
+            "timeout": mockData.mockOrders
+        });
     }
 
 

@@ -3,7 +3,12 @@
     animation: searchListAnimation 0.5s ease-in-out;
     height: 1200rpx;
 }
+
 @keyframes searchListAnimation {
-    from { transform: translateY(-1200rpx); }  
-    to { transform: translateY(0); }
-  }
+    from {
+        transform: translateY(-1200rpx);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
