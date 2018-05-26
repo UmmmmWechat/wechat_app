@@ -86,7 +86,10 @@ export default {
       guideApi.signUp(
         this.form, 
         (res) => {
-          console.log('成功')
+          console.log('成功注册')
+          wx.redirectTo({
+            url: '/pages/guide_main/main'
+          })
         },
         (err) => {
 

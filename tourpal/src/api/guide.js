@@ -35,7 +35,7 @@ export default {
       }
      */
     signUp(form, resolve, reject) {
-        resolve('success');
+        resolve('success')
     },
 
 
@@ -48,7 +48,9 @@ export default {
      * @param {*} reject 
      */
     queryOrders(guideId, state, lastIndex, resolve, reject) {
-        resolve(mockData.mockOrders);
+        console.log('queryOrders', guideId, state, lastIndex)
+        console.log(mockData)
+        resolve(mockData.mockOrders)
     },
 
     /**

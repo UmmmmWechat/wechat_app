@@ -1,11 +1,3 @@
-mockOrders: [
-    createMockOrder(),
-    createMockOrder(),
-    createMockOrder()
-]
-mockGuide: [
-    createMockGuide(1),
-]
 var createMockGuide = function(i) {
     return {
         id: i,
@@ -25,8 +17,8 @@ var createMockOrder = function() {
         touristId: 1,
         guideId: 1,
         spotId: 1,
-        generatedDate: new Date(),
-        travelDate: new Date(),
+        generatedDate: createDate(),
+        travelDate: createDate(),
         message: '老司机带我飞',
         state: 'waiting',
         cancelReason: null,
@@ -37,6 +29,21 @@ var createMockOrder = function() {
         }
     }
 }
+
+var createDate = function() {
+    return new Date().toLocaleDateString()
+}
+
+var mockOrders = [
+    createMockOrder(),
+    createMockOrder(),
+    createMockOrder(),
+    createMockOrder(),
+    createMockOrder()
+]
+var mockGuide = [
+    createMockGuide(1),
+]
 
 export {
     mockOrders,

@@ -3,7 +3,7 @@
 
 <template>
   <div class="d-card">
-      <div id="head">
+      <div class="head">
         <span>{{order.state}}</span>
       </div>
       <div id="body">
@@ -49,7 +49,7 @@ export default {
     );
     orderApi.queryTouristById(
       this.order.guideId,
-      (res) => {this.touristName9 = res.name;},
+      (res) => {this.touristName = res.name;},
       (err) => {}
     )
   }
@@ -57,13 +57,13 @@ export default {
 </script>
 
 <style scoped>
-#head {
+.head {
   padding-right: 20rpx;
   padding-top: 10rpx;
-  text-align: right;
+  float: right;
 }
 #body {
-  padding: 0 20rpx 20rpx 20rpx;
+  padding: 20rpx 20rpx 20rpx 20rpx;
   color: black;
   color: gray;
 }
