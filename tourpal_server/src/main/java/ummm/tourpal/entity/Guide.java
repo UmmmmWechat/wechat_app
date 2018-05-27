@@ -18,7 +18,7 @@ public class Guide implements Serializable {
 
     private String idCard;
 
-    private String gender;
+    private char gender;
 
     @Embedded
     private Location location;
@@ -29,7 +29,7 @@ public class Guide implements Serializable {
 
     private String introduction;
 
-    private double goodFeedBackRate;
+    private int goodFeedbackRate;
 
     private int numOfFinishOrder;
 
@@ -77,11 +77,11 @@ public class Guide implements Serializable {
         this.idCard = idCard;
     }
 
-    public String getGender() {
+    public char getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(char gender) {
         this.gender = gender;
     }
 
@@ -117,12 +117,12 @@ public class Guide implements Serializable {
         this.introduction = introduction;
     }
 
-    public double getGoodFeedBackRate() {
-        return goodFeedBackRate;
+    public int getGoodFeedbackRate() {
+        return goodFeedbackRate;
     }
 
-    public void setGoodFeedBackRate(double goodFeedBackRate) {
-        this.goodFeedBackRate = goodFeedBackRate;
+    public void setGoodFeedbackRate(int goodFeedbackRate) {
+        this.goodFeedbackRate = goodFeedbackRate;
     }
 
     public int getNumOfFinishOrder() {
@@ -132,6 +132,14 @@ public class Guide implements Serializable {
     public void setNumOfFinishOrder(int numOfFinishOrder) {
         this.numOfFinishOrder = numOfFinishOrder;
     }
+
+//    public Set<Integer> getFavorSpots() {
+//        return favorSpots;
+//    }
+//
+//    public void setFavorSpots(Set<Integer> favorSpots) {
+//        this.favorSpots = favorSpots;
+//    }
 
     public List<Integer> getFavorSpots() {
         return favorSpots;
