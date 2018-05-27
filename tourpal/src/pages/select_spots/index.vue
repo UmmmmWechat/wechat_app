@@ -139,7 +139,7 @@ export default {
       const selectedSpots = this.selectedSpots;
       wx.setStorage({
         key: 'selectedSpots',
-        data: seletedSpots,
+        data: selectedSpots,
         success: () => {
           this.handleCancel();
         },
