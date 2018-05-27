@@ -81,7 +81,15 @@ export default {
      * @param {*} reject 
      */
     modifyUserInfo(info, resolve, reject) {
-
+        console.log("guide.js", "修改向导信息", info)
+        var guide = mockData.mockGuide[0]
+        guide.wechat = info.wechat
+        guide.phone = info.phone
+        guide.introduction = info.introduction
+        guide.favorSpots = info.favorSpots
+        resolve({
+            guide: guide
+        })
     },
 
     /**
@@ -91,7 +99,8 @@ export default {
      * @param {*} reject 
      */
     queryUserInfo(id, resolve, reject) {
-        resolve(mockData.mockGuide[0]);
+        var guide = mockData.mockGuide[0]
+        resolve(guide)
     },
 
     /**

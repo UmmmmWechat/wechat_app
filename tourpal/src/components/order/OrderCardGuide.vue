@@ -64,7 +64,7 @@ export default {
 }
 #body {
   padding: 20rpx 20rpx 20rpx 20rpx;
-  color: black;
+  /* color: black; */
   color: gray;
 }
 

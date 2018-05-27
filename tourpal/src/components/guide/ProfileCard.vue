@@ -9,7 +9,7 @@
             alt="头像加载失败"
             >
       </div>
-      <div class="text">{{ name }}</div>
+      <div class="text">{{ realName }}</div>
   </div>
 </template>
 
@@ -20,7 +20,7 @@ export default {
     data() {
         return {
             avatar: "/static/image/用户.svg",
-            name: "体验向导",
+            realName: "体验向导",
             userId: ""
         }
     },
@@ -28,21 +28,34 @@ export default {
         wx.getStorage({
             key: 'guideId',
             success: (res) => {
-                console.log("取得向导ID", res)
+                console.log("取得向导ID成功", res)
                 this.userId = res.data
-                setGuideInfo()
+                this.setGuideInfo()
 
+            },
+            fail: (fai) => {
+                console.error("取得向导ID失败", fai)
             }
         })
     },
     methods: {
         setGuideInfo() {
             GuideApi.queryUserInfo(
-                res.data,
-                (res) => {
-                    console.log("取得向导信息成功", res)
-                    this.avatar = res.avatar
-                    this.name = res.name
+                this.userId,
+                (guide) => {
+                    console.log("取得向导信息成功", guide)
+                    this.avatar = guide.avatar
+                    this.realName = guide.realName
+                    wx.setStorage({
+                        key: "guideInfo",
+                        data: guide,
+                        success: (suc) => {
+                            console.log("存储导游信息成功", suc)
+                        },
+                        fail: (fai) => {
+                            console.log("存储导游信息失败", fai)
+                        }
+                    })
                 },
                 (rej) => {
                     console.log("取得向导信息失败", rej)

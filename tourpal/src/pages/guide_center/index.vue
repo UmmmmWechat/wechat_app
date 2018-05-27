@@ -12,6 +12,7 @@
       class="op-item"
       @click="handleToReview">向导履历</div>
     </div>
+
   </div>
 </template>
 
@@ -22,24 +23,32 @@ export default {
   components: {
     GuideProfileCard
   },
-  data () {
-
-  },
   methods: {
     handleToInfo(event) {
       console.log("向导个人中心-个人信息")
+      wx.navigateTo({
+        url: "../guide_center_info/main"
+      })
     },
     handleToReview(event) {
       console.log("向导个人中心-向导履历")
+      wx.navigateTo({
+        url: "../guide_center_experience/main"
+      })
     },
   }
 }
 </script>
 
-<style>
+<style scoped>
 #operation {
   margin: 20rpx 0;
   border-top: rgba(0,0,0,0.1) 1px solid;
+}
+
+#info-card {
+  border-bottom: rgba(0,0,0,0.1) 1px solid;
+  background-color: transparent;
 }
 
 .op-item {

@@ -33,6 +33,8 @@ export default {
             'pages/guide_check_order/main',
             'pages/guide_calendar/main',
             '^pages/guide_center/main',
+            'pages/guide_center_info/main',
+            'pages/guide_center_experience/main',
 
             'pages/test/main',
             'pages/z_test/main',
