@@ -173,6 +173,7 @@ export default {
 
 #result-list {
   padding: 20rpx;
+  margin-bottom: 100rpx;
 }
 
 .spot-item {
