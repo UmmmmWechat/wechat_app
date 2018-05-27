@@ -24,7 +24,7 @@
 
     <div id="selected-list">
       <div 
-      v-for="spot in seletedSpots"
+      v-for="spot in selectedSpots"
       :key="spot.id"
       class="selected-item">
         <div style="margin-right:4rpx;">
@@ -85,7 +85,7 @@ export default {
     return {
       keyword: '',
       resultSpots: [],
-      seletedSpots: []
+      selectedSpots: []
     }
   },
   mounted () {
@@ -111,7 +111,7 @@ export default {
       // TODO: 调用 api 去搜索
     },
     handleSelectSpot (spot) {
-      this.seletedSpots.push(spot);
+      this.selectedSpots.push(spot);
       this.resultSpots.splice(
         this.resultSpots.findIndex(
           item => item.id === spot.id
@@ -121,15 +121,15 @@ export default {
     },
     handleRemoveSpot (spot) {
       this.resultSpots.push(spot);
-      this.seletedSpots.splice(
-        this.seletedSpots.findIndex(
+      this.selectedSpots.splice(
+        this.selectedSpots.findIndex(
           item => item.id === spot.id
         ),
         1
       )
     },
     handleSubmit () {
-      if(this.seletedSpots.length === 0) {
+      if(this.selectedSpots.length === 0) {
         wx.showToast({
           title: '请至少选择一个景点',
           icon: 'none'

@@ -23,7 +23,7 @@
         label="选择地点"
         @on-location-chosen="handleLocationChosen"/> -->
         <d-choose-spots
-        label="选择负责的景点"
+        label="负责景点"
         :spots="form.favorSpots"/>
     </div>
     <div class="item-wrapper">
@@ -92,8 +92,9 @@ export default {
     wx.getStorage({
       key: 'selectedSpots',
       success: (res)　=> {
+        console.log('内容:');
         console.log(res);
-        this.form.favorSpots = res;
+        this.form.favorSpots = res.data;
         wx.removeStorage({
           key: 'selectedSpots',
           success: () => {

@@ -33,7 +33,15 @@ export default {
   },
   computed: {
       info () {
-          return this.spots.length === 0 ? '未选择，点击选择景点' : '已选择';
+          if(this.spots.length === 0) return '未选择，点击选择景点';
+          else {  
+              var res =  this.spots.map(
+                  (spot) => spot.name
+              ).reduce(
+                  (x, y) => x + '，' + y
+              )
+              return res;
+          }
       }
   },
   methods: {
