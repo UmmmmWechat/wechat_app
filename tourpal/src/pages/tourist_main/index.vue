@@ -1,12 +1,22 @@
 <template>
 <div>
   <div id="head" class="d-head">
-      <div>
-        <span>欢迎&emsp;</span>
+      <div id="user-info-div">
+        <span>欢迎：</span>
         <span
         class="underline-span"
-        @click="handleToPersonCenter"
-        >{{ touristName }}</span>
+        
+        >
+          <!-- <open-data type="userNickName"></open-data> -->
+          <!-- id="user-info-btn" -->
+          <button 
+          
+          class="d-back-btn-white"
+          size="mini" 
+          open-type="getUserInfo" 
+          @getuserinfo="handleGetUserInfo"
+          @click="handleToPersonCenter">{{touristName}}</button>
+        </span>
       </div>
       <div>
         <span>你所旅游的地点：</span>
@@ -107,8 +117,9 @@ export default {
       },
       spots: [],
       searchSpots: [],
-      touristName: '用户',
+      touristName: '获取用户信息',
       touristId: 'id',
+      tourist: undefined,
       filter: '',
       loading: false,
       hasMore: true,
@@ -133,19 +144,19 @@ export default {
     }
   },
   mounted () {
-    // wx.showTabBar();
-    wx.login({
-      success: (res) => {
-        console.log(res.code);
-        wx.getUserInfo({
-          success: (res2) => {
-            var userInfo = res2.userInfo;
-            console.log(userInfo);
-            this.touristName = userInfo.nickName;
-          }
-        })
-      }
-    })
+    // // wx.showTabBar();
+    // wx.login({
+    //   success: (res) => {
+    //     console.log(res.code);
+    //     wx.getUserInfo({
+    //       success: (res2) => {
+    //         var userInfo = res2.userInfo;
+    //         console.log(userInfo);
+    //         this.touristName = userInfo.nickName;
+    //       }
+    //     })
+    //   }
+    // })
     this.getSpots();
     wx.getSystemInfo({
       success: (res) => {
@@ -192,6 +203,10 @@ export default {
       this.getSpots();
     },
     handleToPersonCenter (event) {
+      if(this.tourist === undefined) {
+        console.log('tourist undefined')
+        return;
+      }
       console.log("跳转到个人中心");
       wx.setStorage({
         key: 'touristId',
@@ -201,6 +216,20 @@ export default {
             url: '/pages/tourist_center/main'
           })
         }
+      })
+    },
+    handleGetUserInfo (event) {
+      console.log(event);
+      if(this.tourist !== undefined) return;
+      let userInfo = event.target.userInfo;
+      this.tourist = {
+        name: userInfo.nickName,
+        avatar: userInfo.avatarUrl
+      }
+      this.touristName = this.tourist.name;
+      wx.setStorage({
+        key: 'tourist',
+        data: this.tourist
       })
     },
     handleSearchFocus (event) {
@@ -253,7 +282,21 @@ z-index: 100;
   border-color: white;
 }
 
+#user-info-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
 
+#user-info-btn {
+  background-color: transparent;
+  border-color: transparent;
+  outline: none;
+  /* text-decoration: underline; */
+  display: inline-block;
+  color: white;
+  padding: 0;
+}
 </style>
 
 <style scoped src="../../assets/style/d-head.css" />

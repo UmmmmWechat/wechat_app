@@ -19,6 +19,8 @@ public class Spot implements Serializable {
 
     private String introduction;
 
+    private int popularity;
+
     private int recommendLevel;
 
     public int getId() {
@@ -59,6 +61,14 @@ public class Spot implements Serializable {
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public int getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(int popularity) {
+        this.popularity = popularity;
     }
 
     public int getRecommendLevel() {

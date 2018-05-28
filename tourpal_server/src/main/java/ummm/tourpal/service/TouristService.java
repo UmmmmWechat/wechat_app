@@ -1,9 +1,6 @@
 package ummm.tourpal.service;
 
-import ummm.tourpal.entity.Feedback;
-import ummm.tourpal.entity.Guide;
-import ummm.tourpal.entity.Order;
-import ummm.tourpal.entity.Tourist;
+import ummm.tourpal.entity.*;
 
 import java.util.List;
 
@@ -14,15 +11,15 @@ public interface TouristService {
 
     List<Guide> queryGuideBySpot(int spotId, int lastIndex);
 
-    public List<Guide> queryGuideByKeyword(String keyword, int lastIndex);
+    List<Guide> queryGuideByKeyword(String keyword, int lastIndex);
 
-    int inviteGuide(int touristId, int spotId, int guideId, String message);
+    int inviteGuide(OrderPre orderPre);
 
-    List<Order> queryOrders(int touristId, String state, int lastIndex);
+    List<Order> queryOrders(int touristId, State state, int lastIndex);
 
     List<Order> queryOrdersByKeyword(int touristId, String keyword, int lastIndex);
 
-    boolean cancelOrder(int orderId, String cancelMessage);
+    ResultMessage cancelOrder(int orderId, String cancelMessage);
 
-    boolean commendOrder(int orderId, Feedback feedback);
+    ResultMessage commendOrder(int orderId, Feedback feedback);
 }

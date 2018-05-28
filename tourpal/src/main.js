@@ -36,6 +36,8 @@ export default {
             'pages/guide_center_info/main',
             'pages/guide_center_experience/main',
 
+            'pages/select_spots/main',
+
             'pages/test/main',
             'pages/z_test/main',
         ],
