@@ -3,7 +3,7 @@
 
 <template>
   <div class="d-card">
-      <div id="body">
+      <div id="body" @click="checkOrderDetail">
         <div><span class="title-span">景点：</span><span class="link">{{ spotName }}</span></div>
         <div><span class="title-span">游客：</span><span class="link">{{ touristName }}</span></div>
       </div>
@@ -11,7 +11,11 @@
 </template>
 
 <script>
+import * as constant from '../../pages/guide_check_order/constant'
+import * as urlList from '../../pages/pages_url'
+
 import orderApi from '../../api/order'
+
 export default {
   props: {
     order: {
@@ -36,6 +40,23 @@ export default {
       (res) => {this.touristName = res.name;},
       (err) => {}
     )
+  },
+  methods: {
+    checkOrderDetail() {
+      wx.setStorage({
+        key: constant.SELECTED_ORDER_KEY,
+        data: this.order,
+        success: function(res) {
+          console.log(res);
+          wx.navigateTo({
+            url: "/" + urlList.GUIDE_CHECK_ORDER
+          })
+        },
+        fail: function(res) {
+          console.log(res);
+        }
+      })
+    }
   }
 }
 </script>

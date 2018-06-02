@@ -1,9 +1,9 @@
-
 /* 邀请卡片，也就是一项订单，这个是为guide准备的*/
 
 <template>
   <div class="d-card">
-      <div class="head">
+    <section @click="checkOrderDetail">
+            <div class="head">
         <span>{{order.state}}</span>
       </div>
       <div id="body">
@@ -12,6 +12,8 @@
         <div><span class="title-span">邀请日期：</span>{{ order.generatedDate }}</div>
         <div><span class="title-span">旅游日期：</span>{{ order.travelDate }}</div>
       </div>
+    </section>
+
       <div 
       id="foot"
       v-if="order.state === 'waiting'">
@@ -27,7 +29,11 @@
 </template>
 
 <script>
+import * as constant from '../../pages/guide_check_order/constant'
+import * as urlList from '../../pages/pages_url'
+
 import orderApi from '../../api/order'
+
 export default {
   props: {
     order: {
@@ -52,6 +58,22 @@ export default {
       (res) => {this.touristName = res.name;},
       (err) => {}
     )
+  },
+  methods: {
+    checkOrderDetail() {
+      wx.setStorage({
+        key: constant.SELECTED_ORDER_KEY,
+        data: this.order,
+        success: function(res) {
+          wx.navigateTo({
+            url: "/" + urlList.GUIDE_CHECK_ORDER
+          })
+        },
+        fail: function(res) {
+          console.log(res);
+        }
+      })
+    }
   }
 }
 </script>
@@ -88,4 +110,3 @@ export default {
 </style>
 <style scoped src="../../assets/style/d-card.css"/>
 <style scoped src="../../assets/style/d-a.css"/>
-
