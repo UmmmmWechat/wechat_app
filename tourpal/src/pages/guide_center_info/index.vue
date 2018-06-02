@@ -66,8 +66,11 @@
                 placeholder="请简短地介绍自己"
                 label="个人简介"/>
             </div>
-            <div>
-                负责景点（待完成）
+            
+            <div class="item-wrapper">
+                <d-choose-spots
+                label="负责景点"
+                :spots="form.favorSpots"/>
             </div>
             <div class="item-wrapper button-wrapper">
                 <button 
@@ -84,13 +87,15 @@
 <script>
 import DInput from '../../components/common/DInput'
 import DTextArea from '../../components/common/DTextarea'
+import DChooseSpots from '../../components/common/DChooseSpots'
 
 import guideApi from '../../api/guide'
 
 export default {
     components: {
         DInput,
-        DTextArea
+        DTextArea,
+        DChooseSpots
     },
     data() {
         return {
