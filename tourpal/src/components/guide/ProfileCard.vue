@@ -15,6 +15,7 @@
 
 <script>
 import GuideApi from "../../api/guide"
+import * as constant from "./constant"
 
 export default {
     data() {
@@ -26,12 +27,11 @@ export default {
     },
     mounted() {
         wx.getStorage({
-            key: 'guideId',
+            key: constant.GUIDE_ID,
             success: (res) => {
                 console.log("取得向导ID成功", res)
                 this.userId = res.data
                 this.setGuideInfo()
-
             },
             fail: (fai) => {
                 console.error("取得向导ID失败", fai)
@@ -47,7 +47,7 @@ export default {
                     this.avatar = guide.avatar
                     this.realName = guide.realName
                     wx.setStorage({
-                        key: "guideInfo",
+                        key: constant.GUIDE_INFO,
                         data: guide,
                         success: (suc) => {
                             console.log("存储导游信息成功", suc)
