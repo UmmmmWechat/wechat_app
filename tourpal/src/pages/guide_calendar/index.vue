@@ -1,22 +1,29 @@
 <template>
   <section>
     <section>
-      <calendar/>
+      <calendar
+      v-on:choseDay="clickDay"
+      v-on:changeMonth="changeDate"/>
+    </section>
+    <section>
+      <order-list-mini
+      :orders="orders"/>
     </section>
   </section>
 </template>
 
 <script>
 import Calendar from "../../components/guide/Calendar"
+import OrderListMini from "../../components/order/OrderListMini"
 import GuideApi from "../../api/guide"
 
 export default {
   components: {
-    Calendar
+    Calendar,
+    OrderListMini
   },
   data() {
     return {
-      
       orders: []
     }
   },
@@ -35,7 +42,13 @@ export default {
         (err) => {
           console.log(err)
         })
-    }
+    },
+    clickDay(data) {
+      console.log(data); //选中某天
+    },
+    changeDate(data) {
+      console.log(data); //左右点击切换月份
+    },
   }
 }
 </script>

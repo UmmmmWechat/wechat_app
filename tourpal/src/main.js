@@ -5,12 +5,12 @@ import 'animate.css'
 // import 'iview/dist/styles/iview.css';
 import './assets/style/index.css'
 
-Vue.config.productionTip = false
-App.mpType = 'app'
+Vue.config.productionTip = false;
+App.mpType = 'app';
 
 
-const app = new Vue(App)
-app.$mount()
+const app = new Vue(App);
+app.$mount();
 
 export default {
     // 这个字段走 app.json
