@@ -6,7 +6,7 @@
           {{label}}
       </div>
       <div id="input-wrapper">
-          <picker 
+          <picker
           mode="date"
           :start="start"
           :end="end"
@@ -21,30 +21,28 @@
 <script>
 export default {
   props: {
-      label: {
-          type: String,
-          default: ''
-      },
-      start: {
-          type: String,
-          default: '1900-01-01'
-      },
-      end: {
-          type: String,
-          default: '2020-01-01'
-      }
+    label: {
+      type: String,
+      default: ''
+    },
+    start: {
+      type: String
+    },
+    end: {
+      type: String
+    }
   },
   data () {
-      return {
-          result: '未选择，点击开始选择'
-      }
+    return {
+      result: '未选择，点击开始选择'
+    }
   },
   methods: {
-      handleChange (event) {
-          console.log(event);
-          this.result = event.target.value;
-          this.$emit('on-change', event);
-      }
+    handleChange (event) {
+      console.log(event)
+      this.result = event.target.value
+      this.$emit('on-change', event)
+    }
   }
 }
 </script>
