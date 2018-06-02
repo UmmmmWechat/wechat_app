@@ -11,8 +11,6 @@ public class GuidePre {
 
     public char gender; //性别
 
-    public Location location; //地址
-
     public String wechat; //微信号
 
     public String phone; //电话号码
