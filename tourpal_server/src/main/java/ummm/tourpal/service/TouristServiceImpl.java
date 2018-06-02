@@ -43,21 +43,17 @@ public class TouristServiceImpl implements TouristService {
         return tourist.getId();
     }
 
-
-    @Cacheable(value = "tourist", key = "#tourist.id")
     @Override
     public Tourist queryById(int id) {
         return touristRepository.getOne(id);
     }
 
-
-    @Cacheable(value = "guide", key = "#guide.id")
     @Override
     public List<Guide> queryGuideBySpot(int spotId, int lastIndex) {
         if (lastIndex == NumberUtil.ALL_INDEX)
             return guideRepository.findByFavorSpots(spotId, Integer.MAX_VALUE);
 
-        int limit = lastIndex + NumberUtil.SEARCH;
+        int limit = lastIndex + NumberUtil.PAGE;
 
         List<Guide> guides = guideRepository.findByFavorSpots(spotId, limit);
 
@@ -75,7 +71,7 @@ public class TouristServiceImpl implements TouristService {
         if (lastIndex == NumberUtil.ALL_INDEX)
             return guideRepository.findByKeyword(keyword, Integer.MAX_VALUE);
 
-        int limit = lastIndex + NumberUtil.SEARCH;
+        int limit = lastIndex + NumberUtil.PAGE;
 
         List<Guide> guides = guideRepository.findByKeyword(keyword, limit);
 
@@ -106,54 +102,55 @@ public class TouristServiceImpl implements TouristService {
     @Cacheable(value = "order", key = "#order.id")
     @Override
     public List<Order> queryOrders(int touristId, State state, int lastIndex) {
-        if (state == State.ALL) {
-            if (lastIndex == NumberUtil.ALL_INDEX)
-                return orderRepository.findByTouristId(touristId, Integer.MAX_VALUE);
-            else {
-                int limit = lastIndex + NumberUtil.SEARCH;
-
-                List<Order> orders = orderRepository.findByTouristId(touristId, limit);
-
-                int size = orders.size();
-
-                if (size >= limit)
-                    return orders.subList(lastIndex, limit);
-
-                return orders.subList(lastIndex, size);
-            }
-        }
-
-        if (lastIndex == NumberUtil.ALL_INDEX)
-            return orderRepository.findByTouristIdAndState(touristId, state, Integer.MAX_VALUE);
-
-        int limit = lastIndex + NumberUtil.SEARCH;
-
-        List<Order> orders = orderRepository.findByTouristIdAndState(touristId, state, limit);
-
-        int size = orders.size();
-
-        if (size >= limit)
-            return orders.subList(lastIndex, limit);
-
-        return orders.subList(lastIndex, size);
+//        if (state == State.ALL) {
+//            if (lastIndex == NumberUtil.ALL_INDEX)
+//                return orderRepository.findByTouristId(touristId, Integer.MAX_VALUE);
+//            else {
+//                int limit = lastIndex + NumberUtil.PAGE;
+//
+//                List<Order> orders = orderRepository.findByTouristId(touristId, limit);
+//
+//                int size = orders.size();
+//
+//                if (size >= limit)
+//                    return orders.subList(lastIndex, limit);
+//
+//                return orders.subList(lastIndex, size);
+//            }
+//        }
+//
+//        if (lastIndex == NumberUtil.ALL_INDEX)
+//            return orderRepository.findByTouristIdAndState(touristId, state, Integer.MAX_VALUE);
+//
+//        int limit = lastIndex + NumberUtil.PAGE;
+//
+//        List<Order> orders = orderRepository.findByTouristIdAndState(touristId, state, limit);
+//
+//        int size = orders.size();
+//
+//        if (size >= limit)
+//            return orders.subList(lastIndex, limit);
+//
+//        return orders.subList(lastIndex, size);
+        return null;
     }
 
-    @Cacheable(value = "order", key = "#order.id")
     @Override
     public List<Order> queryOrdersByKeyword(int touristId, String keyword, int lastIndex) {
-        if (lastIndex == NumberUtil.ALL_INDEX)
-            return orderRepository.findByTouristIdAndKeyword(touristId, keyword, Integer.MAX_VALUE);
-
-        int limit = lastIndex + NumberUtil.SEARCH;
-
-        List<Order> orders = orderRepository.findByTouristIdAndKeyword(touristId, keyword, limit);
-
-        int size = orders.size();
-
-        if (size >= limit)
-            return orders.subList(lastIndex, limit);
-
-        return orders.subList(lastIndex, size);
+//        if (lastIndex == NumberUtil.ALL_INDEX)
+//            return orderRepository.findByTouristIdAndKeyword(touristId, keyword, Integer.MAX_VALUE);
+//
+//        int limit = lastIndex + NumberUtil.PAGE;
+//
+//        List<Order> orders = orderRepository.findByTouristIdAndKeyword(touristId, keyword, limit);
+//
+//        int size = orders.size();
+//
+//        if (size >= limit)
+//            return orders.subList(lastIndex, limit);
+//
+//        return orders.subList(lastIndex, size);
+        return null;
     }
 
 
