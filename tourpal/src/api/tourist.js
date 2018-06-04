@@ -18,15 +18,23 @@ const apiName = 'touristApi';
 const isTestMode = true;
 
 import * as constant from "./../components/tourist/constant";
+import * as serverUrl from "./apiUrl";
+import * as returnMessage from "./returnMessage";
+import * as httpRequest from "./httpRequestApi";
 
 export default {
 
+    /**
+     * 打印信息的方法
+     * @param {*} message 
+     * @param {*} optionalParams 
+     */
     dLog(message, ...optionalParams) {
-        console.log(apiName, message, optionalParams);
-    },
-
-    stubLog(message, ...optionalParams) {
-        console.log(apiName, 'stub', message, optionalParams);
+        if (isTestMode) {
+            console.log(apiName, 'stub', message, optionalParams);
+        } else {
+            console.log(apiName, message, optionalParams);
+        }
     },
 
     /**
@@ -35,7 +43,7 @@ export default {
      * @param {*} reject 
      */
     logInStub(resolve, reject) {
-        this.stubLog('logIn 方法请求');
+        this.dLog('logIn 方法请求');
 
         const touristId = 'testTouristID';
         // 保存 游客ID
@@ -43,11 +51,11 @@ export default {
             key: constant.TOURIST_ID,
             data: touristId,
             success: () => {
-                this.stubLog('保存游客ID成功');
+                this.dLog('保存游客ID成功');
                 resolve();
             },
             fail: () => {
-                this.stubLog('保存游客ID失败');
+                this.dLog('保存游客ID失败');
                 reject();
             }
         })
@@ -72,41 +80,42 @@ export default {
                     this.dLog('登录成功！', res);
 
                     if (res.code) {
-                        // TODO 发起网络请求
-                        wx.request({
-                            url: touristLoginUrl,
-                            data: {
-                                code: res.code
-                            },
-                            method: POST,
-                            success: (suc) => {
-                                // 成功的返回信息中应包含 touristId
-                                this.dLog('服务器端登录成功', suc);
+                        // 发起网络请求
+                        var onSuccess = (suc) => {
+                            // 成功的返回信息中应包含 touristId
+                            this.dLog('服务器端登录成功', suc);
 
-                                // 保存 游客ID
-                                if (suc.touristId) {
-                                    wx.setStorage({
-                                        key: constant.TOURIST_ID,
-                                        data: suc.touristId,
-                                        success: () => {
-                                            this.dLog('保存游客ID成功');
-                                            resolve();
-                                        },
-                                        fail: () => {
-                                            this.dLog('保存游客ID失败');
-                                            reject();
-                                        }
-                                    })
-                                } else {
-                                    this.dLog('从服务器端取得游客ID失败');
-                                    reject();
-                                }
-                            },
-                            fail: (fai) => {
-                                this.dLog('服务器端登录失败', fai);
+                            // 保存 游客ID
+                            if (suc.touristId) {
+                                wx.setStorage({
+                                    key: constant.TOURIST_ID,
+                                    data: suc.touristId,
+                                    success: () => {
+                                        this.dLog('保存游客ID成功');
+                                        resolve();
+                                    },
+                                    fail: () => {
+                                        this.dLog('保存游客ID失败');
+                                        reject();
+                                    }
+                                })
+                            } else {
+                                this.dLog('从服务器端取得游客ID失败');
                                 reject();
                             }
-                        })
+                        };
+                        var onFail = (fai) => {
+                            this.dLog('服务器端登录失败', fai);
+                            reject();
+                        }
+                        httpRequest.dRequest(
+                            serverUrl.TOURIST_LOGIN, {
+                                code: res.code
+                            },
+                            "POST",
+                            onSuccess,
+                            onFail
+                        );
                     }
                 },
                 fail: (fai) => {
