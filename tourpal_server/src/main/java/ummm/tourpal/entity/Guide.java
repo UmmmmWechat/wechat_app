@@ -8,9 +8,9 @@ import java.util.List;
 public class Guide implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id; //
+    private int id; // 
 
-    private String openId;
+    private String openId; //
 
     private String avatar;
 
@@ -19,9 +19,6 @@ public class Guide implements Serializable {
     private String idCard;
 
     private char gender;
-
-    @Embedded
-    private Location location;
 
     private String wechat;
 
@@ -33,9 +30,23 @@ public class Guide implements Serializable {
 
     private int numOfFinishOrder;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable
+    @ElementCollection(targetClass = Integer.class, fetch = FetchType.EAGER)
+    @Column(name = "favor_spot")
     private List<Integer> favorSpots;
+
+    public Guide(String openId, String avatar, String realName, String idCard, char gender, String wechat, String phone, String introduction, int goodFeedbackRate, int numOfFinishOrder, List<Integer> favorSpots) {
+        this.openId = openId;
+        this.avatar = avatar;
+        this.realName = realName;
+        this.idCard = idCard;
+        this.gender = gender;
+        this.wechat = wechat;
+        this.phone = phone;
+        this.introduction = introduction;
+        this.goodFeedbackRate = goodFeedbackRate;
+        this.numOfFinishOrder = numOfFinishOrder;
+        this.favorSpots = favorSpots;
+    }
 
     public int getId() {
         return id;
@@ -85,14 +96,6 @@ public class Guide implements Serializable {
         this.gender = gender;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public String getWechat() {
         return wechat;
     }
@@ -132,14 +135,6 @@ public class Guide implements Serializable {
     public void setNumOfFinishOrder(int numOfFinishOrder) {
         this.numOfFinishOrder = numOfFinishOrder;
     }
-
-//    public Set<Integer> getFavorSpots() {
-//        return favorSpots;
-//    }
-//
-//    public void setFavorSpots(Set<Integer> favorSpots) {
-//        this.favorSpots = favorSpots;
-//    }
 
     public List<Integer> getFavorSpots() {
         return favorSpots;

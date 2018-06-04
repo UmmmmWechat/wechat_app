@@ -27,8 +27,7 @@ public class Order implements Serializable {
 
     private String cancelReason;
 
-    @OneToOne
-    @JoinColumn(name = "feedback_id")
+    @OneToOne(cascade = CascadeType.ALL)
     private Feedback feedback;
 
     public int getId() {

@@ -1,6 +1,7 @@
 package ummm.tourpal.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -17,6 +18,7 @@ public class Spot implements Serializable {
 
     private String pictureUrl;
 
+    @Lob
     private String introduction;
 
     private int popularity;

@@ -157,6 +157,16 @@ export default {
     //     })
     //   }
     // })
+    console.log('request')
+    wx.request({
+      url: 'https://www.injusalon.com/count/user/getRealInfo',
+      data: {
+        userName: '10k'
+      },
+      success: (res) => {
+        console.log(res)
+      }
+    })
     this.getSpots();
     wx.getSystemInfo({
       success: (res) => {

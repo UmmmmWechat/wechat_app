@@ -6,7 +6,7 @@
           {{label}}
       </div>
       <div id="input-wrapper">
-          <picker 
+          <picker
           mode="selector"
           :range="range"
           @change="handleChange">
@@ -33,6 +33,7 @@ export default {
       return {
           result: '未选择，点击开始选择'
       }
+      JSON.parse(false)
   },
   methods: {
       handleChange (event) {
