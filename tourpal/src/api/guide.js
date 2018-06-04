@@ -6,7 +6,6 @@ import * as httpRequest from "./httpRequestApi";
 
 const guideLoginUrl = 'https://test.com/onLogin';
 const apiName = 'guideApi';
-const isTestMode = true;
 
 export default {
 
@@ -16,7 +15,7 @@ export default {
      * @param {*} optionalParams 
      */
     dLog(message, ...optionalParams) {
-        if (isTestMode) {
+        if (httpRequest.isTestMode) {
             console.log(apiName, 'stub', message, optionalParams);
         } else {
             console.log(apiName, message, optionalParams);
@@ -31,20 +30,28 @@ export default {
     logInStub(resolve, reject) {
         this.dLog('logIn 方法请求');
 
-        const guideId = 'testGuideID';
-        // 保存 向导ID
-        wx.setStorage({
-            key: constant.GUIDE_ID,
-            data: guideId,
-            success: () => {
-                this.dLog('保存向导ID成功');
-                resolve();
-            },
-            fail: () => {
-                this.dLog('保存向导ID失败');
-                reject();
-            }
-        })
+        // 是否是 新的导游
+        const isNewGuide = false;
+        if (isNewGuide) {
+            this.dLog('新导游，需要进行注册');
+            resolve({ isNewGuide: isNewGuide });
+        } else {
+            this.dLog('老导游，不需要进行注册');
+            const guideId = 'testGuideID';
+            // 保存 向导ID
+            wx.setStorage({
+                key: constant.GUIDE_ID,
+                data: guideId,
+                success: () => {
+                    this.dLog('保存向导ID成功');
+                    resolve({ isNewGuide: isNewGuide });
+                },
+                fail: () => {
+                    this.dLog('保存向导ID失败');
+                    reject();
+                }
+            })
+        }
     },
 
     /**
@@ -55,7 +62,7 @@ export default {
     logIn(resolve, reject) {
         this.dLog('logIn 方法请求');
 
-        if (isTestMode) {
+        if (httpRequest.isTestMode) {
             this.logInStub(resolve, reject);
         } else {
             wx.login({
@@ -65,23 +72,32 @@ export default {
                     if (res.code) {
                         // 发起网络请求
                         var onSuccess = (suc) => {
-                            // 成功的返回信息中应包含 touristId
+                            // 成功的返回信息中包含 guideId 或 NOT_FOUND 
                             this.dLog('服务器端登录成功', suc);
 
-                            // 保存 向导ID
-                            if (suc.touristId) {
-                                wx.setStorage({
-                                    key: constant.TOURIST_ID,
-                                    data: suc.touristId,
-                                    success: () => {
-                                        this.dLog('保存向导ID成功');
-                                        resolve();
-                                    },
-                                    fail: () => {
-                                        this.dLog('保存向导ID失败');
-                                        reject();
-                                    }
-                                })
+                            if (suc) {
+                                // 检查是否是 新的导游
+                                const isNewGuide = suc == returnMessage.NOT_FOUND;
+                                if (isNewGuide) {
+                                    // 没有找到这个导游 需要进行注册
+                                    this.dLog('新导游，需要进行注册');
+                                    resolve({ isNewGuide: isNewGuide });
+                                } else {
+                                    // 找到了这个导游 保存 guideId 取得信息并保存
+                                    this.dLog('老导游，不需要进行注册');
+                                    wx.setStorage({
+                                        key: constant.GUIDE_ID,
+                                        data: suc,
+                                        success: () => {
+                                            this.dLog('保存向导ID成功');
+                                            resolve({ isNewGuide: isNewGuide });
+                                        },
+                                        fail: () => {
+                                            this.dLog('保存向导ID失败');
+                                            reject();
+                                        }
+                                    })
+                                }
                             } else {
                                 this.dLog('从服务器端取得向导ID失败');
                                 reject();
@@ -92,10 +108,10 @@ export default {
                             reject();
                         }
                         httpRequest.dRequest(
-                            serverUrl.TOURIST_LOGIN, {
+                            serverUrl.GUIDE_LOGIN, {
                                 code: res.code
                             },
-                            "POST",
+                            httpRequest.POST,
                             onSuccess,
                             onFail
                         );

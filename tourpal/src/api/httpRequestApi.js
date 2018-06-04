@@ -1,4 +1,6 @@
 const BASE_URL = "http://localhost:3000";
+const POST = "POST";
+const GET = "GET";
 var dRequest = (url, data, method, onSuccess, onFail) => {
     wx.request({
         url: BASE_URL + url,
@@ -15,6 +17,11 @@ var dRequest = (url, data, method, onSuccess, onFail) => {
     })
 }
 
+const isTestMode = true;
+
 export {
-    dRequest
+    dRequest,
+    POST,
+    GET,
+    isTestMode
 }

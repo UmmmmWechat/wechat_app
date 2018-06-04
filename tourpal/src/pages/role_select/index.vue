@@ -1,4 +1,4 @@
-<template>
+<template class="page">
   <div class="container">
     <div 
     class="role-card" 
@@ -76,11 +76,15 @@ export default {
           // resolve
           this.dLog('向导登录成功', res);
 
-          const url = res.isNewGuide?
-          `/${urlList.GUIDE_SIGN_UP}`:
-          `/${urlList.GUIDE_MAIN}`;
-          this.dLog('跳转', url);
-          wx.redirectTo({ url });
+          if (res.isNewGuide) {
+            const url = `/${urlList.GUIDE_SIGN_UP}`;
+            this.dLog('跳转', url);
+            wx.redirectTo({ url });
+          } else {
+            const url = `/${urlList.GUIDE_MAIN}`;
+            this.dLog('跳转', url);
+            wx.switchTab({ url });
+          }
         },
         () => {
           this.dError('向导登录失败');
@@ -93,16 +97,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#tourist-role-card {
-  background-color: rgb(255, 127, 116);
-  box-shadow: 0 0 30rpx rgb(255, 127, 116);
-  /* background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(rgb(230, 75, 70)), to(rgb(247, 147, 144))); */
+.container {
+  position: fixed;
+  
+  height: 100%;
+  width: 100%;
+  padding-bottom: 20%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;/*垂直居中*/
+  justify-content: center;/*水平居中*/
 }
-#guide-role-card{
-  background-color: rgb(254, 185, 126);
-  box-shadow: 0 0 30rpx rgb(254, 185, 126);
-   /* background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(rgb(138, 207, 64)), to(rgb(198, 248, 144))); */
-}
+
 .role-card {
   width: 600rpx;
   height: 200rpx;
@@ -131,6 +138,18 @@ export default {
   font-size: 0.9em;
   margin:10rpx;
   color: rgba(255,255,255,0.7);
+}
+
+#tourist-role-card {
+  background-color: rgb(255, 127, 116);
+  box-shadow: 0 0 30rpx rgb(255, 127, 116);
+  /* background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(rgb(230, 75, 70)), to(rgb(247, 147, 144))); */
+}
+
+#guide-role-card{
+  background-color: rgb(254, 185, 126);
+  box-shadow: 0 0 30rpx rgb(254, 185, 126);
+   /* background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(rgb(138, 207, 64)), to(rgb(198, 248, 144))); */
 }
 
 </style>

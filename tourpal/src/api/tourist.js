@@ -15,7 +15,6 @@ var mockGuide = function(i) {
 
 const touristLoginUrl = 'https://test.com/onLogin';
 const apiName = 'touristApi';
-const isTestMode = true;
 
 import * as constant from "./../components/tourist/constant";
 import * as serverUrl from "./apiUrl";
@@ -30,7 +29,7 @@ export default {
      * @param {*} optionalParams 
      */
     dLog(message, ...optionalParams) {
-        if (isTestMode) {
+        if (httpRequest.isTestMode) {
             console.log(apiName, 'stub', message, optionalParams);
         } else {
             console.log(apiName, message, optionalParams);
@@ -72,7 +71,7 @@ export default {
     logIn(resolve, reject) {
         this.dLog('logIn 方法请求');
 
-        if (isTestMode) {
+        if (httpRequest.isTestMode) {
             this.logInStub(resolve, reject);
         } else {
             wx.login({
@@ -81,15 +80,15 @@ export default {
 
                     if (res.code) {
                         // 发起网络请求
-                        var onSuccess = (suc) => {
-                            // 成功的返回信息中应包含 touristId
-                            this.dLog('服务器端登录成功', suc);
+                        var onSuccess = (touristId) => {
+                            // 成功的返回信息中包含 touristId
+                            this.dLog('服务器端登录成功', touristId);
 
-                            // 保存 游客ID
-                            if (suc.touristId) {
+                            if (touristId) {
+                                // 保存 游客ID
                                 wx.setStorage({
                                     key: constant.TOURIST_ID,
-                                    data: suc.touristId,
+                                    data: touristId,
                                     success: () => {
                                         this.dLog('保存游客ID成功');
                                         resolve();
@@ -112,7 +111,7 @@ export default {
                             serverUrl.TOURIST_LOGIN, {
                                 code: res.code
                             },
-                            "POST",
+                            httpRequest.POST,
                             onSuccess,
                             onFail
                         );
