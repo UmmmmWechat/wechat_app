@@ -1,9 +1,113 @@
 import * as mockData from "./mock/guide_mock_data";
+import * as constant from "./../components/guide/constant";
+
+const guideLoginUrl = 'https://test.com/onLogin';
+const apiName = 'guideApi';
+const isTestMode = true;
 
 export default {
 
-    guideLogin() {
+    dLog(message, ...optionalParams) {
+        console.log(apiName, message, optionalParams);
+    },
 
+    stubLog(message, ...optionalParams) {
+        console.log(apiName, 'stub', message, optionalParams);
+    },
+
+    /**
+     * 向导登录桩
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    logInStub(resolve, reject) {
+        this.stubLog('logIn 方法请求');
+
+        const touristId = 'testTouristID';
+        // 保存 向导ID
+        wx.setStorage({
+            key: constant.TOURIST_ID,
+            data: touristId,
+            success: () => {
+                this.stubLog('保存向导ID成功');
+                resolve();
+            },
+            fail: () => {
+                this.stubLog('保存向导ID失败');
+                reject();
+            }
+        })
+    },
+
+    /**
+     * 导游登录
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    logIn(resolve, reject) {
+        this.dLog('logIn 方法请求');
+
+        if (isTestMode) {
+            this.logInStub(resolve, reject);
+        } else {
+            wx.login({
+                success: (res) => {
+                    this.dLog('登录成功！', res);
+
+                    if (res.code) {
+                        // TODO 发起网络请求
+                        wx.request({
+                            url: guideLoginUrl,
+                            data: {
+                                code: res.code
+                            },
+                            method: POST,
+                            success: (suc) => {
+                                // 成功的返回信息中应包含 向导信息 guide 是否为新向导 isNewGuide TODO
+                                this.dLog('服务器端登录成功', suc);
+                                const guide = suc.guide;
+
+                                // 保存 向导ID 和 向导信息
+                                if (guide) {
+                                    wx.setStorage({
+                                        key: constant.GUIDE_ID,
+                                        data: guide.id,
+                                        success: () => {
+                                            this.dLog('保存向导ID成功');
+                                            wx.setStorage({
+                                                key: constant.GUIDE_INFO,
+                                                data: guide,
+                                                success: () => {
+
+                                                },
+                                                fail: () => {
+
+                                                }
+                                            })
+                                            resolve();
+                                        },
+                                        fail: () => {
+                                            this.dLog('保存向导ID失败');
+                                            reject();
+                                        }
+                                    })
+                                } else {
+                                    this.dLog('从服务器端取得向导信息失败');
+                                    reject();
+                                }
+                            },
+                            fail: (fai) => {
+                                this.dLog('服务器端登录失败', fai);
+                                reject();
+                            }
+                        })
+                    }
+                },
+                fail: (fai) => {
+                    this.dLog('登录失败！', fai);
+                }
+            });
+        }
     },
 
     /**

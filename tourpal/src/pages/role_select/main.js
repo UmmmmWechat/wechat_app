@@ -5,7 +5,7 @@ const app = new Vue(App)
 app.$mount()
 
 export default {
-  config: {
-    navigationBarTitleText: '请问你是？'
-  }
+    config: {
+        navigationBarTitleText: '欢迎，请问你是？'
+    }
 }

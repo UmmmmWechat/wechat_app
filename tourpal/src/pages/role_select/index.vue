@@ -1,43 +1,90 @@
 <template>
-  <div class="container" >
+  <div class="container">
     <div 
     class="role-card" 
-    id="card-1"
-   >
-      <p class="title">游客</p>
-      <p class="extra">我达达的马蹄，美丽的错误</p>
+    id="tourist-role-card"
+    @click="handleChooseTourist">
+      <p class="title">{{ touristPrompot.title }}</p>
+      <p class="extra">{{ touristPrompot.extra }}</p>
     </div>
     <div 
     class="role-card" 
-    id="card-2"
+    id="guide-role-card"
     @click="handleChooseGuide">
-      <p class="title">向导</p>
-      <p class="extra">守着这一方水土，等待着谁的到来</p>
+      <p class="title">{{ guidePrompt.title }}</p>
+      <p class="extra">{{ guidePrompt.extra }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import guideApi from '../../api/guide'
+import * as urlList from '../pages_url';
+
+import guideApi from '../../api/guide';
+import touristApi from '../../api/tourist';
+
 export default {
   data () {
     return {
+      touristPrompot: {
+        title: "游客",
+        extra: "我达达的马蹄，美丽的错误"
+      },
+      guidePrompt: {
+        title: "向导",
+        extra: "守着这一方水土，等待着谁的到来"
+      },
+      pageName: "role_select"
     }
   },
+  mounted() {
+    // TODO 检查是否需要重新选择登录
+
+  },
   methods: {
-    handleChooseGuide () {
-      console.log('选择了引路人');
-      guideApi.queryIfNew(
-        '',
-        (res) => {
-          // 是新的guide
-          if (res) {
-            const url = '../guide_sign_up/main';
-            wx.navigateTo({ url });
-          }
+    dLog(message, ...optionalParams) {
+        console.log(this.pageName, message, optionalParams);
+    },
+    dError(message, ...optionalParams) {
+        console.error(this.pageName, message, optionalParams);
+    },
+    handleChooseTourist() {
+      // 选择游客
+      this.dLog('选择了游客');
+
+      touristApi.logIn(
+        () => {
+          // resolve
+          this.dLog('游客登录成功');
+
+          const url = `/${urlList.TOURIST_MAIN}`;
+          this.dLog('跳转', url);
+          wx.redirectTo({ url });
         },
-        (err) => {
-          console.log(err);
+        () => {
+          this.dError('游客登录失败');
+          // TODO 
+        }
+      );
+    },
+    handleChooseGuide () {
+      // 选择向导
+      this.dLog('选择了向导');
+
+      guideApi.logIn(
+        (res) => {
+          // resolve
+          this.dLog('向导登录成功', res);
+
+          const url = res.isNewGuide?
+          `/${urlList.GUIDE_SIGN_UP}`:
+          `/${urlList.GUIDE_MAIN}`;
+          this.dLog('跳转', url);
+          wx.redirectTo({ url });
+        },
+        () => {
+          this.dError('向导登录失败');
+          // TODO 
         }
       )
     }
@@ -46,12 +93,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#card-1 {
+#tourist-role-card {
   background-color: rgb(255, 127, 116);
   box-shadow: 0 0 30rpx rgb(255, 127, 116);
   /* background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(rgb(230, 75, 70)), to(rgb(247, 147, 144))); */
 }
-#card-2 {
+#guide-role-card{
   background-color: rgb(254, 185, 126);
   box-shadow: 0 0 30rpx rgb(254, 185, 126);
    /* background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(rgb(138, 207, 64)), to(rgb(198, 248, 144))); */
