@@ -48,6 +48,12 @@ export default {
      * @param {*} reject 
      */
     queryOrders(guideId, state, lastIndex, resolve, reject) {
+        /* 导游只有以下类型有效
+        "finished": mockData.mockOrders,
+        "waiting": mockData.mockOrders,
+        "ongoing": mockData.mockOrders,
+        "rejected": mockData.mockOrders,
+        "timeout": mockData.mockOrders*/
         console.log('queryOrders', guideId, state, lastIndex)
         console.log(mockData)
         resolve(mockData.mockOrders)
@@ -109,19 +115,20 @@ export default {
      * @param {*} resolve 
      * @param {*} reject 
      * {
+     *  "finished":[{},{},{}],
      *  "waiting":[{},{},{}],
      *  "ongoing":[{},{},{}],
-     *  []
+     *  "rejected":[{},{},{}],
+     *  "timeout":[{},{},{}],
      * }
      */
     queryOrdersByKeyword(keyword, userId, resolve, reject) {
+        // 导游只需要以下五种类型的邀请
         resolve({
             "finished": mockData.mockOrders,
             "waiting": mockData.mockOrders,
             "ongoing": mockData.mockOrders,
-            "invalid": mockData.mockOrders,
             "rejected": mockData.mockOrders,
-            "canceled": mockData.mockOrders,
             "timeout": mockData.mockOrders
         });
     }

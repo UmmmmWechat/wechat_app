@@ -3,8 +3,11 @@
   <header>
     {{ header }}
   </header>
+
   <section>
-    
+    <section>
+      
+    </section>
   </section>
 </section>
 </template>
@@ -13,7 +16,8 @@
 export default {
   data() {
     return {
-      header: "向导履历"
+      header: "向导履历",
+      
     }
   },
   mounted() {
