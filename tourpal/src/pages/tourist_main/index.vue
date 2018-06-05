@@ -1,50 +1,46 @@
 <template>
 <div>
   <div id="head" class="d-head">
-      <div id="user-info-div">
-        <span>欢迎：</span>
-        <span
-        class="underline-span"
-        
-        >
-          <!-- <open-data type="userNickName"></open-data> -->
-          <!-- id="user-info-btn" -->
-          <button 
-          
-          class="d-back-btn-white"
-          size="mini" 
-          open-type="getUserInfo" 
-          @getuserinfo="handleGetUserInfo"
-          @click="handleToPersonCenter">{{touristName}}</button>
-        </span>
-      </div>
-      <div>
-        <span>你所旅游的地点：</span>
-        <div style="display:inline-block;">
-        <picker 
-        mode="region"
-        @change="handleLocationChange"
-        >
-          <span
-          class="underline-span" >
-          {{ city }}
-          </span>
-        </picker>
-        </div>
-        
-      </div>
-      <div id="search">
-        <icon type="search" size="10" color="white"/>
-        <div style="display:inline-block;width:90%;">
-          <d-input
-          v-model="searchWord"
-          placeholder="搜索景点"
-          confirm-type="search"
-          @on-focus="handleSearchFocus"
-          @on-enter="handleSearch"/>
-        </div>     
-      </div>
+    <div id="user-info-div">
+      <span>欢迎：</span>
+      <span class="underline-span">
+        <!-- <open-data type="userNickName"></open-data> -->
+        <!-- id="user-info-btn" -->
+        <button 
+        class="d-back-btn-white"
+        size="mini" 
+        open-type="getUserInfo" 
+        @getuserinfo="handleGetUserInfo"
+        @click="handleToPersonCenter">{{touristName}}</button>
+      </span>
     </div>
+    <div>
+      <span>旅游地点：</span>
+      <div style="display:inline-block;">
+      <picker 
+      mode="region"
+      @change="handleLocationChange"
+      >
+        <span
+        class="underline-span" >
+        {{ city }}
+        </span>
+      </picker>
+      </div>
+      
+    </div>
+    <div id="search">
+      <icon type="search" size="10" color="white"/>
+      <div style="display:inline-block;width:90%;">
+        <d-input
+        v-model="searchWord"
+        placeholder="搜索景点"
+        confirm-type="search"
+        @on-focus="handleSearchFocus"
+        @on-enter="handleSearch"/>
+      </div>     
+    </div>
+  </div>
 
   <scroll-view
   v-if="!isSearch"
@@ -87,8 +83,8 @@
     :key="spot.id"
     :spot="spot"/>
     </div>
-    <d-loading :loading="loading" color="white"/>
-    <d-no-more :has-more="hasMore" color="white"/>
+    <d-loading :loading="loading" :color="white"/>
+    <d-no-more :has-more="hasMore" :color="white"/>
   </scroll-view>
 </div>
 </template>
@@ -99,8 +95,11 @@ import SpotCard from '../../components/spot/SpotCard'
 import DInput from '../../components/common/DInput'
 import DLoading from '../../components/common/DLoading'
 import DNoMore from '../../components/common/DNoMore'
+
 import touristApi from '../../api/tourist'
 import spotApi from '../../api/spot'
+
+import { TOURIST_ID } from '../../components/tourist/constant';
 export default {
   components: {
     SpotCard,
@@ -110,21 +109,28 @@ export default {
   },
   data () {
     return {
+      touristName: '获取用户信息',
+      touristId: undefined,
+      tourist: undefined,
+      
       location: {
         province: '江苏省',
         city: '南京市',
         region: '栖霞区'
       },
-      spots: [],
-      searchSpots: [],
-      touristName: '获取用户信息',
-      touristId: 'id',
-      tourist: undefined,
-      filter: '',
+      
       loading: false,
       hasMore: true,
+      hasMore: true,
+
+      spots: [],
+      
       isSearch: false,
-      searchWord: ''
+      searchWord: '',
+      searchSpots: [],
+
+      filter: '',
+      pageName: 'tourist_main'
     }
   },
   computed: {
@@ -144,29 +150,19 @@ export default {
     }
   },
   mounted () {
-    // // wx.showTabBar();
-    // wx.login({
-    //   success: (res) => {
-    //     console.log(res.code);
-    //     wx.getUserInfo({
-    //       success: (res2) => {
-    //         var userInfo = res2.userInfo;
-    //         console.log(userInfo);
-    //         this.touristName = userInfo.nickName;
-    //       }
-    //     })
-    //   }
-    // })
-    console.log('request')
-    wx.request({
-      url: 'https://www.injusalon.com/count/user/getRealInfo',
-      data: {
-        userName: '10k'
+    // 测试 TODO
+    touristApi.logIn(
+      () => {
+        // resolve
+        this.dLog('游客登录成功');
+        this.touristId = wx.getStorageSync(TOURIST_ID);
       },
-      success: (res) => {
-        console.log(res)
+      () => {
+        this.dError('游客登录失败');
+        // TODO 
       }
-    })
+    );
+    
     this.getSpots();
     wx.getSystemInfo({
       success: (res) => {
@@ -178,26 +174,45 @@ export default {
     })
   },
   methods: {
+    dLog(message, ...optionalParams) {
+        console.log(this.pageName, message, optionalParams);
+    },
+    dError(message, ...optionalParams) {
+        console.error(this.pageName, message, optionalParams);
+    },
     getSpots () {
-      if (this.loading) return;
-      if (!this.hasMore) return;
+      this.dLog("getSpots 方法调用");
+
+      if (this.loading){
+        this.dLog("加载中 return");
+        return;
+      }
+      if (!this.hasMore) {
+        this.dLog("已经加载全部 return")
+        return;
+      }
+
+      // 加载
       this.loading = true;
+
       // 保留下上次最后的index
       let lastIndex = this.spots.length;
-      console.log('get spots')
+
+      // 取得景点列表
       touristApi.querySpots(
         this.location,
         lastIndex,
         (res) => {
-          if(res === undefined || res.length === 0) {
-            this.hasMore = false;
-          }
-          for (let key in res) {
-            this.spots.push(res[key]);
+          this.dLog("取得景点列表成功", res);
+
+          this.hasMore = res.hasMoreSpot;
+
+          for (let key in res.spotList) {
+            this.spots.push(res.spotList[key]);
           }
           this.loading = false;
         },
-        (err) => {console.log(err);}
+        (err) => {this.dLog("取得景点列表失败", err);}
       )
     },
     handleLocationChange (event) {

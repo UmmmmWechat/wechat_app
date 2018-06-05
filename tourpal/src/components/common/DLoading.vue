@@ -1,11 +1,11 @@
 /* 加载中的波浪条组件 */
 <template>
   <div id="out" :style="{display:loading ? 'block' : 'none'}">
-            <div class="item" id="rect1" :style="{backgroundColor: color}"></div>
-            <div class="item" id="rect2" :style="{backgroundColor: color}"></div>
-            <div class="item" id="rect3" :style="{backgroundColor: color}"></div>
-            <div class="item" id="rect4" :style="{backgroundColor: color}"></div>
-            <div class="item" id="rect5" :style="{backgroundColor: color}"></div>
+        <div class="item" id="rect1" :style="{backgroundColor: color}"></div>
+        <div class="item" id="rect2" :style="{backgroundColor: color}"></div>
+        <div class="item" id="rect3" :style="{backgroundColor: color}"></div>
+        <div class="item" id="rect4" :style="{backgroundColor: color}"></div>
+        <div class="item" id="rect5" :style="{backgroundColor: color}"></div>
   </div>
 </template>
 
@@ -24,12 +24,12 @@ export default {
 }
 </script>
 
-
 <style scoped>
 #out {
     text-align: center;
     margin: 10rpx;
 }
+
 .item {
     display: inline-block;
     margin: 0 2px;
@@ -37,8 +37,8 @@ export default {
     height: 20px;
 
     animation: scaledelay 1.2s infinite ease-in-out;
-    
 }
+
 @keyframes scaledelay {
   0%, 40%, 100% { transform: scaleY(0.4); }  
   20% { transform: scaleY(1.0); }

@@ -41,32 +41,27 @@ export default {
                             // 成功的返回信息中包含 guideId 或 NOT_FOUND 
                             this.dLog('服务器端登录成功', suc);
 
-                            if (suc) {
-                                // 检查是否是 新的导游
-                                const isNewGuide = suc == returnMessage.NOT_FOUND;
-                                if (isNewGuide) {
-                                    // 没有找到这个导游 需要进行注册
-                                    this.dLog('新导游，需要进行注册');
-                                    resolve({ isNewGuide: isNewGuide });
-                                } else {
-                                    // 找到了这个导游 保存 guideId 取得信息并保存
-                                    this.dLog('老导游，不需要进行注册');
-                                    wx.setStorage({
-                                        key: constant.GUIDE_ID,
-                                        data: suc,
-                                        success: () => {
-                                            this.dLog('保存向导ID成功');
-                                            resolve({ isNewGuide: isNewGuide });
-                                        },
-                                        fail: () => {
-                                            this.dLog('保存向导ID失败');
-                                            reject();
-                                        }
-                                    })
-                                }
+                            // 检查是否是 新的导游
+                            const isNewGuide = suc == returnMessage.NOT_FOUND;
+                            if (isNewGuide) {
+                                // 没有找到这个导游 需要进行注册
+                                this.dLog('新导游，需要进行注册');
+                                resolve({ isNewGuide: isNewGuide });
                             } else {
-                                this.dLog('从服务器端取得向导ID失败');
-                                reject();
+                                // 找到了这个导游 保存 guideId 取得信息并保存
+                                this.dLog('老导游，不需要进行注册');
+                                wx.setStorage({
+                                    key: constant.GUIDE_ID,
+                                    data: suc,
+                                    success: () => {
+                                        this.dLog('保存向导ID成功');
+                                        resolve({ isNewGuide: isNewGuide });
+                                    },
+                                    fail: () => {
+                                        this.dLog('保存向导ID失败');
+                                        reject();
+                                    }
+                                });
                             }
                         };
                         var onFail = (fai) => {

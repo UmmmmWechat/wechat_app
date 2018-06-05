@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import * as urlList from '../pages_url';
+import { TOURIST_MAIN, GUIDE_SIGN_UP, GUIDE_MAIN } from '../pages_url';
 
 import guideApi from '../../api/guide';
 import touristApi from '../../api/tourist';
@@ -57,7 +57,7 @@ export default {
           // resolve
           this.dLog('游客登录成功');
 
-          const url = `/${urlList.TOURIST_MAIN}`;
+          const url = `/${TOURIST_MAIN}`;
           this.dLog('跳转', url);
           wx.redirectTo({ url });
         },
@@ -77,11 +77,11 @@ export default {
           this.dLog('向导登录成功', res);
 
           if (res.isNewGuide) {
-            const url = `/${urlList.GUIDE_SIGN_UP}`;
+            const url = `/${GUIDE_SIGN_UP}`;
             this.dLog('跳转', url);
             wx.navigateTo({ url });
           } else {
-            const url = `/${urlList.GUIDE_MAIN}`;
+            const url = `/${GUIDE_MAIN}`;
             this.dLog('跳转', url);
             wx.switchTab({ url });
           }

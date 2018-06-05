@@ -7,10 +7,14 @@ var dRequest = (url, data, method, onSuccess, onFail) => {
         data: data,
         method: method,
         success: (res) => {
-            if (res.statusCode === 400 || res.statusCode === 500) {
-                onFail(res.data);
+            if (res) {
+                if (res.statusCode === 400 || res.statusCode === 500) {
+                    onFail(res.data);
+                } else {
+                    onSuccess(res.data);
+                }
             } else {
-                onSuccess(res.data);
+                onFail(res);
             }
         },
         fail: onFail
