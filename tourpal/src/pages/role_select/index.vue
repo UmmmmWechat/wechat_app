@@ -79,7 +79,7 @@ export default {
           if (res.isNewGuide) {
             const url = `/${urlList.GUIDE_SIGN_UP}`;
             this.dLog('跳转', url);
-            wx.redirectTo({ url });
+            wx.navigateTo({ url });
           } else {
             const url = `/${urlList.GUIDE_MAIN}`;
             this.dLog('跳转', url);

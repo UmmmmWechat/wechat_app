@@ -13,13 +13,14 @@ var mockGuide = function(i) {
     }
 }
 
-const touristLoginUrl = 'https://test.com/onLogin';
-const apiName = 'touristApi';
-
 import * as constant from "./../components/tourist/constant";
 import * as serverUrl from "./apiUrl";
 import * as returnMessage from "./returnMessage";
 import * as httpRequest from "./httpRequestApi";
+
+import touristStub from "./touristStub";
+
+const apiName = 'touristApi';
 
 export default {
 
@@ -29,35 +30,7 @@ export default {
      * @param {*} optionalParams 
      */
     dLog(message, ...optionalParams) {
-        if (httpRequest.isTestMode) {
-            console.log(apiName, 'stub', message, optionalParams);
-        } else {
-            console.log(apiName, message, optionalParams);
-        }
-    },
-
-    /**
-     * 游客登录桩
-     * @param {*} resolve 
-     * @param {*} reject 
-     */
-    logInStub(resolve, reject) {
-        this.dLog('logIn 方法请求');
-
-        const touristId = 'testTouristID';
-        // 保存 游客ID
-        wx.setStorage({
-            key: constant.TOURIST_ID,
-            data: touristId,
-            success: () => {
-                this.dLog('保存游客ID成功');
-                resolve();
-            },
-            fail: () => {
-                this.dLog('保存游客ID失败');
-                reject();
-            }
-        })
+        console.log(apiName, message, optionalParams);
     },
 
     /**
@@ -72,7 +45,7 @@ export default {
         this.dLog('logIn 方法请求');
 
         if (httpRequest.isTestMode) {
-            this.logInStub(resolve, reject);
+            touristStub.logInStub(resolve, reject);
         } else {
             wx.login({
                 success: (res) => {
