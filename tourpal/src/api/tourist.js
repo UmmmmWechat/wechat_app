@@ -15,11 +15,9 @@ var mockGuide = function(i) {
 
 import * as constant from "./../components/tourist/constant";
 import * as serverUrl from "./apiUrl";
-import * as returnMessage from "./returnMessage";
 import * as httpRequest from "./httpRequestApi";
 
 import touristStub from "./touristStub";
-import { SPOT_MAX_NUM, GET_ALL_TAG } from "./const/spotConst";
 
 const apiName = 'touristApi';
 
@@ -90,44 +88,6 @@ export default {
                     this.dLog('登录失败！', fai);
                 }
             });
-        }
-    },
-
-    /**
-     * 根据定位查询景点
-     * @param {} location 
-     * @param {int} lastIndex
-     * @param {*} resolve 
-     * @param {*} reject 
-     */
-    querySpots(location, lastIndex, resolve, reject) {
-        this.dLog('querySpots 方法请求', "location", location, `lastIndes: ${lastIndex}`);
-
-        if (httpRequest.isTestMode) {
-            touristStub.querySpots(location, lastIndex, resolve, reject);
-        } else {
-            // 发起网络请求
-            var onSuccess = (suc) => {
-                // 成功的返回信息中为 景点的数组
-                this.dLog('服务器端取得景点失败', suc);
-
-                const hasMoreSpot = lastIndex != GET_ALL_TAG && suc.length == SPOT_MAX_NUM;
-
-                resolve({ spotList, hasMoreSpot });
-            };
-            var onFail = (fai) => {
-                this.dLog('服务器端取得景点失败', fai);
-                reject();
-            };
-            httpRequest.dRequest(
-                serverUrl.GET_SPOTS_BY_LOCATION, {
-                    location,
-                    lastIndex
-                },
-                httpRequest.GET,
-                onSuccess,
-                onFail
-            );
         }
     },
 

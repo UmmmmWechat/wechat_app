@@ -1,6 +1,5 @@
 import * as mockData from "./mock/tourist_mock_data";
 import * as constant from "./../components/tourist/constant";
-import { SPOT_MAX_NUM, GET_ALL_TAG } from "./const/spotConst";
 
 const apiName = 'touristApiStub';
 
@@ -37,38 +36,6 @@ export default {
                 reject();
             }
         })
-    },
-
-    /**
-     * 根据定位查询景点桩
-     * @param {} location
-     * @param {int} lastIndex
-     * @param {*} resolve 
-     * @param {*} reject 
-     */
-    querySpots(location, lastIndex, resolve, reject) {
-        this.dLog('querySpots 方法请求', "location", location, `lastIndes: ${lastIndex}`);
-
-        const totalSize = 2 * SPOT_MAX_NUM;
-        const getAll = lastIndex == GET_ALL_TAG;
-        const hasMoreSpot = !getAll && lastIndex < totalSize;
-        var spotList = [];
-
-        if (hasMoreSpot) {
-            var mockSpot = mockData.mockSpot;
-            var size = getAll ? totalSize : totalSize - lastIndex;
-            for (let i = 0; i < size; i++) {
-                let spotItem = {
-                    id: lastIndex + i + "",
-                    name: mockSpot.name,
-                    pictureUrl: mockSpot.pictureUrl,
-                    introduction: mockSpot.introduction
-                }
-                spotList.push(spotItem);
-            }
-        }
-
-        resolve({ spotList, hasMoreSpot });
     },
 
 }
