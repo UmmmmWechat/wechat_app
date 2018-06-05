@@ -90,6 +90,12 @@
     <d-loading :loading="loading" :color="white"/>
     <d-no-more :has-more="hasMore" :color="white"/>
   </scroll-view>
+
+  <section class="to-top-wrapper" v-if="show_gotop">
+    <a id="to-top" @click="scrollToTop">
+      Top
+    </a>
+  </section>
 </div>
 </template>
 
@@ -138,11 +144,23 @@ export default {
       filter: '',
       pageName: 'tourist_main',
 
-      scrollTop: 0,
-      searchScrollTop: 0,
+      scrollTop: undefined,
+      searchScrollTop: undefined,
       show_gotop: false
     }
   },
+  // watch: {
+  //   // 如果 `question` 发生改变，这个函数就会运行
+  //   scrollTop: function (newScrollTop, oldScrollTop) {
+  //     this.dLog(newScrollTop, oldScrollTop);
+  //   }
+  // },
+  // created: () => {
+  //   console.log("!!!");
+  //   this.debouncedGetAnswer = _.debounce(() => {
+  //     this.dLog("test");
+  //   }, 500)
+  // },
   computed: {
     city () {
       var result = '';
@@ -187,28 +205,39 @@ export default {
   },
   methods: {
     handleScroll(event) {
+      this.dLog("handleScroll 响应");
+
       var top = event.mp.detail.scrollTop;
 
       if (top > SHOW_TOP_SCROLLTOP) {
         if (!this.show_gotop) {
-          this.dLog("scrollTop 响应", "显示 gotop 浮标", top);
+          this.dLog("显示 gotop 浮标", top);
           this.show_gotop = true;
         }
       } else {
         if (this.show_gotop) {
-          this.dLog("scrollTop 响应", "隐藏 gotop 浮标", top);
+          this.dLog("隐藏 gotop 浮标", top);
           this.show_gotop = false;
         }
       }
     },
     scrollToTop() {
+      this.dLog("scrollToTop 方法调用");
+
       this.show_gotop = false;
 
-      this.dLog("scrollToTop 方法调用");
       if (this.isSearch) {
-          this.searchScrollTop = this.searchScrollTop == 0? 1: 0;
+          this.searchScrollTop = 0;
+          setTimeout(
+            () => {
+              this.searchScrollTop = undefined;
+            }, 500);
       } else {
-          this.scrollTop = this.scrollTop == 0? 1: 0;
+          this.scrollTop = 0;
+          setTimeout(
+            () => {
+              this.scrollTop = undefined;
+            }, 500);
       }
 
       wx.pageScrollTo({
@@ -294,11 +323,11 @@ export default {
               this.hasMore = true;
               this.spots.splice(0, this.spots.length);// 清空原 spot 数组
 
-              // 上滑到顶部
-              this.scrollToTop();
-
               // 重新获取景点信息
               this.getSpots();
+
+              // 上滑到顶部
+              this.scrollToTop();
             } else {
               // 不支持该地区
               this.dError(res.errMsg);// TODO 改成弹窗提示用户
@@ -379,6 +408,10 @@ export default {
 </script>
 
 <style scoped>
+page {
+  height: 100%;
+}
+
 #head {
 color: white;
 z-index: 100;
@@ -411,6 +444,29 @@ z-index: 100;
   display: inline-block;
   color: white;
   padding: 0;
+}
+
+.to-top-wrapper {
+  position: fixed;
+  left: 5%;
+  bottom: 5%;
+}
+
+#to-top {
+  height: 100rpx;
+  width: 100rpx;
+  border-radius: 50%;
+  border: solid #42b9704d;
+  box-shadow: #42b9704d 0 0 5px;
+  background: #a2ddb9af;
+  
+  color: #314237af;
+  font-weight: bold;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;/*垂直居中*/
+  justify-content: center;/*水平居中*/
 }
 </style>
 
