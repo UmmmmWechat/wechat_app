@@ -57,6 +57,51 @@ export default {
     },
 
     /**
+     * 通过关键词和城市获取 spots 的方法桩
+     * @param {*} keyword 
+     * @param {*} city 
+     * @param {*} lastIndex 
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    querySpotsByKeywordAndCity(keyword, city, lastIndex, resolve, reject) {
+        this.dLog('querySpotsByKeywordAndCity 方法请求',
+            "keyword", keyword, "city", city, `lastIndes: ${lastIndex}`);
+
+        const totalSize = 2 * constant.SPOT_MAX_NUM;
+        const getAll = lastIndex == constant.GET_ALL_TAG;
+        const hasMoreSpot = !getAll && lastIndex < totalSize;
+        var spotList = [];
+
+        if (hasMoreSpot) {
+            var mockSpotList = mockData.mockSpotList;
+            const length = mockSpotList.length;
+            var size = getAll ?
+                totalSize :
+                (totalSize - lastIndex > constant.SPOT_MAX_NUM ?
+                    constant.SPOT_MAX_NUM :
+                    totalSize - lastIndex);
+            for (let i = 0; i < size; i++) {
+                var mockSpot = mockSpotList[i % length];
+                let spotItem = {
+                    id: lastIndex + i + "",
+                    name: `${keyword}:${mockSpot.name}`,
+                    pictureUrl: mockSpot.pictureUrl,
+                    introduction: mockSpot.introduction
+                }
+                spotList.push(spotItem);
+            }
+        }
+
+        setTimeout(
+            () => {
+                resolve({ spotList, hasMoreSpot });
+            },
+            300
+        )
+    },
+
+    /**
      * 检查 location 是否在服务范围内的方法桩
      * @param {*} location 
      * @param {*} resolve 

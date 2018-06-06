@@ -62,16 +62,10 @@
     <d-no-more :has-more="hasMore" />
   </scroll-view>
 
-  <scroll-view
-  v-else 
-  class="scroll d-search-list"
-  scroll-y
-  scroll-with-animation
-  enable-back-to-top
-  :scroll-top="searchScrollTop"
-  @scroll="handleScroll"
-  @scrolltolower="handleSearch">
-    <div >
+  <section
+    v-else
+    class="d-search-list">
+    <header>
       <div 
       style="text-align:center;padding:10rpx;">
         <button 
@@ -81,15 +75,33 @@
         @click="handleClickBack">
           返回
         </button>
+        <button 
+        class="d-back-btn-white"
+        style="margin-left:33rpx;"
+        size="mini"
+        plain
+        @click="handleClearSearch">
+          清空
+        </button>
       </div>
-    <spot-card
-    v-for="spot in toShowSpots"
-    :key="spot.id"
-    :spot="spot"/>
-    </div>
-    <d-loading :loading="loading" :color="white"/>
-    <d-no-more :has-more="hasMore" :color="white"/>
-  </scroll-view>
+    </header>
+
+    <scroll-view
+      class="scroll"
+      scroll-y
+      scroll-with-animation
+      enable-back-to-top
+      :scroll-top="searchScrollTop"
+      @scroll="handleScroll"
+      @scrolltolower="handleSearch">
+      <spot-card
+      v-for="spot in toShowSpots"
+      :key="spot.id"
+      :spot="spot"/>
+      <d-loading :loading="loading" :color="white"/>
+      <d-no-more :has-more="hasMore" :color="white"/>
+    </scroll-view>
+  </section>
 
   <section class="to-top-wrapper" v-if="show_gotop">
     <a id="to-top" @click="scrollToTop">
@@ -133,10 +145,11 @@ export default {
       },
       
       loading: false,
-      hasMore: true,
 
+      hasMore: true,
       spots: [],
       
+      searchHasMore: true,
       isSearch: false,
       searchWord: '',
       searchSpots: [],
@@ -205,7 +218,7 @@ export default {
   },
   methods: {
     handleScroll(event) {
-      this.dLog("handleScroll 响应");
+      // this.dLog("handleScroll 响应");
 
       var top = event.mp.detail.scrollTop;
 
@@ -323,8 +336,15 @@ export default {
               this.hasMore = true;
               this.spots.splice(0, this.spots.length);// 清空原 spot 数组
 
-              // 重新获取景点信息
-              this.getSpots();
+              if (this.isSearch) {
+                this.searchHasMore = true;
+                this.searchSpots.splice(0, this.searchSpots.length);// 清空搜索的 spot 数组
+                // 重新搜索
+                this.handleSearch();
+              } else {
+                // 重新获取景点信息
+                this.getSpots();
+              }
 
               // 上滑到顶部
               this.scrollToTop();
@@ -338,11 +358,84 @@ export default {
       }
     },
     handleGetMoreSpots (event) {
-      this.dLog("handleGetMoreSpots 方法调用");
+      this.dLog("handleGetMoreSpots 方法调用", event);
       this.getSpots();
     },
+    handleSearchFocus (event) {
+      this.dLog("handleSearchFocus 方法调用", event);
+      this.isSearch = true;
+    },
+    handleSearch (event) {
+      this.dLog("handleSearch 方法调用", event);
+
+      if (this.loading){
+        this.dLog("加载中 return");
+        return;
+      }
+      if (!this.searchHasMore) {
+        this.dLog("已经加载全部 return")
+        return;
+      }
+
+      // 加载
+      this.loading = true;
+
+      // 保留下上次最后的index
+      let lastIndex = this.searchSpots.length;
+
+      // 按照关键词搜索景点
+      spotApi.querySpotsByKeywordAndCity(
+        this.searchWord,
+        this.location,
+        lastIndex,
+        (res) => {
+          this.dLog("搜索景点列表成功", res);
+
+          this.searchHasMore = res.hasMoreSpot;
+
+          for (let key in res.spotList) {
+            this.searchSpots.push(res.spotList[key]);
+          }
+          this.loading = false;
+        },
+        (err) => {this.dError("搜索景点列表失败", err);}
+      )
+    },
+    handleClickBack (event) {
+      this.dLog("handleClickBack 方法调用", event);
+
+      // 回滚
+      this.scrollToTop();
+
+      this.isSearch = false;
+    },
+    handleClearSearch(event) {
+      this.dLog("handleClickBack 方法调用", event);
+
+      // 重置属性
+      this.searchHasMore = true;
+      this.searchSpots.splice(0, this.searchSpots.length);// 清空搜索的 spot 数组
+      
+      // 返回
+      this.handleClickBack(event);
+    },
+    handleGetUserInfo (event) {
+      this.dLog("handleGetUserInfo 方法调用", event);
+      console.log(event);
+      if(this.tourist !== undefined) return;
+      let userInfo = event.target.userInfo;
+      this.tourist = {
+        name: userInfo.nickName,
+        avatar: userInfo.avatarUrl
+      }
+      this.touristName = this.tourist.name;
+      wx.setStorage({
+        key: 'tourist',
+        data: this.tourist
+      })
+    },
     handleToPersonCenter (event) {
-      this.dLog("handleToPersonCenter 方法调用");
+      this.dLog("handleToPersonCenter 方法调用", event);
       if(this.tourist === undefined) {
         console.log('tourist undefined')
         return;
@@ -357,51 +450,6 @@ export default {
           })
         }
       })
-    },
-    handleGetUserInfo (event) {
-      this.dLog("handleGetUserInfo 方法调用");
-      console.log(event);
-      if(this.tourist !== undefined) return;
-      let userInfo = event.target.userInfo;
-      this.tourist = {
-        name: userInfo.nickName,
-        avatar: userInfo.avatarUrl
-      }
-      this.touristName = this.tourist.name;
-      wx.setStorage({
-        key: 'tourist',
-        data: this.tourist
-      })
-    },
-    handleSearchFocus (event) {
-      this.dLog("handleSearchFocus 方法调用");
-      this.isSearch = true;
-    },
-    handleSearch (event) {
-      this.dLog("handleSearch 方法调用");
-      console.log('开始搜索')
-      this.loading = true;
-      spotApi.querySpotsByKeyword(
-        this.searchWord,
-        this.searchSpots.length,
-        (res) => {
-          if (res === undefined || res.length === 0) {
-            this.hasMore = false;
-          }
-          for (let item in res) {
-            this.searchSpots.push(res[item]);
-          }
-          this.loading = false;
-        },
-        (err) => {console.log(err);}
-      )
-    },
-    handleClickBack (event) {
-      this.dLog("handleClickBack 方法调用");
-      this.searchWord = '';
-      this.hasMore = true;
-      this.isSearch = false;
-      this.searchSpots = [];
     }
   }
 }
