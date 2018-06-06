@@ -4,14 +4,11 @@
     <div id="user-info-div">
       <span>欢迎：</span>
       <span class="underline-span">
-        <!-- <open-data type="userNickName"></open-data> -->
-        <!-- id="user-info-btn" -->
-        <button 
-        class="d-back-btn-white"
-        size="mini" 
-        open-type="getUserInfo" 
-        @getuserinfo="handleGetUserInfo"
-        @click="handleToPersonCenter">{{touristName}}</button>
+        <span
+        class="underline-span"
+        @click="handleToPersonCenter">
+        {{ tourist.touristName }}
+        </span>
       </span>
     </div>
     <div>
@@ -51,13 +48,11 @@
   :scroll-top="scrollTop"
   @scroll="handleScroll"
   @scrolltolower="handleGetMoreSpots">
-    <div id="body">
     <spot-card
     v-for="spot in toShowSpots"
     :key="spot.id"
     :spot="spot"
     />
-    </div>
     <d-loading :loading="loading"/>
     <d-no-more :has-more="hasMore" />
   </scroll-view>
@@ -98,8 +93,8 @@
       v-for="spot in toShowSpots"
       :key="spot.id"
       :spot="spot"/>
-      <d-loading :loading="loading" :color="white"/>
-      <d-no-more :has-more="hasMore" :color="white"/>
+      <d-loading :loading="loading" :color="'white'"/>
+      <d-no-more :has-more="searchHasMore" :color="'white'"/>
     </scroll-view>
   </section>
 
@@ -122,6 +117,8 @@ import touristApi from '../../api/tourist';
 import spotApi from '../../api/spot';
 
 import { TOURIST_ID } from '../../components/tourist/constant';
+import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
+import { TOURIST_CENTER, ROLE_SELECT } from '../pages_url';
 
 const SHOW_TOP_SCROLLTOP = 700;
 
@@ -134,9 +131,11 @@ export default {
   },
   data () {
     return {
-      touristName: '获取用户信息',
-      touristId: undefined,
-      tourist: undefined,
+      tourist: {
+        avatar: "/static/image/用户.svg",
+        touristName: "体验游客",
+        touristId: MOCK_TOURIST_ID,
+      },
       
       location: {
         province: '江苏省',
@@ -154,7 +153,6 @@ export default {
       searchWord: '',
       searchSpots: [],
 
-      filter: '',
       pageName: 'tourist_main',
 
       scrollTop: undefined,
@@ -162,18 +160,6 @@ export default {
       show_gotop: false
     }
   },
-  // watch: {
-  //   // 如果 `question` 发生改变，这个函数就会运行
-  //   scrollTop: function (newScrollTop, oldScrollTop) {
-  //     this.dLog(newScrollTop, oldScrollTop);
-  //   }
-  // },
-  // created: () => {
-  //   console.log("!!!");
-  //   this.debouncedGetAnswer = _.debounce(() => {
-  //     this.dLog("test");
-  //   }, 500)
-  // },
   computed: {
     city () {
       var result = '';
@@ -191,32 +177,27 @@ export default {
     }
   },
   mounted () {
-    // 测试 TODO
-    touristApi.logIn(
-      () => {
-        // resolve
-        this.dLog('游客登录成功');
-        this.touristId = wx.getStorageSync(TOURIST_ID);
-    this.getSpots();
-      },
-      () => {
-        this.dError('游客登录失败');
-        // TODO 
-      }
-    );
-    
-    // this.getSpots();
+    this.tourist.touristId = wx.getStorageSync(TOURIST_ID);
+    if (!this.tourist.touristId) {
+      // 未找到游客ID 需要先去登录
+      this.dError("未找到游客ID 需要先去登录")
 
-    // wx.getSystemInfo({
-    //   success: (res) => {
-    //     wx.setStorage({
-    //       key: 'screenHeight',
-    //       data: res.screenHeight
-    //     })
-    //   }
-    // })
+      const url = `/${ROLE_SELECT}`;
+      this.dLog('跳转', url);
+      wx.redirectTo({ url });
+
+      return;
+    }
+    
+    this.getSpots();
   },
   methods: {
+    dLog(message, ...optionalParams) {
+        console.log(this.pageName, message, optionalParams);
+    },
+    dError(message, ...optionalParams) {
+        console.error(this.pageName, message, optionalParams);
+    },
     handleScroll(event) {
       // this.dLog("handleScroll 响应");
 
@@ -258,13 +239,7 @@ export default {
         duration: 300
       });
     },
-    dLog(message, ...optionalParams) {
-        console.log(this.pageName, message, optionalParams);
-    },
-    dError(message, ...optionalParams) {
-        console.error(this.pageName, message, optionalParams);
-    },
-    getSpots () {
+    getSpots() {
       this.dLog("getSpots 方法调用");
 
       if (this.loading){
@@ -419,63 +394,21 @@ export default {
       // 返回
       this.handleClickBack(event);
     },
-    handleGetUserInfo (event) {
-      this.dLog("handleGetUserInfo 方法调用", event);
-      console.log(event);
-      if(this.tourist !== undefined) return;
-      let userInfo = event.target.userInfo;
-      this.tourist = {
-        name: userInfo.nickName,
-        avatar: userInfo.avatarUrl
-      }
-      this.touristName = this.tourist.name;
-      wx.setStorage({
-        key: 'tourist',
-        data: this.tourist
-      })
-    },
     handleToPersonCenter (event) {
       this.dLog("handleToPersonCenter 方法调用", event);
-      if(this.tourist === undefined) {
-        console.log('tourist undefined')
-        return;
-      }
-      console.log("跳转到个人中心");
-      wx.setStorage({
-        key: 'touristId',
-        data: this.touristId,
-        success: () => {
-          wx.navigateTo({
-            url: '/pages/tourist_center/main'
-          })
-        }
-      })
+
+      const url = `/${TOURIST_CENTER}`;
+      this.dLog('跳转', url);
+      wx.navigateTo({ url });
     }
   }
 }
 </script>
 
 <style scoped>
-page {
-  height: 100%;
-}
-
 #head {
 color: white;
 z-index: 100;
-}
-.underline-span {
-  text-decoration: underline;
-}
-
-.scroll {
-  height: 1000rpx;
-}
-
-#back-btn {
-  background-color: transparent;
-  color: white;
-  border-color: white;
 }
 
 #user-info-div {
@@ -484,20 +417,18 @@ z-index: 100;
   justify-content: flex-start;
 }
 
-#user-info-btn {
-  background-color: transparent;
-  border-color: transparent;
-  outline: none;
-  /* text-decoration: underline; */
-  display: inline-block;
-  color: white;
-  padding: 0;
+.underline-span {
+  text-decoration: underline;
+}
+
+.scroll {
+  height: 1000rpx;
 }
 
 .to-top-wrapper {
   position: fixed;
   left: 5%;
-  bottom: 5%;
+  bottom: 10%;
 }
 
 #to-top {

@@ -22,7 +22,7 @@ export default {
     logInStub(resolve, reject) {
         this.dLog('logIn 方法请求');
 
-        const touristId = mockData.mockTouristID;
+        const touristId = mockData.MOCK_TOURIST_ID;
         // 保存 游客ID
         wx.setStorage({
             key: constant.TOURIST_ID,

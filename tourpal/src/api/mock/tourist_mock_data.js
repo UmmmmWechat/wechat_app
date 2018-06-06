@@ -19,8 +19,8 @@ var mockTourist = {
 
 };
 
-var mockTouristID = "testTouristID";
+var MOCK_TOURIST_ID = "testTouristID";
 
 export {
-    mockTouristID
+    MOCK_TOURIST_ID
 }
