@@ -16,6 +16,7 @@ var mockGuide = function(i) {
 import * as constant from "./../components/tourist/constant";
 import * as serverUrl from "./apiUrl";
 import * as httpRequest from "./httpRequestApi";
+import * as returnMessage from "./returnMessage";
 
 import touristStub from "./touristStub";
 
@@ -171,20 +172,47 @@ export default {
         }
     },
 
-
     /**
-     * 邀请 guide
-     * @param {String} guideId 
-     * @param {String} spotId 
-     * @param {String} touristId 
-     * @param {Function} resolve 
-     * @param {Function} reject
-     * {
-     *  orderId
-     * }
+     * 发起新邀请
+     * @param {*} order 
+     * @param {*} formId 
+     * @param {*} resolve 
+     * @param {*} reject 
      */
-    inviteGuide(guideId, spotId, touristId, resolve, reject) {
+    newOrder(order, formId, resolve, reject) {
+        this.dLog("queryGuideByKeyword 方法请求",
+            "order: ", order, "formId: ", formId);
 
+        if (httpRequest.isTestMode) {
+            touristStub.newOrderStub(order, formId, resolve, reject);
+        } else {
+            // 发起网络请求
+            var onFail = (fai) => {
+                this.dLog("服务器端通过关键词搜索导游失败", fai);
+                reject();
+            };
+
+            var onSuccess = (suc) => {
+                if (suc === returnMessage.SUCCESS) {
+                    // 成功的返回信息中为 SUCCESS
+                    this.dLog("服务器端通过关键词搜索导游成功", suc);
+
+                    resolve();
+                } else {
+                    onFail(suc);
+                }
+            };
+
+            httpRequest.dRequest(
+                serverUrl.TOURIST_NEW_ORDER, {
+                    order,
+                    formId
+                },
+                httpRequest.POST,
+                onSuccess,
+                onFail
+            );
+        }
     },
 
     /**

@@ -1,55 +1,54 @@
 /* 输入框，包装原组件 */
-/* 事件有 on-enter input  on-focus */
+/* 事件有 on-enter input on-focus */
 <template>
-  <div id="wrapper">
-      <label
-      for="d-input" 
-      class="label" 
-      v-if="label !== '' ">
-          {{label}}
-      </label>
-      <div id="input-wrapper">
-          <textarea
-          id="d-input"
-            :value="value"
-            :placeholder="placeholder"
-            placeholder-style="color:rgba(0,0,0,0.3);"
-            @confirm="handleEnter"
-            @input="handleInput"
-            @focus="handleFocus"/>
-      </div>
-  </div>
+<div id="wrapper">
+    <label
+    for="d-input" 
+    class="label" 
+    v-if="label !== '' ">
+        {{label}}
+    </label>
+    <div id="input-wrapper">
+        <textarea
+        id="d-input"
+        :value="value"
+        :placeholder="placeholder"
+        placeholder-style="color:rgba(0,0,0,0.3);"
+        @confirm="handleEnter"
+        @input="handleInput"
+        @focus="handleFocus"/>
+    </div>
+</div>
 </template>
 
 
 <script>
 export default {
-  props: {
-      placeholder: {
-          type: String,
-          default: ''
-      },
-      value: {
-          type: [String,Number],
-          default: ''
-      },
-      label: {
-          type: String,
-          default: ''
-      }
-  },
-  methods: {
-      handleEnter (event) {
-          console.log('on-enter');
-          this.$emit('on-enter', event);
-      },
-      handleInput (event) {
-          this.$emit('input',event.target.value);
-      },
-      handleFocus (event) {
-          this.$emit('on-focus', event);
-      },
-  }
+    props: {
+        placeholder: {
+            type: String,
+            default: ''
+        },
+        value: {
+            type: [String,Number]
+        },
+        label: {
+            type: String,
+            default: ''
+        }
+    },
+    methods: {
+        handleEnter (event) {
+            this.$emit('on-enter', event);
+        },
+        handleInput (event) {
+            // this.value = event.target.value;
+            this.$emit('input', event.target.value);
+        },
+        handleFocus (event) {
+            this.$emit('on-focus', event);
+        },
+    }
 }
 </script>
 

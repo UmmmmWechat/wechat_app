@@ -11,7 +11,12 @@
           :start="start"
           :end="end"
           @change="handleChange">
-              <div class="info">{{result}}</div>
+              <div v-if="result" style="'text-align': left; padding: 5rpx;">
+                {{ result }}
+              </div>
+              <div v-else class="info">
+                {{ prompt }}
+              </div>
           </picker>
       </div>
   </div>
@@ -25,7 +30,7 @@ export default {
       type: String,
       default: ''
     },
-    result: {
+    prompt: {
       type: String,
       default: '未选择，点击开始选择'
     },
@@ -38,13 +43,14 @@ export default {
   },
   data () {
     return {
-      componentName: "DDatePicker"
+      componentName: "DDatePicker",
+      result: undefined
     }
   },
   methods: {
     handleChange (event) {
       this.result = event.target.value;
-      this.$emit('on-change', event);
+      this.$emit('on-change', this.result);
     }
   }
 }

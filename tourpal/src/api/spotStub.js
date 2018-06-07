@@ -39,7 +39,7 @@ export default {
                     totalSize - lastIndex);
             for (let i = 0; i < size; i++) {
                 let spotItem = {
-                    id: lastIndex + i + "",
+                    id: `spotID${lastIndex + i}`,
                     name: mockSpot.name,
                     pictureUrl: mockSpot.pictureUrl,
                     introduction: mockSpot.introduction
@@ -84,7 +84,7 @@ export default {
             for (let i = 0; i < size; i++) {
                 var mockSpot = mockSpotList[i % length];
                 let spotItem = {
-                    id: lastIndex + i + "",
+                    id: `spotID${lastIndex + i}`,
                     name: `${keyword}:${mockSpot.name}`,
                     pictureUrl: mockSpot.pictureUrl,
                     introduction: mockSpot.introduction

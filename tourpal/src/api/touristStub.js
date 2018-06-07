@@ -111,4 +111,19 @@ export default {
         );
     },
 
+    /**
+     * 发起新邀请
+     * @param {*} order 
+     * @param {*} formId 
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    newOrderStub(order, formId, resolve, reject) {
+        this.dLog("queryGuideByKeyword 方法请求",
+            "order: ", order, "formId: ", formId);
+
+        // 直接返回成功
+        resolve();
+    }
+
 }

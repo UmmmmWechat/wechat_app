@@ -8,7 +8,7 @@
     </div>
     <div id="text-wrapper">
         <div id="title-div">
-            {{ spot.title }}
+            {{ spot.name }}
         </div>
         <div id="content-div">
             {{ spot.introduction }}
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { D_SPOT } from '../../api/const/spotConst';
+import { D_SPOT_ID, D_SPOT_NAME } from '../../api/const/spotConst';
 import { SHOW_SPOT_GUIDE } from '../../pages/pages_url';
 
 export default {
@@ -43,14 +43,25 @@ export default {
     },
     methods: {
         handleClick (event) {
+            // 保存景点 ID
             wx.setStorage({
-                key: D_SPOT,
-                data: this.spot,
+                key: D_SPOT_ID,
+                data: this.spot.id,
                 success: () => {
-                    const url = `/${SHOW_SPOT_GUIDE}`;
-                    wx.navigateTo({ url });
+                    console.log(`SpotCard 保存 spot id 成功 ${this.spot.id}`);
+                    
+                    // 保存景点名称
+                    wx.setStorage({
+                        key: D_SPOT_NAME,
+                        data: this.spot.name,
+                        success: () => {
+                            console.log(`SpotCard 保存 spot name 成功 ${this.spot.name}`);
+                            const url = `/${SHOW_SPOT_GUIDE}`;
+                            wx.navigateTo({ url });
+                        }
+                    }) 
                 }
-            })  
+            });
         }
     },
 }
@@ -77,10 +88,11 @@ export default {
 }
 
 #title-div {
-    font-size: 1.5em;
+    font-size: 1.2em;
     text-align: left;
     font-weight: bold;
     color: black;
+    padding-bottom: 20rpx;
 }
 
 #content-div {

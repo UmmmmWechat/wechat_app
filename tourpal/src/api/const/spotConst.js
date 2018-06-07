@@ -15,12 +15,14 @@ const AVAILABLE_LEVEL_PROMPT = [
     "暂不支持该城镇"
 ]
 
-const D_SPOT = "dSpot";
+const D_SPOT_ID = "dSpotID";
+const D_SPOT_NAME = "dSpotName";
 
 export {
     SPOT_MAX_NUM,
     GET_ALL_TAG,
     AVAILABLE_LOCATION_ARRAY,
     AVAILABLE_LEVEL_PROMPT,
-    D_SPOT
+    D_SPOT_ID,
+    D_SPOT_NAME
 }

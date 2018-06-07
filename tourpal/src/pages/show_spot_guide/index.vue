@@ -1,7 +1,7 @@
 <template>
 <div>
   <div id="head" class="d-head">
-    <div id="title">{{ spot.title }}</div>
+    <div id="title">{{ spotName }}</div>
 
     <div id="search">
       <icon type="search" size="10" color="white"/>
@@ -93,7 +93,7 @@ import DLoading from '../../components/common/DLoading';
 import DInput from '../../components/common/DInput';
 import DNoMore from '../../components/common/DNoMore';
 
-import { D_SPOT } from '../../api/const/spotConst';
+import { D_SPOT_ID, D_SPOT_NAME } from '../../api/const/spotConst';
 
 const SHOW_TOP_SCROLLTOP = 700;
 
@@ -106,12 +106,8 @@ export default {
   },
   data () {
     return {
-      spot: {
-        id: "spotID",
-        name: "spotName",
-        pictureUrl: "/static/image/spot.jpg",
-        introduction: "spotIntroduction"
-      },
+      spotName: "spotName",
+      spotID: "spotID",
 
       loading: false,
       
@@ -136,26 +132,50 @@ export default {
     }
   },
   mounted() {
+    // 取得景点ID
     wx.getStorage({
-      key: D_SPOT,
+      key: D_SPOT_ID,
       success: (res) => {
-        this.dLog("取得景点信息完成", res);
-        this.spot = res.data;
+        this.dLog("取得景点ID完成", res);
+        this.spotID = res.data;
+
+        // 取得景点名称
+        wx.getStorage({
+          key: D_SPOT_NAME,
+          success: (res) => {
+            this.dLog("取得景点名称完成", res);
+            this.spotName = res.data;
       
-        this.hasMore = true;
-        this.guides.splice(0, this.guides.length);// 清空原 guides 数组
-        
-        this.isSearch = false,
-        this.searchHasMore = true,
-        this.searchWord = '';
-        this.searchGuides.splice(0, this.searchGuides.length);// 清空原 searchGuides 数组
-        
-        this.show_gotop = false;
-        
-        this.getGuides();
+            this.hasMore = true;
+            this.guides.splice(0, this.guides.length);// 清空原 guides 数组
+            
+            this.isSearch = false,
+            this.searchHasMore = true,
+            this.searchWord = '';
+            this.searchGuides.splice(0, this.searchGuides.length);// 清空原 searchGuides 数组
+            
+            this.show_gotop = false;
+            
+            this.getGuides();
+          },
+          fail: (fai) => {
+              const errMsg = "取得景点名称失败";
+              this.dError(errMsg, fai);
+
+              wx.navigateBack();
+              
+              // 输出提示信息 
+              wx.showToast({
+                  icon: 'none',
+                  title: errMsg
+              });
+
+              wx.navigateBack();
+          }
+        });
       },
       fail: (fai) => {
-          const errMsg = "取得景点信息失败";
+          const errMsg = "取得景点ID失败";
           this.dError(errMsg, fai);
 
           wx.navigateBack();
@@ -238,7 +258,7 @@ export default {
 
       // 取得导游列表
       touristApi.queryGuideBySpot(
-        this.spot.id,
+        this.spotID,
         lastIndex,
         (res) => {
           this.dLog("通过景点取得导游列表成功", res);
