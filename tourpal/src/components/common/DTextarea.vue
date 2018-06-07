@@ -10,13 +10,13 @@
     </label>
     <div id="input-wrapper">
         <textarea
-        id="d-input"
-        :value="value"
-        :placeholder="placeholder"
-        placeholder-style="color:rgba(0,0,0,0.3);"
-        @confirm="handleEnter"
-        @input="handleInput"
-        @focus="handleFocus"/>
+            id="d-input"
+            :value="value"
+            :placeholder="placeholder"
+            placeholder-style="color:rgba(0,0,0,0.3);"
+            @confirm="handleEnter"
+            @input="handleInput"
+            @focus="handleFocus"/>
     </div>
 </div>
 </template>
@@ -42,12 +42,11 @@ export default {
             this.$emit('on-enter', event);
         },
         handleInput (event) {
-            // this.value = event.target.value;
             this.$emit('input', event.target.value);
         },
         handleFocus (event) {
             this.$emit('on-focus', event);
-        },
+        }
     }
 }
 </script>

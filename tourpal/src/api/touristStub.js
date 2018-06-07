@@ -98,7 +98,7 @@ export default {
 
             for (let i = 0; i < size; i++) {
                 let mockGuide = createMockGuide(i + lastIndex);
-                mockGuide.name = `${keyword}:${mockGuide.name}`;
+                mockGuide.realName = `${keyword}:${mockGuide.realName}`;
                 guideList.push(mockGuide);
             }
         }

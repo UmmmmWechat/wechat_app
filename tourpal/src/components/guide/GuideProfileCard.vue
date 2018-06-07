@@ -1,8 +1,8 @@
 /* 向导个人信息卡片，用于向游客展示 */
 /* contactable 表示是否允许联系， 也就是在通过邀请之后才能看到这个导游的联系方式 */
 <template>
-<div class="d-card">
-    <div id="out" >
+<div class="d-card" :style="{backgroundColor: color}">
+    <div id="out">
         <div id="avatar-wrapper">
             <img
             style="width: 200rpx; height:200rpx; border-radius:50%;" 
@@ -58,6 +58,9 @@ export default {
         guide: {
             type: Object,
             default: mockGuide
+        },
+        color: {
+            type: String
         }
     },
     data() {
@@ -110,7 +113,6 @@ export default {
 #text-wrapper {
     margin: 20rpx;
 }
-
 
 .title-span {
     color: #42b970;

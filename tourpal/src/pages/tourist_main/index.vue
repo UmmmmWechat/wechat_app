@@ -29,9 +29,9 @@
       <icon type="search" size="10" color="white"/>
       <div style="display:inline-block;width:90%;">
         <d-input
-        v-model="searchWord"
         placeholder="搜索景点"
         confirm-type="search"
+        @input="handleSearchInput"
         @on-focus="handleSearchFocus"
         @on-enter="handleResetSearch"/>
       </div>     
@@ -280,7 +280,7 @@ export default {
         (err) => {this.dLog("取得景点列表失败", err);}
       )
     },
-    handleLocationChange (event) {
+    handleLocationChange(event) {
       this.dLog("handleLocationChange 方法调用", event);
 
       var value = event.target.value;
@@ -374,15 +374,20 @@ export default {
           this.scrollTop = undefined;
         }, 500);
     },
-    handleGetMoreSpots (event) {
+    handleGetMoreSpots(event) {
       this.dLog("handleGetMoreSpots 方法调用", event);
       this.getSpots();
     },
-    handleSearchFocus (event) {
+    handleSearchFocus(event) {
       this.dLog("handleSearchFocus 方法调用", event);
       this.isSearch = true;
     },
-    handleResetSearch (event) {
+    handleSearchInput(e) {
+      this.dLog("handleInput 方法调用", e);
+      this.searchWord = e;
+      this.dLog(`message 更新 ${this.message}`);
+    },
+    handleResetSearch(event) {
       this.dLog("handleResetSearch 方法调用", event);
 
       this.searchHasMore = true;
@@ -425,7 +430,7 @@ export default {
       // 上滑到顶部
       this.scrollToTop();
     },
-    handleScrollToSearch (event) {
+    handleScrollToSearch(event) {
       this.dLog("handleScrollToSearch 方法调用", event);
 
       if (this.loading){
@@ -471,7 +476,7 @@ export default {
         }
       );
     },
-    handleClickBack (event) {
+    handleClickBack(event) {
       this.dLog("handleClickBack 方法调用", event);
 
       // 回滚
@@ -490,7 +495,7 @@ export default {
       // 返回
       this.handleClickBack(event);
     },
-    handleToPersonCenter (event) {
+    handleToPersonCenter(event) {
       this.dLog("handleToPersonCenter 方法调用", event);
 
       const url = `/${TOURIST_CENTER}`;

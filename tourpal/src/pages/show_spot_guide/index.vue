@@ -7,12 +7,11 @@
       <icon type="search" size="10" color="white"/>
       <div style="display:inline-block;width:90%;">
         <d-input
-        v-model="searchWord"
         placeholder="搜索向导"
         confirm-type="search"
+        @input="handleSearchInput"
         @on-focus="handleSearchFocus"
-        @on-enter="handleResetSearch"
-        />
+        @on-enter="handleResetSearch"/>
       </div>     
     </div>
   </div>
@@ -30,8 +29,8 @@
   >
     <guide-profile-card
       v-for="guide in toShowGuides"
-    :key="guide.id"
-    :guide="guide"/>
+      :key="guide.id"
+      :guide="guide"/>
     <d-loading :loading="loading" />
     <d-no-more :has-more="hasMore" />
   </scroll-view>
@@ -70,9 +69,10 @@
       @scrolltolower="handleScrollToSearch">
       <guide-profile-card
       v-for="guide in toShowGuides"
+      :color="'white'"
       :key="guide.id"
       :guide="guide"/>
-      <d-loading :loading="loading" :color="'white'" />
+      <d-loading :loading="loading" :color="'white'"/>
       <d-no-more :has-more="searchHasMore" :color="'white'"/>
     </scroll-view>
   </section>
@@ -276,6 +276,11 @@ export default {
     handleSearchFocus(event) {
       this.dLog("handleSearchFocus 方法调用", event);
       this.isSearch = true;
+    },
+    handleSearchInput(e) {
+      this.dLog("handleInput 方法调用", e);
+      this.searchWord = e;
+      this.dLog(`message 更新 ${this.message}`);
     },
     handleResetSearch (event) {
       this.dLog("handleResetSearch 方法调用", event);
