@@ -10,7 +10,7 @@
             alt="头像加载失败">
         </div>
         <div id="text-wrapper">
-            <div class="text-item"><span class="title-span">姓名：</span><span>{{ guide.name }}</span></div>
+            <div class="text-item"><span class="title-span">姓名：</span><span>{{ guide.realName }}</span></div>
             <div class="text-item"><span class="title-span">年龄：</span><span>{{ guide.age }}</span></div>
             <div class="text-item"><span class="title-span">性别：</span><span>{{ guide.gender }}</span></div>
             <template v-if="contactable">
@@ -41,8 +41,9 @@
 </template>
 
 <script>
-import { mockGuide } from '../../api/mock/tourist_mock_data';
-import { INVITE_GUIDE_ID } from './constant';
+import { INVITE_GUIDE_INFO } from './constant';
+import { TOURIST_INVITE_GUIDE } from '../../pages/pages_url';
+import { mockGuide } from '../../api/mock/guide_mock_data';
 
 export default {
     props: {
@@ -59,15 +60,25 @@ export default {
             default: mockGuide
         }
     },
+    data() {
+        return {
+            componentName: "GuideProfileCard"
+        }
+    },
     methods: {
+        dLog(message, ...optionalParams) {
+            console.log(this.componentName, message, optionalParams);
+        },
         handleInvite (event) {
             wx.setStorage({
-                key: INVITE_GUIDE_ID,
+                key: INVITE_GUIDE_INFO,
                 data: this.guide,
-                success: () => {
-                    wx.navigateTo({
-                        url: '/pages/tourist_invite_guide/main'
-                    })
+                success: (suc) => {
+                    this.dLog("设置邀请目标导游完成", suc);
+
+                    const url = `/${TOURIST_INVITE_GUIDE}`;
+                    this.dLog('跳转', url);
+                    wx.navigateTo({ url });
                 }
             })
         }

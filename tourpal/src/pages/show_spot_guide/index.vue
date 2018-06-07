@@ -141,11 +141,32 @@ export default {
       success: (res) => {
         this.dLog("取得景点信息完成", res);
         this.spot = res.data;
-        this.getGuides()
+      
+        this.hasMore = true;
+        this.guides.splice(0, this.guides.length);// 清空原 guides 数组
+        
+        this.isSearch = false,
+        this.searchHasMore = true,
+        this.searchWord = '';
+        this.searchGuides.splice(0, this.searchGuides.length);// 清空原 searchGuides 数组
+        
+        this.show_gotop = false;
+        
+        this.getGuides();
       },
       fail: (fai) => {
-        this.dLog("取得景点信息失败", fai);
-        wx.navigateBack();
+          const errMsg = "取得景点信息失败";
+          this.dError(errMsg, fai);
+
+          wx.navigateBack();
+          
+          // 输出提示信息 
+          wx.showToast({
+              icon: 'none',
+              title: errMsg
+          });
+
+          wx.navigateBack();
       }
     })
   },
@@ -262,7 +283,16 @@ export default {
 
           this.loading = false;
         },
-        (err) => {this.dError("搜索向导列表失败", err);}
+        (fai) => {
+            const errMsg = "搜索向导列表失败";
+            this.dError(errMsg, fai);
+            
+            // 输出提示信息 
+            wx.showToast({
+                icon: 'none',
+                title: errMsg
+            });
+        }
       );
 
       // 上滑到顶部

@@ -41,11 +41,6 @@ export default {
             default: false
         }
     },
-    data() {
-        return {
-            componentName: "SpotCard"
-        }
-    },
     methods: {
         handleClick (event) {
             wx.setStorage({
@@ -53,20 +48,9 @@ export default {
                 data: this.spot,
                 success: () => {
                     const url = `/${SHOW_SPOT_GUIDE}`;
-                    wx.navigateTo({
-                        url,
-                        success: (suc) => {
-                            this.dLog('跳转成功', url, suc);
-                        },
-                        fail: (fai) => {
-                            this.dLog('跳转失败', url, suc);
-                        }
-                    });
+                    wx.navigateTo({ url });
                 }
             })  
-        },
-        dLog(message, ...optionalParams) {
-            console.log(this.componentName, message, optionalParams);
         }
     },
 }

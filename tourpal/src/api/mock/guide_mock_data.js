@@ -1,7 +1,7 @@
 var createMockGuide = function(i) {
     return {
         id: "testGuideID" + i,
-        avatar: "/static/image/用户.jpg",
+        avatar: "/static/image/用户.svg",
         realName: '体验导游' + i,
         idCard: "000000199001010001",
         age: 18 + i,
@@ -45,6 +45,7 @@ var mockOrders = [
     createMockOrder(),
     createMockOrder()
 ]
+
 var mockGuide = createMockGuide(-1);
 var mockGuideList = [
     mockGuide,
@@ -62,5 +63,6 @@ var mockGuideList = [
 export {
     mockOrders,
     mockGuideList,
-    mockGuide
+    mockGuide,
+    createMockGuide
 }

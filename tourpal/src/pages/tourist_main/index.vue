@@ -179,7 +179,14 @@ export default {
     this.tourist.touristId = wx.getStorageSync(TOURIST_ID);
     if (!this.tourist.touristId) {
       // 未找到游客ID 需要先去登录
-      this.dError("未找到游客ID 需要先去登录")
+      const errMsg = "未找到游客ID 需要先去登录";
+      this.dError(errMsg);
+      
+      // 输出提示信息 
+      wx.showToast({
+        icon: 'none',
+        title: errMsg
+      });
 
       const url = `/${ROLE_SELECT}`;
       this.dLog('跳转', url);
@@ -318,7 +325,13 @@ export default {
               }
             } else {
               // 不支持该地区
-              this.dError(res.errMsg);// TODO 改成弹窗提示用户
+              this.dError(res.errMsg);
+          
+              // 输出提示信息 
+              wx.showToast({
+                icon: 'none',
+                title: res.errMsg
+              });
             }
           },
           (rej) => {this.dLog("检查所在城市是否支持失败", rej);}
@@ -397,7 +410,16 @@ export default {
           // 更新景点显示
           this.resetSpots();
         },
-        (err) => {this.dError("搜索景点列表失败", err);}
+        (fai) => {
+            const errMsg = "搜索景点列表失败";
+            this.dError(errMsg, fai);
+            
+            // 输出提示信息 
+            wx.showToast({
+              icon: 'none',
+              title: errMsg
+            });
+        }
       );
 
       // 上滑到顶部
@@ -437,7 +459,16 @@ export default {
           
           this.loading = false;
         },
-        (err) => {this.dError("搜索景点列表失败", err);}
+        (fai) => {
+            const errMsg = "搜索景点列表失败";
+            this.dError(errMsg, fai);
+            
+            // 输出提示信息 
+            wx.showToast({
+              icon: 'none',
+              title: errMsg
+            });
+        }
       );
     },
     handleClickBack (event) {

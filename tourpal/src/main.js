@@ -25,7 +25,7 @@ export default {
             'pages/tourist_rate_order/main',
             'pages/tourist_orders/main',
             'pages/tourist_travel_records/main',
-            'pages/show_spot_guide/main',
+            '^pages/show_spot_guide/main',
             'pages/tourist_center/main',
 
             /** 向导 */
@@ -39,7 +39,7 @@ export default {
 
             'pages/select_spots/main',
 
-            '^pages/test/main',
+            'pages/test/main',
             'pages/z_test/main',
         ],
         window: {

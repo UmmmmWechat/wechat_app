@@ -37,9 +37,6 @@ export default {
       pageName: "role_select"
     }
   },
-  mounted() {
-    // TODO 检查是否需要重新选择登录
-  },
   methods: {
     dLog(message, ...optionalParams) {
         console.log(this.pageName, message, optionalParams);
@@ -52,17 +49,23 @@ export default {
       this.dLog('选择了游客');
 
       touristApi.logIn(
-        () => {
+        (suc) => {
           // resolve
-          this.dLog('游客登录成功');
+          this.dLog('游客登录成功', suc);
 
           const url = `/${TOURIST_MAIN}`;
           this.dLog('跳转', url);
           wx.redirectTo({ url });
         },
-        () => {
-          this.dError('游客登录失败');
-          // TODO 
+        (fai) => {
+            const errMsg = "游客登录失败";
+            this.dError(errMsg, fai);
+            
+            // 输出提示信息 
+            wx.showToast({
+              icon: 'none',
+              title: errMsg
+            });
         }
       );
     },
@@ -85,9 +88,15 @@ export default {
             wx.switchTab({ url });
           }
         },
-        () => {
-          this.dError('向导登录失败');
-          // TODO 
+        (fai) => {
+          const errMsg = "向导登录失败";
+          this.dError(errMsg, fai);
+          
+          // 输出提示信息 
+          wx.showToast({
+            icon: 'none',
+            title: errMsg
+          });
         }
       )
     }

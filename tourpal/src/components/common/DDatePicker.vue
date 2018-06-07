@@ -25,6 +25,10 @@ export default {
       type: String,
       default: ''
     },
+    result: {
+      type: String,
+      default: '未选择，点击开始选择'
+    },
     start: {
       type: String
     },
@@ -34,14 +38,13 @@ export default {
   },
   data () {
     return {
-      result: '未选择，点击开始选择'
+      componentName: "DDatePicker"
     }
   },
   methods: {
     handleChange (event) {
-      console.log(event)
-      this.result = event.target.value
-      this.$emit('on-change', event)
+      this.result = event.target.value;
+      this.$emit('on-change', event);
     }
   }
 }

@@ -1,5 +1,6 @@
 import * as mockData from "./mock/tourist_mock_data";
 import * as constant from "./../components/tourist/constant";
+import { createMockGuide } from "./mock/guide_mock_data";
 
 const apiName = 'touristApiStub';
 
@@ -60,7 +61,7 @@ export default {
                     totalSize - lastIndex);
 
             for (let i = 0; i < size; i++) {
-                let mockGuide = mockData.createMockGuide(i + lastIndex);
+                let mockGuide = createMockGuide(i + lastIndex);
                 guideList.push(mockGuide);
             }
         }
@@ -96,7 +97,7 @@ export default {
                     totalSize - lastIndex);
 
             for (let i = 0; i < size; i++) {
-                let mockGuide = mockData.createMockGuide(i + lastIndex);
+                let mockGuide = createMockGuide(i + lastIndex);
                 mockGuide.name = `${keyword}:${mockGuide.name}`;
                 guideList.push(mockGuide);
             }
