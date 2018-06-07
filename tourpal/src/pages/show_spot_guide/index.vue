@@ -12,7 +12,7 @@
           placeholder="搜索向导"
           confirm-type="search"
           @on-focus="handleSearchFocus"
-          @on-enter="handleSearch"
+          @on-enter="handleResetSearch"
           />
         </div>     
       </div>
@@ -68,7 +68,7 @@
         enable-back-to-top
         :scroll-top="searchScrollTop"
         @scroll="handleScroll"
-        @scrolltolower="handleSearch">
+        @scrolltolower="handleScrollToSearch">
         <guide-profile-card
         v-for="guide in toShowGuides"
         :key="guide.id"
@@ -232,21 +232,48 @@ export default {
       this.dLog("handleSearchFocus 方法调用", event);
       this.isSearch = true;
     },
-    handleSearch(event) {
-      this.dLog("handleSearch 方法调用", event);
+    handleResetSearch (event) {
+      this.dLog("handleResetSearch 方法调用", event);
 
-      const isScrollToLower = event.type == SCROLL_TO_LOWER;
+      this.searchHasMore = true;
+      this.searchGuides.splice(0, this.searchGuides.length);// 清空搜索的 spot 数组
 
-      // 下滑时需要做的检查
-      if (isScrollToLower) {
-        if (this.loading){
-          this.dLog("加载中 return");
-          return;
-        }
-        if (!this.searchHasMore) {
-          this.dLog("已经加载全部 return")
-          return;
-        }
+      // 重新搜索
+
+      // 加载
+      this.loading = true;
+
+      // 按照关键词搜索向导
+      touristApi.queryGuideByKeyword(
+        this.searchWord,
+        0,
+        (res) => {
+          this.dLog("搜索向导列表成功", res);
+
+          this.searchHasMore = res.hasMoreSpot;
+
+          for (let key in res.guideList) {
+            this.searchGuides.push(res.guideList[key]);
+          }
+
+          this.loading = false;
+        },
+        (err) => {this.dError("搜索向导列表失败", err);}
+      );
+
+      // 上滑到顶部
+      this.scrollToTop();
+    },
+    handleScrollToSearch(event) {
+      this.dLog("handleScrollToSearch 方法调用", event);
+
+      if (this.loading){
+        this.dLog("加载中 return");
+        return;
+      }
+      if (!this.searchHasMore) {
+        this.dLog("已经加载全部 return")
+        return;
       }
 
       // 加载
@@ -255,7 +282,7 @@ export default {
       // 保留下上次最后的index
       let lastIndex = this.searchGuides.length;
 
-      // 按照关键词搜索景点
+      // 按照关键词搜索向导
       touristApi.queryGuideByKeyword(
         this.searchWord,
         lastIndex,
@@ -264,31 +291,11 @@ export default {
 
           this.searchHasMore = res.hasMoreGuide;
 
-          if (isScrollToLower) {
-            // 下滑获取更多
-            for (let key in res.guideList) {
-              this.searchGuides.push(res.guideList[key]);
-            }
-            
-            this.loading = false;
-          } else {
-            // 重新搜索
-            
-            // 重置属性
-            this.searchHasMore = true;
-            this.searchGuides.splice(0, this.searchGuides.length);
-
-            setTimeout(
-              () => {
-                for (let key in res.guideList) {
-                  this.searchGuides.push(res.guideList[key]);
-                }
-                this.loading = false;
-              }, 500);
-
-            // 回滚
-            // this.scrollToTop();
+          for (let key in res.guideList) {
+            this.searchGuides.push(res.guideList[key]);
           }
+          
+          this.loading = false;
         },
         (rej) => {this.dLog("通过关键词搜索导游列表失败", rej);}
       )
