@@ -94,7 +94,6 @@ import DLoading from '../../components/common/DLoading';
 import DInput from '../../components/common/DInput';
 import DNoMore from '../../components/common/DNoMore';
 
-import { SCROLL_TO_LOWER } from "../../api/const/d-type";
 import { D_SPOT } from '../../api/const/spotConst';
 
 const SHOW_TOP_SCROLLTOP = 700;

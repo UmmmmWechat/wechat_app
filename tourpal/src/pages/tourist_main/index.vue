@@ -33,7 +33,7 @@
         placeholder="搜索景点"
         confirm-type="search"
         @on-focus="handleSearchFocus"
-        @on-enter="handleSearch"/>
+        @on-enter="handleResetSearch"/>
       </div>     
     </div>
   </div>
@@ -87,7 +87,7 @@
       enable-back-to-top
       :scroll-top="searchScrollTop"
       @scroll="handleScroll"
-      @scrolltolower="handleSearch">
+      @scrolltolower="handleScrollToSearch">
       <spot-card
       v-for="spot in toShowSpots"
       :key="spot.id"
@@ -118,7 +118,6 @@ import spotApi from '../../api/spot';
 import { TOURIST_ID } from '../../components/tourist/constant';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
 import { TOURIST_CENTER, ROLE_SELECT } from '../pages_url';
-import { SCROLL_TO_LOWER } from "../../api/const/d-type";
 
 const SHOW_TOP_SCROLLTOP = 700;
 
@@ -307,22 +306,16 @@ export default {
               // 支持该地区
               this.location = location;
 
-              // 初始化景点信息
-              this.hasMore = true;
-              this.spots.splice(0, this.spots.length);// 清空原 spot 数组
-
               if (this.isSearch) {
-                this.searchHasMore = true;
-                this.searchSpots.splice(0, this.searchSpots.length);// 清空搜索的 spot 数组
-                // 重新搜索
-                this.handleSearch();
+                this.handleResetSearch(event);
               } else {
-                // 重新获取景点信息
-                this.getSpots();
-              }
+                this.resetSpots();
 
-              // 上滑到顶部
-              this.scrollToTop();
+                wx.pageScrollTo({
+                  scrollTop: 0,
+                  duration: 300
+                });
+              }
             } else {
               // 不支持该地区
               this.dError(res.errMsg);// TODO 改成弹窗提示用户
@@ -332,6 +325,42 @@ export default {
         );
       }
     },
+    resetSpots() {
+      // 初始化景点信息
+      this.hasMore = true;
+      this.spots.splice(0, this.spots.length);// 清空原 spot 数组
+      
+      // 重新获取景点信息
+
+      // 加载
+      this.loading = true;
+
+      // 取得景点列表
+      spotApi.querySpots(
+        this.location,
+        0,
+        (res) => {
+          this.dLog("取得景点列表成功", res);
+
+          this.hasMore = res.hasMoreSpot;
+
+          for (let key in res.spotList) {
+            this.spots.push(res.spotList[key]);
+          }
+          this.loading = false;
+        },
+        (err) => {this.dLog("取得景点列表失败", err);}
+      )
+
+      // 上滑到顶部
+      this.show_gotop = false;
+      
+      this.scrollTop = 0;
+      setTimeout(
+        () => {
+          this.scrollTop = undefined;
+        }, 500);
+    },
     handleGetMoreSpots (event) {
       this.dLog("handleGetMoreSpots 方法调用", event);
       this.getSpots();
@@ -340,21 +369,50 @@ export default {
       this.dLog("handleSearchFocus 方法调用", event);
       this.isSearch = true;
     },
-    handleSearch (event) {
-      this.dLog("handleSearch 方法调用", event);
+    handleResetSearch (event) {
+      this.dLog("handleResetSearch 方法调用", event);
 
-      const isScrollToLower = event.type == SCROLL_TO_LOWER;
+      this.searchHasMore = true;
+      this.searchSpots.splice(0, this.searchSpots.length);// 清空搜索的 spot 数组
 
-      // 下滑时需要做的检查
-      if (isScrollToLower) {
-        if (this.loading){
-          this.dLog("加载中 return");
-          return;
-        }
-        if (!this.searchHasMore) {
-          this.dLog("已经加载全部 return")
-          return;
-        }
+      // 重新搜索
+
+      // 加载
+      this.loading = true;
+
+      // 按照关键词搜索景点
+      spotApi.querySpotsByKeywordAndCity(
+        this.searchWord,
+        this.location,
+        0,
+        (res) => {
+          this.dLog("搜索景点列表成功", res);
+
+          this.searchHasMore = res.hasMoreSpot;
+
+          for (let key in res.spotList) {
+            this.searchSpots.push(res.spotList[key]);
+          }
+
+          // 更新景点显示
+          this.resetSpots();
+        },
+        (err) => {this.dError("搜索景点列表失败", err);}
+      );
+
+      // 上滑到顶部
+      this.scrollToTop();
+    },
+    handleScrollToSearch (event) {
+      this.dLog("handleScrollToSearch 方法调用", event);
+
+      if (this.loading){
+        this.dLog("加载中 return");
+        return;
+      }
+      if (!this.searchHasMore) {
+        this.dLog("已经加载全部 return")
+        return;
       }
 
       // 加载
@@ -373,28 +431,14 @@ export default {
 
           this.searchHasMore = res.hasMoreSpot;
 
-          if (isScrollToLower) {
-            // 下滑获取更多
-            for (let key in res.spotList) {
-              this.searchSpots.push(res.spotList[key]);
-            }
-          } else {
-            // 重新搜索
-            
-            // 重置属性
-            this.searchHasMore = true;
-            this.searchSpots.splice(0, this.searchSpots.length);
-
-            // 回滚
-            this.scrollToTop();
-
-            this.searchSpots = res.spotList;
+          for (let key in res.spotList) {
+            this.searchSpots.push(res.spotList[key]);
           }
           
           this.loading = false;
         },
         (err) => {this.dError("搜索景点列表失败", err);}
-      )
+      );
     },
     handleClickBack (event) {
       this.dLog("handleClickBack 方法调用", event);
