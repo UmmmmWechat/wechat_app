@@ -6,6 +6,9 @@
       :guide="guide"/>
     </div>
     <div id="form-wrapper">
+      <form 
+      report-submit
+      @submit="handleSubmit">
       <d-date-picker
         label="旅游日期"
         :start="start"
@@ -15,10 +18,13 @@
       label="留言"
       placeholder="请给向导留个言吧"/>
       <button
+      formType="submit"
+      open-type="contact"
       type="primary"
       style="margin: 10rpx;">
         确定
       </button>
+      </form>
     </div>
   </div>
 </template>
@@ -45,7 +51,12 @@ export default {
     return {
       guide: {},
       start: '1900-01-01',
-      end: '2200-01-01'
+      end: '2200-01-01',
+      // form相关
+      travelDate: '',
+      message: '',
+      spotId: '',
+      formId: ''
     }
   },
   mounted () {
@@ -66,6 +77,13 @@ export default {
     endDate.setDate(startDate.getDate() + 30)
     this.start = format(startDate)
     this.end = format(endDate)
+  },
+  methods: {
+    handleSubmit (e) {
+      console.log(e)
+      // 获取formId
+      this.formId = e.target.formId
+    }
   }
 }
 </script>
