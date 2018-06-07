@@ -98,9 +98,9 @@
   </section>
 
   <section class="to-top-wrapper" v-if="show_gotop">
-    <a id="to-top" @click="scrollToTop">
+    <span id="to-top" @click="scrollToTop">
       Top
-    </a>
+    </span>
   </section>
 </div>
 </template>
@@ -499,15 +499,19 @@ z-index: 100;
   position: fixed;
   left: 5%;
   bottom: 10%;
+  opacity: 0.7;
 }
 
 #to-top {
   height: 100rpx;
   width: 100rpx;
   border-radius: 50%;
-  border: solid #42b9704d;
+  /* border: solid #42b9704d;
   box-shadow: #42b9704d 0 0 5px;
-  background: #a2ddb9af;
+  background: #a2ddb9af; */
+  border: solid #42b970;
+  box-shadow: #42b970 0 0 5px;
+  background: #a2ddb9;
   
   color: #314237af;
   font-weight: bold;
