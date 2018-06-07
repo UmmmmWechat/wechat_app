@@ -38,4 +38,76 @@ export default {
         })
     },
 
+    /**
+     * 根据景点查询向导
+     * @param {String} spotId 景点ID
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    queryGuideBySpot(spotId, lastIndex, resolve, reject) {
+        this.dLog(`queryGuideBySpot 方法请求 spotId:${spotId} lastIndex:${lastIndex}`);
+
+        const totalSize = 2 * constant.GUIDE_MAX_NUM;
+        const getAll = lastIndex == constant.GET_ALL_TAG;
+        const hasMoreGuide = !getAll && lastIndex < totalSize;
+        var guideList = [];
+
+        if (hasMoreGuide) {
+            var size = getAll ?
+                totalSize :
+                (totalSize - lastIndex > constant.GUIDE_MAX_NUM ?
+                    constant.GUIDE_MAX_NUM :
+                    totalSize - lastIndex);
+
+            for (let i = 0; i < size; i++) {
+                let mockGuide = mockData.createMockGuide(i);
+                guideList.push(mockGuide);
+            }
+        }
+
+        setTimeout(
+            () => {
+                resolve({ guideList, hasMoreGuide });
+            },
+            300
+        );
+    },
+
+    /**
+     * 根据关键词查找导游
+     * @param {*} keyword 
+     * @param {*} lastIndex 
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    queryGuideByKeyword(keyword, lastIndex, resolve, reject) {
+        this.dLog(`queryGuideByKeyword 方法请求 keyword:${keyword} lastIndex:${lastIndex}`);
+
+        const totalSize = 2 * constant.GUIDE_MAX_NUM;
+        const getAll = lastIndex == constant.GET_ALL_TAG;
+        const hasMoreGuide = !getAll && lastIndex < totalSize;
+        var guideList = [];
+
+        if (hasMoreGuide) {
+            var size = getAll ?
+                totalSize :
+                (totalSize - lastIndex > constant.GUIDE_MAX_NUM ?
+                    constant.GUIDE_MAX_NUM :
+                    totalSize - lastIndex);
+
+            for (let i = 0; i < size; i++) {
+                let mockGuide = mockData.createMockGuide(i);
+                mockGuide.name = `${keyword}:${mockGuide.name}`;
+                guideList.push(mockGuide);
+            }
+        }
+
+        setTimeout(
+            () => {
+                resolve({ guideList, hasMoreGuide });
+            },
+            300
+        );
+    },
+
 }

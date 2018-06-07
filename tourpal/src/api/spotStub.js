@@ -53,7 +53,7 @@ export default {
                 resolve({ spotList, hasMoreSpot });
             },
             300
-        )
+        );
     },
 
     /**

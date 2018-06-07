@@ -24,7 +24,6 @@
         </span>
       </picker>
       </div>
-      
     </div>
     <div id="search">
       <icon type="search" size="10" color="white"/>
@@ -119,6 +118,7 @@ import spotApi from '../../api/spot';
 import { TOURIST_ID } from '../../components/tourist/constant';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
 import { TOURIST_CENTER, ROLE_SELECT } from '../pages_url';
+import { SCROLL_TO_LOWER } from "../../api/const/d-type";
 
 const SHOW_TOP_SCROLLTOP = 700;
 
@@ -343,13 +343,18 @@ export default {
     handleSearch (event) {
       this.dLog("handleSearch 方法调用", event);
 
-      if (this.loading){
-        this.dLog("加载中 return");
-        return;
-      }
-      if (!this.searchHasMore) {
-        this.dLog("已经加载全部 return")
-        return;
+      const isScrollToLower = event.type == SCROLL_TO_LOWER;
+
+      // 下滑时需要做的检查
+      if (isScrollToLower) {
+        if (this.loading){
+          this.dLog("加载中 return");
+          return;
+        }
+        if (!this.searchHasMore) {
+          this.dLog("已经加载全部 return")
+          return;
+        }
       }
 
       // 加载
@@ -368,9 +373,24 @@ export default {
 
           this.searchHasMore = res.hasMoreSpot;
 
-          for (let key in res.spotList) {
-            this.searchSpots.push(res.spotList[key]);
+          if (isScrollToLower) {
+            // 下滑获取更多
+            for (let key in res.spotList) {
+              this.searchSpots.push(res.spotList[key]);
+            }
+          } else {
+            // 重新搜索
+            
+            // 重置属性
+            this.searchHasMore = true;
+            this.searchSpots.splice(0, this.searchSpots.length);
+
+            // 回滚
+            this.scrollToTop();
+
+            this.searchSpots = res.spotList;
           }
+          
           this.loading = false;
         },
         (err) => {this.dError("搜索景点列表失败", err);}
@@ -388,6 +408,7 @@ export default {
       this.dLog("handleClickBack 方法调用", event);
 
       // 重置属性
+      this.searchWord = "";
       this.searchHasMore = true;
       this.searchSpots.splice(0, this.searchSpots.length);// 清空搜索的 spot 数组
       
@@ -421,8 +442,13 @@ z-index: 100;
   text-decoration: underline;
 }
 
+#search {
+  margin: 20rpx 0;
+  font-size: 0.8em; 
+}
+
 .scroll {
-  height: 1000rpx;
+  height: 1200rpx;
 }
 
 .to-top-wrapper {

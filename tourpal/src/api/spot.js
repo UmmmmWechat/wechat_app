@@ -36,7 +36,7 @@ export default {
 
                 const hasMoreSpot = lastIndex != constant.GET_ALL_TAG && suc.length == constant.SPOT_MAX_NUM;
 
-                resolve({ spotList, hasMoreSpot });
+                resolve({ spotList: suc, hasMoreSpot });
             };
             var onFail = (fai) => {
                 this.dLog('服务器端取得景点失败', fai);
@@ -76,7 +76,7 @@ export default {
 
                 const hasMoreSpot = lastIndex != constant.GET_ALL_TAG && suc.length == constant.SPOT_MAX_NUM;
 
-                resolve({ spotList, hasMoreSpot });
+                resolve({ spotList: suc, hasMoreSpot });
             };
             var onFail = (fai) => {
                 this.dLog('服务器端取得景点失败', fai);

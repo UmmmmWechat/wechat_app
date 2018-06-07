@@ -1,32 +1,35 @@
 <template>
-  <div id="wrapper" class="d-card">
-      <div id="img-wrapper">
-          <img
-          id="image" 
-          :src="spot.pictureUrl" 
-          alt="景点图片加载失败">
-      </div>
-      <div id="text-wrapper">
-          <div id="title-div">
-              {{ spot.title }}
-          </div>
-          <div id="content-div">
-              {{ spot.introduction }}
-          </div>
-      </div>
-      <div 
-      v-if="!noAction"
-      id="btn-wrapper">
-              <a
-              class="d-a"
-              @click="handleClick">
-                  感兴趣
-              </a>
-      </div>
-  </div>
+<div id="wrapper" class="d-card">
+    <div id="img-wrapper">
+        <img
+        id="image" 
+        :src="spot.pictureUrl" 
+        alt="景点图片加载失败">
+    </div>
+    <div id="text-wrapper">
+        <div id="title-div">
+            {{ spot.title }}
+        </div>
+        <div id="content-div">
+            {{ spot.introduction }}
+        </div>
+    </div>
+    <div 
+    v-if="!noAction"
+    id="btn-wrapper">
+        <a
+        class="d-a"
+        @click="handleClick">
+            感兴趣
+        </a>
+    </div>
+</div>
 </template>
 
 <script>
+import { D_SPOT } from '../../api/const/spotConst';
+import { SHOW_SPOT_GUIDE } from '../../pages/pages_url';
+
 export default {
     props: {
         spot: {
@@ -38,22 +41,34 @@ export default {
             default: false
         }
     },
+    data() {
+        return {
+            componentName: "SpotCard"
+        }
+    },
     methods: {
         handleClick (event) {
             wx.setStorage({
-                key: 'spot',
+                key: D_SPOT,
                 data: this.spot,
                 success: () => {
+                    const url = `/${SHOW_SPOT_GUIDE}`;
                     wx.navigateTo({
-                        url: '/pages/show_spot_guide/main'
-                    })
+                        url,
+                        success: (suc) => {
+                            this.dLog('跳转成功', url, suc);
+                        },
+                        fail: (fai) => {
+                            this.dLog('跳转失败', url, suc);
+                        }
+                    });
                 }
             })  
+        },
+        dLog(message, ...optionalParams) {
+            console.log(this.componentName, message, optionalParams);
         }
     },
-    mounted () {
-        console.log(this.imageUrl)
-    }
 }
 </script>
 
@@ -62,13 +77,16 @@ export default {
     margin: 20rpx;
     background-color: #fff;
 }
+
 #img-wrapper {
     text-align: center;
 }
+
 #image {
     width: 100%;
     height: 500rpx;
 }
+
 #text-wrapper {
     padding: 20rpx 30rpx;
     background-color: #fff;
@@ -92,6 +110,5 @@ export default {
     text-align: right;
 }
 </style>
-
 <style src="../../assets/style/d-card.css" scoped/>
 <style src="../../assets/style/d-a.css" scoped/>

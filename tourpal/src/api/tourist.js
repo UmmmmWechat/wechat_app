@@ -93,31 +93,82 @@ export default {
 
     /**
      * 根据景点查询向导
-     * @param {String} spotId 景点ID
+     * @param {*} spotId 
+     * @param {*} lastIndex 
      * @param {*} resolve 
      * @param {*} reject 
      */
     queryGuideBySpot(spotId, lastIndex, resolve, reject) {
-        console.log('in tourist api:' + spotId);
-        var res = []
-        for (let i = lastIndex; i < lastIndex + 5; i++) {
-            res.push(mockGuide(i));
-        }
-        setTimeout(
-            () => resolve(res),
-            1000
-        )
+        this.dLog(`queryGuideBySpot 方法请求 spotId:${spotId} lastIndex:${lastIndex}`);
 
+        if (httpRequest.isTestMode) {
+            touristStub.queryGuideBySpot(spotId, lastIndex, resolve, reject);
+        } else {
+            // 发起网络请求
+            var onSuccess = (suc) => {
+                // 成功的返回信息中为 向导数组
+                this.dLog("服务器端通过景点取得导游成功", suc);
+
+                const hasMoreGuide = lastIndex != constant.GET_ALL_TAG && suc.length == constant.GUIDE_MAX_NUM;
+
+                resolve({ guideList: suc, hasMoreGuide });
+            };
+
+            var onFail = (fai) => {
+                this.dLog("服务器端通过景点取得导游失败", fai);
+                reject();
+            };
+
+            httpRequest.dRequest(
+                serverUrl.GET_GUIDE_BY_SPOT_ID, {
+                    spotId,
+                    lastIndex
+                },
+                httpRequest.GET,
+                onSuccess,
+                onFail
+            );
+        }
     },
 
     /**
      * 根据关键词查找导游
      * @param {*} keyword 
+     * @param {*} lastIndex 
      * @param {*} resolve 
      * @param {*} reject 
      */
-    queryGuideByKeyword(keyword, resolve, reject) {
+    queryGuideByKeyword(keyword, lastIndex, resolve, reject) {
+        this.dLog(`queryGuideByKeyword 方法请求 keyword:${keyword} lastIndex:${lastIndex}`);
 
+        if (httpRequest.isTestMode) {
+            touristStub.queryGuideByKeyword(keyword, lastIndex, resolve, reject);
+        } else {
+            // 发起网络请求
+            var onSuccess = (suc) => {
+                // 成功的返回信息中为 向导数组
+                this.dLog("服务器端通过关键词搜索导游成功", suc);
+
+                const hasMoreGuide = lastIndex != constant.GET_ALL_TAG && suc.length == constant.GUIDE_MAX_NUM;
+
+                resolve({ guideList: suc, hasMoreGuide });
+            };
+
+            var onFail = (fai) => {
+                this.dLog("服务器端通过关键词搜索导游失败", fai);
+                reject();
+            };
+
+            httpRequest.dRequest(
+                serverUrl.GET_GUIDE_BY_KEYWORD, {
+                    keyword,
+                    lastIndex
+                },
+                httpRequest.GET,
+                onSuccess,
+                onFail
+            );
+        }
     },
 
 
