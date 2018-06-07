@@ -39,7 +39,6 @@ export default {
   },
   mounted() {
     // TODO 检查是否需要重新选择登录
-
   },
   methods: {
     dLog(message, ...optionalParams) {

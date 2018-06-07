@@ -1,7 +1,7 @@
 var createMockGuide = function(i) {
     return {
         id: "testGuideID" + i,
-        avatar: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526121882561&di=c15bfa3211e5ac3187be885db53016d4&imgtype=0&src=http%3A%2F%2Fi2.hdslb.com%2Fbfs%2Farchive%2Fa054478cfce531e62c1bb5a122ed71f6193533d7.jpg',
+        avatar: "/static/image/用户.jpg",
         realName: '体验导游' + i,
         idCard: "000000199001010001",
         age: 18 + i,
@@ -45,20 +45,7 @@ var mockOrders = [
     createMockOrder(),
     createMockOrder()
 ]
-var mockGuide = {
-    id: "testGuideID",
-    avatar: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526121882561&di=c15bfa3211e5ac3187be885db53016d4&imgtype=0&src=http%3A%2F%2Fi2.hdslb.com%2Fbfs%2Farchive%2Fa054478cfce531e62c1bb5a122ed71f6193533d7.jpg',
-    realName: '体验导游',
-    idCard: "000000199001010001",
-    age: 18,
-    gender: '男',
-    wechat: 'wechat',
-    phone: '11111111111',
-    goodFeedbackRate: 80,
-    introduction: '简短的介绍',
-    numOfFinishedOrder: 10,
-    favorSpots: ['夫子庙', '秦淮河', '玄武湖']
-}
+var mockGuide = createMockGuide(-1);
 var mockGuideList = [
     mockGuide,
     createMockGuide(0),

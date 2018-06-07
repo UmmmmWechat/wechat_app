@@ -139,8 +139,13 @@ export default {
     wx.getStorage({
       key: D_SPOT,
       success: (res) => {
+        this.dLog("取得景点信息完成", res);
         this.spot = res.data;
         this.getGuides()
+      },
+      fail: (fai) => {
+        this.dLog("取得景点信息失败", fai);
+        wx.navigateBack();
       }
     })
   },
@@ -347,15 +352,19 @@ export default {
   position: fixed;
   left: 5%;
   bottom: 10%;
+  opacity: 0.7;
 }
 
 #to-top {
   height: 100rpx;
   width: 100rpx;
   border-radius: 50%;
-  border: solid #42b9704d;
+  /* border: solid #42b9704d;
   box-shadow: #42b9704d 0 0 5px;
-  background: #a2ddb9af;
+  background: #a2ddb9af; */
+  border: solid #42b970;
+  box-shadow: #42b970 0 0 5px;
+  background: #a2ddb9;
   
   color: #314237af;
   font-weight: bold;
