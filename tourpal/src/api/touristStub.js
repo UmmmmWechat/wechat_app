@@ -60,7 +60,7 @@ export default {
                     totalSize - lastIndex);
 
             for (let i = 0; i < size; i++) {
-                let mockGuide = mockData.createMockGuide(i);
+                let mockGuide = mockData.createMockGuide(i + lastIndex);
                 guideList.push(mockGuide);
             }
         }
@@ -96,7 +96,7 @@ export default {
                     totalSize - lastIndex);
 
             for (let i = 0; i < size; i++) {
-                let mockGuide = mockData.createMockGuide(i);
+                let mockGuide = mockData.createMockGuide(i + lastIndex);
                 mockGuide.name = `${keyword}:${mockGuide.name}`;
                 guideList.push(mockGuide);
             }

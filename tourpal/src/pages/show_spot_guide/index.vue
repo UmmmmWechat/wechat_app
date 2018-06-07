@@ -1,89 +1,88 @@
 <template>
-  <div>
+<div>
+  <div id="head" class="d-head">
+    <div id="title">{{ spot.title }}</div>
 
-    <div id="head" class="d-head">
-      <div id="title">{{ spot.title }}</div>
-
-      <div id="search">
-        <icon type="search" size="10" color="white"/>
-        <div style="display:inline-block;width:90%;">
-          <d-input
-          v-model="searchWord"
-          placeholder="搜索向导"
-          confirm-type="search"
-          @on-focus="handleSearchFocus"
-          @on-enter="handleResetSearch"
-          />
-        </div>     
-      </div>
+    <div id="search">
+      <icon type="search" size="10" color="white"/>
+      <div style="display:inline-block;width:90%;">
+        <d-input
+        v-model="searchWord"
+        placeholder="搜索向导"
+        confirm-type="search"
+        @on-focus="handleSearchFocus"
+        @on-enter="handleResetSearch"
+        />
+      </div>     
     </div>
+  </div>
 
-    <scroll-view
-    v-if="!isSearch" 
-   class="scroll" 
-    id="guide-list"
-    :scroll-top="scrollTop"
-    @scroll="handleScroll"
-    @scrolltolower="getGuides"
-    scroll-y
-    enable-back-to-top
-    scroll-with-animation
-    >
+  <scroll-view
+  v-if="!isSearch" 
+  class="scroll" 
+  id="guide-list"
+  :scroll-top="scrollTop"
+  @scroll="handleScroll"
+  @scrolltolower="getGuides"
+  scroll-y
+  enable-back-to-top
+  scroll-with-animation
+  >
+    <guide-profile-card
+      v-for="guide in toShowGuides"
+    :key="guide.id"
+    :guide="guide"/>
+    <d-loading :loading="loading" />
+    <d-no-more :has-more="hasMore" />
+  </scroll-view>
+
+  <section
+  v-else
+  class="d-search-list">
+    <header>
+    <div style="text-align:center;padding:10rpx;">
+        <button 
+        class="d-back-btn-white"
+        size="mini"
+        plain
+        @click="handleClickBack">
+          返回
+        </button>
+        <button 
+        class="d-back-btn-white"
+        style="margin-left:33rpx;"
+        size="mini"
+        plain
+        @click="handleClearSearch">
+          清空
+        </button>
+      </div>
+
+    </header>
+
+    <scroll-view 
+      class="scroll" 
+      scroll-y
+      scroll-with-animation
+      enable-back-to-top
+      :scroll-top="searchScrollTop"
+      @scroll="handleScroll"
+      @scrolltolower="handleScrollToSearch">
       <guide-profile-card
-       v-for="guide in toShowGuides"
+      v-for="guide in toShowGuides"
       :key="guide.id"
       :guide="guide"/>
-      <d-loading :loading="loading" />
-      <d-no-more :has-more="hasMore" />
+      <d-loading :loading="loading" :color="'white'" />
+      <d-no-more :has-more="searchHasMore" :color="'white'"/>
     </scroll-view>
-
-    <section
-    v-else
-    class="d-search-list">
-      <header>
-      <div style="text-align:center;padding:10rpx;">
-          <button 
-          class="d-back-btn-white"
-          size="mini"
-          plain
-          @click="handleClickBack">
-            返回
-          </button>
-          <button 
-          class="d-back-btn-white"
-          style="margin-left:33rpx;"
-          size="mini"
-          plain
-          @click="handleClearSearch">
-            清空
-          </button>
-        </div>
-
-      </header>
-
-      <scroll-view 
-        class="scroll" 
-        scroll-y
-        scroll-with-animation
-        enable-back-to-top
-        :scroll-top="searchScrollTop"
-        @scroll="handleScroll"
-        @scrolltolower="handleScrollToSearch">
-        <guide-profile-card
-        v-for="guide in toShowGuides"
-        :key="guide.id"
-        :guide="guide"/>
-        <d-loading :loading="loading" :color="'white'" />
-        <d-no-more :has-more="searchHasMore" :color="'white'"/>
-      </scroll-view>
-    </section>
+  </section>
 
   <section class="to-top-wrapper" v-if="show_gotop">
     <a id="to-top" @click="scrollToTop">
       Top
     </a>
   </section>
-  </div>
+</div>
 </template>
 
 <script>
