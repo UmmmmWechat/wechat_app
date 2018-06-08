@@ -151,16 +151,16 @@ export default {
      */
     queryOrders(guideId, state, lastIndex, resolve, reject) {
         /* 导游只有以下类型有效
-        "finished": mockData.mockOrders,
-        "waiting": mockData.mockOrders,
-        "ongoing": mockData.mockOrders,
-        "rejected": mockData.mockOrders,
-        "timeout": mockData.mockOrders*/
+        "finished": MOCK_ORDERS,
+        "waiting": MOCK_ORDERS,
+        "ongoing": MOCK_ORDERS,
+        "rejected": MOCK_ORDERS,
+        "timeout": MOCK_ORDERS*/
         this.dLog('query orders by state 方法')
         if (httpRequest.isTestMode) {
             console.log('queryOrders', guideId, state, lastIndex)
             console.log(mockData)
-            resolve(mockData.mockOrders)
+            resolve(MOCK_ORDERS)
         } else {
             httpRequest.dRequest(
                 serverUrl.GUIDE_GET_ORDER_BY_STATE, {
@@ -317,16 +317,16 @@ export default {
     queryOrdersByKeyword(keyword, userId, lastIndex, resolve, reject) {
         // 导游只需要以下五种类型的邀请
         // resolve({
-        //   "finished": mockData.mockOrders,
-        //   "waiting": mockData.mockOrders,
-        //   "ongoing": mockData.mockOrders,
-        //   "rejected": mockData.mockOrders,
-        //   "timeout": mockData.mockOrders
+        //   "finished": MOCK_ORDERS,
+        //   "waiting": MOCK_ORDERS,
+        //   "ongoing": MOCK_ORDERS,
+        //   "rejected": MOCK_ORDERS,
+        //   "timeout": MOCK_ORDERS
         // });
 
         this.dLog('get orders by keyword 方法')
         if (httpRequest.isTestMode) {
-            resolve(mockData.mockOrders)
+            resolve(MOCK_ORDERS)
         } else {
             httpRequest.dRequest(
                 serverUrl.GUIDE_GET_ORDER_BY_KEYWORD, {

@@ -49,10 +49,11 @@
 <script>
 import commonApi from '../../api/common';
 import touristApi from '../../api/tourist';
-import ResultMessage from '../../api/returnMessage'
+import * as ResultMessage from '../../api/returnMessage'
 import orderApi from '../../api/order'
 import { STATES_ARRAY, WAITING_STATE, FINISHED_STATE } from '../tourist/constant';
 import { SHOW_SPOT_PAGE, SHOW_GUIDE_PAGE } from '../../pages/pages_url';
+
 export default {
   props: {
     order: {

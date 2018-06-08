@@ -93,6 +93,7 @@ import DLoading from '../../components/common/DLoading';
 import OrderListTourist from '../../components/order/OrderList';
 import { STATE_MENU, STATES_ARRAY, TOURIST_ID } from '../../components/tourist/constant';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
+import { ROLE_SELECT } from '../pages_url';
 
 export default {
   components: {
@@ -130,18 +131,11 @@ export default {
     this.touristId = wx.getStorageSync(TOURIST_ID);
     if (!this.touristId) {
       // 未找到游客ID 需要先去登录
-      const errMsg = "未找到游客ID 需要先去登录";
-      this.dError(errMsg);
-      
-      // 输出提示信息 
-      wx.showToast({
-        icon: 'none',
-        title: errMsg
-      });
-
       const url = `/${ROLE_SELECT}`;
       this.dLog('跳转', url);
       wx.redirectTo({ url });
+      
+      this.showErrorRoast("未找到游客ID 需要先去登录");
 
       return;
     }
