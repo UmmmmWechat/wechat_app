@@ -21,7 +21,7 @@ var dRequest = (url, data, method, onSuccess, onFail) => {
     })
 }
 
-const isTestMode = false;
+const isTestMode = true;
 
 export {
     dRequest,

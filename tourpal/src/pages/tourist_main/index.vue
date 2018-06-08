@@ -7,8 +7,9 @@
         <span
         class="underline-span"
         @click="handleToPersonCenter">
-        <!-- @Modify 这里直接显示 id 吧 -->
-        {{ '游客：' + tourist.touristId }}
+        {{ tourist.touristName }}
+        <!-- @Modify 这里直接显示 id 吧 TODO -->
+        <!-- {{ '游客：' + tourist.touristId }} -->
         </span>
       </span>
     </div>
@@ -32,6 +33,7 @@
         <d-input
         placeholder="搜索景点"
         confirm-type="search"
+        :value="searchValue"
         @input="handleSearchInput"
         @on-focus="handleSearchFocus"
         @on-enter="handleResetSearch"/>
@@ -152,6 +154,7 @@ export default {
       searchHasMore: true,
       isSearch: false,
       searchWord: '',
+      searchValue: undefined, // 用于清空搜索框
       searchSpots: [],
 
       pageName: 'tourist_main',
@@ -403,8 +406,9 @@ export default {
       // 按照关键词搜索景点
       spotApi.querySpotsByKeywordAndCity(
         this.searchWord,
-        // @Modified 这里我改了，只需要传 city
-        this.location.city,
+        this.location,
+        // @Modified 这里我改了，只需要传 city TODO
+        // this.location.city,
         0,
         (res) => {
           this.dLog("搜索景点列表成功", res);
@@ -481,25 +485,30 @@ export default {
     },
     handleClickBack(event) {
       this.dLog("handleClickBack 方法调用", event);
-
-      // 回滚
-      this.scrollToTop();
+      
+      // 清空
+      this.handleClearSearch(event);
 
       this.isSearch = false;
-      // @Add 返回时也把搜索词清空
-      this.searchWord = ''
     },
     handleClearSearch(event) {
       this.dLog("handleClickBack 方法调用", event);
+      
+      // 清空搜索框
+      this.searchValue = "";
+      setTimeout(
+        () => {
+          this.searchValue = undefined;
+        }, 500
+      );
 
       // 重置属性
       this.searchWord = "";
       this.searchHasMore = true;
       this.searchSpots.splice(0, this.searchSpots.length);// 清空搜索的 spot 数组
-      
-      // TODO: @Question 清空的话不需要返回吧？
-      // 返回
-      this.handleClickBack(event);
+
+      // 回滚
+      this.scrollToTop();
     },
     handleToPersonCenter(event) {
       this.dLog("handleToPersonCenter 方法调用", event);

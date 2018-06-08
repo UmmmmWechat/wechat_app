@@ -9,6 +9,7 @@
         <d-input
         placeholder="搜索向导"
         confirm-type="search"
+        :value="searchValue"
         @input="handleSearchInput"
         @on-focus="handleSearchFocus"
         @on-enter="handleResetSearch"/>
@@ -116,7 +117,8 @@ export default {
       
       isSearch: false,
       searchHasMore: true,
-      searchWord: '',
+      searchWord: "",
+      searchValue: undefined, // 用于清空搜索框
       searchGuides: [],
 
       pageName: 'show_spot_guide',
@@ -282,7 +284,7 @@ export default {
       this.searchWord = e;
       this.dLog(`message 更新 ${this.message}`);
     },
-    handleResetSearch (event) {
+    handleResetSearch(event) {
       this.dLog("handleResetSearch 方法调用", event);
 
       this.searchHasMore = true;
@@ -359,26 +361,32 @@ export default {
         (rej) => {this.dLog("通过关键词搜索导游列表失败", rej);}
       )
     },
-    handleClickBack (event) {
+    handleClickBack(event) {
       this.dLog("handleClickBack 方法调用", event);
-
-      // 回滚
-      this.scrollToTop();
+      
+      // 清空
+      this.handleClearSearch(event);
 
       this.isSearch = false;
-      // @Add 返回时也把搜索词清空
-      this.searchWord = ''
     },
     handleClearSearch(event) {
       this.dLog("handleClickBack 方法调用", event);
+      
+      // 清空搜索框
+      this.searchValue = "";
+      setTimeout(
+        () => {
+          this.searchValue = undefined;
+        }, 500
+      );
 
       // 重置属性
       this.searchWord = "";
       this.searchHasMore = true;
       this.searchGuides.splice(0, this.searchGuides.length);// 清空搜索的 spot 数组
-      
-      // 返回
-      this.handleClickBack(event);
+
+      // 回滚
+      this.scrollToTop();
     }
   }
 }
