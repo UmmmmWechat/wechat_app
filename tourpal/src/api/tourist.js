@@ -4,6 +4,7 @@ import * as httpRequest from "./httpRequestApi";
 import * as returnMessage from "./returnMessage";
 
 import touristStub from "./touristStub";
+import { REJECTED } from "./const/orderConst";
 
 const apiName = 'touristApi';
 
@@ -240,47 +241,47 @@ export default {
                 onFail
             );
         }
-
     },
 
     /**
-     *
-     * @param {String} touristId
-     * @param {String} state
-     * @param {Function} resolve
-     * @param {Function} reject
+     * 通过状态取得邀请列表
+     * @param {*} touristId 
+     * @param {*} state 
+     * @param {*} lastIndex 
+     * @param {*} resolve 
+     * @param {*} reject 
      */
     queryOrders(touristId, state, lastIndex, resolve, reject) {
-        console.log('query orders' + state);
+        this.dLog(`queryOrders 方法请求 touristId:${touristId} state:${state} lastIndex:${lastIndex}`);
+
         if (httpRequest.isTestMode) {
-          var res = [];
-          for (let i = 0; i < 5; i++) {
-            res.push({
-              id: state + i,
-              touristId: i,
-              guideId: i,
-              spotId: i,
-              state: state,
-              generatedDate: new Date().toLocaleDateString(),
-              travelDate: new Date().toLocaleDateString()
-            })
-          }
-          setTimeout(
-            () => resolve(res),
-            1000
-          )
+            touristStub.queryOrders(touristId, state, lastIndex, resolve, reject);
         } else {
-          httpRequest.dRequest(
-            serverUrl.TOURIST_GET_ORDER_BY_STATE,
-            {
-              touristId: touristId,
-              state: state,
-              lastIndex: lastIndex
-            },
-            httpRequest.GET,
-            resolve,
-            reject
-          )
+            // 发起网络请求
+            var onSuccess = (suc) => {
+                // 成功的返回信息中为 邀请数组
+                this.dLog("服务器端通过状态搜索邀请成功", suc);
+
+                const hasMoreOrder = lastIndex != constant.GET_ALL_TAG && suc.length == constant.ORDER_MAX_NUM;
+
+                resolve({ orderList: suc, hasMoreOrder });
+            };
+
+            var onFail = (fai) => {
+                this.dLog("服务器端通过状态搜索邀请失败", fai);
+                reject();
+            };
+
+            httpRequest.dRequest(
+                serverUrl.TOURIST_GET_ORDER_BY_STATE, {
+                    touristId,
+                    state,
+                    lastIndex
+                },
+                httpRequest.GET,
+                onSuccess,
+                onFail
+            );
         }
     },
 

@@ -10,14 +10,14 @@
       @input="handleSearchInput"
       @on-focus="handleSearchFocus"
       @on-enter="handleResetSearch"/>
-    </div>     
+    </div>
   </div>
 
   <div
     v-if="isSearch"
     class="d-search-list">
     <div 
-    style="text-align:center;padding:10rpx;">
+      style="text-align:center;padding:10rpx;">
       <button 
       class="d-back-btn-white"
       size="mini"
@@ -34,11 +34,14 @@
         清空
       </button>
     </div>
+
     <order-list-tourist
       :color="'white'"
       :orders="searchOrders"
       @scrolltolower="handleScrollToSearch"/>
+
     <d-loading :loading="loading" :color="'white'" />
+
     <d-no-more :has-more="searchHasMore" :color="'white'"/>
   </div>
 
@@ -47,35 +50,45 @@
       <d-navigator-bar 
       :menus="menus"
       :current="current"
-      @on-change="current = $event.target.value"
-      />
+      @on-change="onNavigatorChange"/>
     </div>
 
     <div
     id="swiper-wrapper">
       <swiper
-      class="swiper"
-      :current="current"
-      @change="handleSwiperChange">
+        class="swiper"
+        :current="current"
+        @change="handleSwiperChange">
+
         <swiper-item class="swiper-item">
-          <order-list-tourist :orders="waitingOrders"/>
-          <d-loading :loading="loading"/>
+          <!-- WAITING -->
+          <order-list-tourist :orders="ordersArray[0]"
+            @scrolltolower="queryOrders"/>
+          <d-loading :loading="loadingArray[0]"/>
+          <d-no-more :has-more="hasMoreArray[0]"/>
         </swiper-item>
 
         <swiper-item class="swiper-item">
-          <order-list-tourist :orders="ongoingOrders"/>
-          <d-loading :loading="loading" />
+          <!-- ONGOING -->
+          <order-list-tourist :orders="ordersArray[1]"
+            @scrolltolower="queryOrders"/>
+          <d-loading :loading="loadingArray[1]"/>
+          <d-no-more :has-more="hasMoreArray[1]"/>
         </swiper-item>
 
         <swiper-item class="swiper-item">
-          <order-list-tourist :orders="invalidOrders"/>
-          <d-loading :loading="loading" />
+          <!-- FINISHED -->
+          <order-list-tourist :orders="ordersArray[2]"
+            @scrolltolower="queryOrders"/>
+          <d-loading :loading="loadingArray[2]"/>
+          <d-no-more :has-more="hasMoreArray[2]"/>
         </swiper-item>
 
         <swiper-item class="swiper-item">
-          <order-list-tourist :orders="finishedOrders"/>
-          <d-loading :loading="loading" />
+          <!-- INVALID -->
+          <invalid-tourist-order-page/>
         </swiper-item>
+
       </swiper>
     </div>
   </div>
@@ -91,8 +104,11 @@ import DInput from '../../components/common/DInput';
 import DNoMore from '../../components/common/DNoMore';
 import DLoading from '../../components/common/DLoading';
 import OrderListTourist from '../../components/order/OrderList';
-import { STATE_MENU, STATES_ARRAY, TOURIST_ID } from '../../components/tourist/constant';
+import InvalidTouristOrderPage from '../../components/tourist/InvalidTouristOrderPage';
+
+import { STATE_MENU, STATES_ARRAY, TOURIST_ID, WAITING_STATE, INVALID_STATE } from '../../components/tourist/constant';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
+import { ROLE_SELECT } from '../pages_url';
 
 export default {
   components: {
@@ -100,7 +116,8 @@ export default {
     OrderListTourist,
     DInput,
     DNoMore,
-    DLoading
+    DLoading,
+    InvalidTouristOrderPage
   },
   data () {
     return {
@@ -115,13 +132,17 @@ export default {
       searchOrders: [],
 
       menus: STATE_MENU,
-      current: 0,
+      current: WAITING_STATE,
 
-      waitingHasMore: true,
-      waitingOrders: [],
-      ongoingOrders: [],
-      finishedOrders: [],
-      invalidOrders: [],
+      hasMoreArray: [
+        true, true, true, true
+      ],
+      ordersArray: [
+        [], [], [], []
+      ],
+      loadingArray: [
+        false, false, false, false
+      ],
 
       pageName: 'tourist_orders'
     }
@@ -130,23 +151,16 @@ export default {
     this.touristId = wx.getStorageSync(TOURIST_ID);
     if (!this.touristId) {
       // 未找到游客ID 需要先去登录
-      const errMsg = "未找到游客ID 需要先去登录";
-      this.dError(errMsg);
-      
-      // 输出提示信息 
-      wx.showToast({
-        icon: 'none',
-        title: errMsg
-      });
-
       const url = `/${ROLE_SELECT}`;
       this.dLog('跳转', url);
       wx.redirectTo({ url });
+      
+      this.showErrorRoast("未找到游客ID 需要先去登录");
 
       return;
     }
     
-    this.queryWaitingOrders();// TODO
+    this.queryOrders();// TODO
   },
   methods: {
     dLog(message, ...optionalParams) {
@@ -164,30 +178,62 @@ export default {
           title: errMsg
       });
     },
-    queryWaitingOrders() {
+    queryOrders(...event) {
+      this.dLog("queryOrders 方法响应", event);
 
+      if (this.loading){
+        this.dLog("加载中 return");
+        return;
+      }
+
+      const index = this.current;
+
+      if (!this.hasMoreArray[index]) {
+        this.dLog("已经加载全部 return");
+        return;
+      }
+
+      if (index == INVALID_STATE) {
+        this.dLog("invalid!");
+        return;
+      }
+
+      // 加载
+      this.loadingArray[index] = true;
+
+      // 保留下上次最后的index
+      let lastIndex = this.ordersArray[index].length;
+
+      touristApi.queryOrders(
+        this.touristId,
+        STATES_ARRAY[index],
+        lastIndex,
+        (res) => {
+          this.dLog("取得邀请列表成功", res);
+
+          this.hasMoreArray[index] = res.hasMoreOrder;
+
+          for (let key in res.orderList) {
+            this.ordersArray[index].push(res.orderList[key]);
+          }
+
+          this.loadingArray[index] = false;
+        },
+        (rej) => {
+          this.showErrorRoast("取得邀请列表失败");
+
+          this.loadingArray[index] = false;
+        }
+      )
+    },
+    onNavigatorChange(index) {
+      this.dLog(`onNavigatorChange 方法响应 index: ${index}`);
+      this.current = index;
     },
     handleSwiperChange (event) {
-      console.log(event);
-      this.loading = true;
-      let current = event.target.current;
-      this.current = current;
-      var states = STATES_ARRAY;
-      touristApi.queryOrders(
-        'touristId',
-        states[current],
-        'lastIndex',
-        (res) => {
-          switch (current) {
-            case 0: this.waitingOrders = res; break;
-            case 1: this.ongoingOrders = res; break;
-            case 3: this.finishedOrders = res; break;
-            case 2: this.invalidOrders = res; break;
-          }
-          this.loading = false;
-        },
-        (err) => {}
-      )
+      this.dLog("handleSwiperChange 方法响应", event);
+      this.current = event.target.current;
+      this.queryOrders();
     },
     handleSearchFocus (event) {
       this.dLog("handleSearchFocus 方法调用", event);
@@ -279,15 +325,13 @@ export default {
 </script>
 
 <style scoped>
-/* .swiper-item {
-  height: 1000rpx;
-} */
-
 .swiper {
-  height: 1200rpx;
+  height: 1000rpx;
   padding: 40rpx 0;
 }
-
+.swiper-item {
+  height: 100%;
+}
 </style>
 
 <style scoped src="../../assets/style/d-head.css"/>

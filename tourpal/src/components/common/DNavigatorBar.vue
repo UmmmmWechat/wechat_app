@@ -25,9 +25,9 @@ export default {
   },
   methods: {
       handleClickMenuItem(event, index) {
-          console.log(index);
-          event.target.value = index;
-          this.$emit('on-change', event);
+        //   event.target.value = index;
+        //   this.$emit('on-change', event);
+        this.$emit('on-change', index);
       }
   }
 }
@@ -35,7 +35,6 @@ export default {
 
 <style scoped>
 #out {
-
     padding: 10rpx;
 
     display: flex;
