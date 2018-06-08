@@ -322,33 +322,26 @@ export default {
         //   "timeout": MOCK_ORDERS
         // });
 
-        <<
-        << << < HEAD
         this.dLog('get orders by keyword 方法')
         if (httpRequest.isTestMode) {
-            resolve(mockData.mockOrders)
+            resolve(MOCK_ORDERS)
         } else {
-            httpRequest.dRequest( ===
-                === =
-                this.dLog('get orders by keyword 方法') if (httpRequest.isTestMode) {
-                    resolve(MOCK_ORDERS)
-                } else {
-                    httpRequest.dRequest( >>>
-                        >>> > re serverUrl.GUIDE_GET_ORDER_BY_KEYWORD, {
-                            keyword: keyword,
-                            guideId: userId,
-                            lastIndex: lastIndex
-                        },
-                        httpRequest.GET,
-                        (res) => {
-                            this.dLog('get orders by keyword 请求成功', res)
-                            resolve(res)
-                        },
-                        (err) => {
-                            this.dLog('get orders by keyword 请求失败', err)
-                            reject(err)
-                        }
-                    )
+            httpRequest.dRequest(
+                serverUrl.GUIDE_GET_ORDER_BY_KEYWORD, {
+                    keyword: keyword,
+                    guideId: userId,
+                    lastIndex: lastIndex
+                },
+                httpRequest.GET,
+                (res) => {
+                    this.dLog('get orders by keyword 请求成功', res)
+                    resolve(res)
+                },
+                (err) => {
+                    this.dLog('get orders by keyword 请求失败', err)
+                    reject(err)
                 }
-            }
+            )
         }
+    }
+}

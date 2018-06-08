@@ -52,11 +52,11 @@ export default {
     this.guideId = wx.getStorageSync(CHECK_GUIDE_ID);
     // this.guideId = 1
     if (!this.guideId) {
-      // 未找到景点ID
-      this.showErrorRoast("粗错啦QWQ");
-
       // 跳回
       wx.navigateBack();
+
+      // 未找到向导ID
+      this.showErrorRoast("粗错啦QWQ");
       return;
     }
 
@@ -131,10 +131,15 @@ export default {
       commonApi.queryGuideById(
         this.guideId,
         res => {
-          this.guide = res
+          this.dLog("取得向导信息成功", res);
+          this.guide = res.guide;
         },
         err => {
-          this.dError(err)
+          // 跳回
+          wx.navigateBack();
+
+          const errMsg = "没找到向导信息QWQ";
+          this.showErrorRoast(errMsg, err);
         }
       )
     }

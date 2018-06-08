@@ -28,11 +28,12 @@ export default {
     this.spotId = wx.getStorageSync(CHECK_SPOT_ID)
     // this.spotId = 1 // 测试的时候 我写死是 1
     if (!this.spotId) {
-      // 未找到景点ID
-      this.showErrorRoast('粗错啦QWQ')
-
       // 跳回
       wx.navigateBack()
+
+      // 未找到景点ID
+      this.showErrorRoast('粗错啦QWQ');
+
       return
     }
 

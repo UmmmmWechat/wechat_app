@@ -55,7 +55,7 @@ import commonApi from '../../api/common';
 import touristApi from '../../api/tourist';
 import * as ResultMessage from '../../api/returnMessage'
 import orderApi from '../../api/order'
-import { STATES_ARRAY, WAITING_STATE, FINISHED_STATE } from '../tourist/constant';
+import { STATES_ARRAY, WAITING_STATE, FINISHED_STATE, CHECK_GUIDE_ID, CHECK_SPOT_ID } from '../tourist/constant';
 import { SHOW_SPOT_PAGE, SHOW_GUIDE_PAGE } from '../../pages/pages_url';
 import { mockSpot } from '../../api/mock/spot_mock_data';
 import { mockGuide } from '../../api/mock/guide_mock_data';
@@ -85,7 +85,7 @@ export default {
     this.errorOccur = false;
 
     commonApi.querySpotById(
-      this.order.spotApi,
+      this.order.spotId,
       (res) => {
         this.spot = res.spot;
         if (!this.spot) {
@@ -118,14 +118,30 @@ export default {
         console.error(this.componentName, message, optionalParams);
     },
     onSpotNameClicled(event) {
-      const url = `/${SHOW_SPOT_PAGE}`;
-      this.dLog('跳转', url);
-      wx.navigateTo({ url });
+      this.dLog("onSpotNameClicled 方法响应", event);
+      wx.setStorage({
+        key: CHECK_SPOT_ID,
+        data: this.order.spotId,
+        success: (suc) => {
+          this.dLog("guide 保存成功", suc);
+          const url = `/${SHOW_SPOT_PAGE}`;
+          this.dLog('跳转', url);
+          wx.navigateTo({ url });
+        }
+      });
     },
     onGuideNameClicled(event) {
-      const url = `/${SHOW_GUIDE_PAGE}`;
-      this.dLog('跳转', url);
-      wx.navigateTo({ url });
+      this.dLog("onGuideNameClicled 方法响应", event);
+      wx.setStorage({
+        key: CHECK_GUIDE_ID,
+        data: this.order.guideId,
+        success: (suc) => {
+          this.dLog("guide 保存成功", suc);
+          const url = `/${SHOW_GUIDE_PAGE}`;
+          this.dLog('跳转', url);
+          wx.navigateTo({ url });
+        }
+      });
     },
     handleCancel (event) {
       wx.showModal({
