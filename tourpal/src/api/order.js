@@ -1,38 +1,16 @@
+import * as httpRequest from "./httpRequestApi";
+import * as serverUrl from "./apiUrl";
 export default {
-    /**
-     * 
-     * @param {String} id 
-     * @param {Function} resolve 
-     * @param {Function} reject 
-     */
-    queryTouristById (id, resolve, reject) {
-        resolve({
-            name: 'tourist'
-        })
-    },
-
-        /**
-     * 
-     * @param {String} id 
-     * @param {Function} resolve 
-     * @param {Function} reject 
-     */
-    queryGuideById (id, resolve, reject) {
-        resolve({
-            realName: 'guide'
-        })
-    },
-
-        /**
-     * 
-     * @param {String} id 
-     * @param {Function} resolve 
-     * @param {Function} reject 
-     */
-    querySpotById (id, resolve, reject) {
-        resolve({
-            name: 'spot'
-        })
-    },
-    
+    queryOrderById (orderId, resolve, reject) {
+        httpRequest.dRequest(
+            serverUrl.GET_ORDERS_BY_ID,
+            {
+                orderId: orderId
+            },
+            httpRequest.GET,
+            resolve,
+            reject
+        )
+    }
+  
 }
