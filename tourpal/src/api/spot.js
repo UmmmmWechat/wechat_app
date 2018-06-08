@@ -29,7 +29,6 @@ export default {
         if (httpRequest.isTestMode) {
             spotStub.querySpots(location, lastIndex, resolve, reject);
         } else {
-            const city = location.city;
             // 发起网络请求
             var onSuccess = (suc) => {
                 // 成功的返回信息中为 景点的数组
@@ -45,7 +44,7 @@ export default {
             };
             httpRequest.dRequest(
                 serverUrl.GET_SPOTS_BY_LOCATION, {
-                    city,
+                    location,
                     lastIndex
                 },
                 httpRequest.GET,

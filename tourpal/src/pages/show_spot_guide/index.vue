@@ -199,6 +199,15 @@ export default {
     dError(message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams);
     },
+    showErrorRoast(errMsg, ...fai) {
+      this.dError(errMsg, fai);
+    
+      // 输出提示信息 
+      wx.showToast({
+          icon: 'none',
+          title: errMsg
+      });
+    },
     handleScroll(event) {
       // this.dLog("handleScroll 响应");
 
@@ -272,12 +281,16 @@ export default {
           }
           this.loading = false;
         },
-        (rej) => {this.dLog("通过景点取得导游列表失败", rej);}
+        (rej) => {
+          this.showErrorRoast("通过景点取得导游列表失败", rej);
+          this.loading = false;
+        }
       )
     },
     handleSearchFocus(event) {
       this.dLog("handleSearchFocus 方法调用", event);
       this.isSearch = true;
+      this.show_gotop = false;
     },
     handleSearchInput(e) {
       this.dLog("handleInput 方法调用", e);
@@ -295,6 +308,9 @@ export default {
       // 加载
       this.loading = true;
 
+      // 上滑到顶部
+      this.scrollToTop();
+
       // 按照关键词搜索向导
       touristApi.queryGuideByKeyword(
         this.searchWord,
@@ -311,19 +327,11 @@ export default {
           this.loading = false;
         },
         (fai) => {
-            const errMsg = "搜索向导列表失败";
-            this.dError(errMsg, fai);
-            
-            // 输出提示信息 
-            wx.showToast({
-                icon: 'none',
-                title: errMsg
-            });
+          this.showErrorRoast("搜索向导列表失败");
+
+          this.loading = false;
         }
       );
-
-      // 上滑到顶部
-      this.scrollToTop();
     },
     handleScrollToSearch(event) {
       this.dLog("handleScrollToSearch 方法调用", event);
@@ -358,7 +366,11 @@ export default {
           
           this.loading = false;
         },
-        (rej) => {this.dLog("通过关键词搜索导游列表失败", rej);}
+        (rej) => {
+          this.showErrorRoast("通过关键词搜索导游列表失败", rej);
+          
+          this.loading = false;
+        }
       )
     },
     handleClickBack(event) {
@@ -370,7 +382,7 @@ export default {
       this.isSearch = false;
     },
     handleClearSearch(event) {
-      this.dLog("handleClickBack 方法调用", event);
+      this.dLog("handleClearSearch 方法调用", event);
       
       // 清空搜索框
       this.searchValue = "";

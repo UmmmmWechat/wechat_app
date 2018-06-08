@@ -100,7 +100,7 @@
   </section>
 
   <section class="to-top-wrapper" v-if="show_gotop">
-    <span id="to-top" @click="scrollToTop">
+    <span id="to-top" @click="toTop">
       Top
     </span>
   </section>
@@ -204,6 +204,15 @@ export default {
     dError(message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams);
     },
+    showErrorRoast(errMsg, ...fai) {
+      this.dError(errMsg, fai);
+    
+      // 输出提示信息 
+      wx.showToast({
+          icon: 'none',
+          title: errMsg
+      });
+    },
     handleScroll(event) {
       // this.dLog("handleScroll 响应");
 
@@ -221,24 +230,39 @@ export default {
         }
       }
     },
+    toTop() {
+      if (this.isSearch) {
+        this.searchScrollToTop();
+      } else {
+        this.scrollToTop();
+      }
+    },
+    searchScrollToTop() {
+      this.dLog("searchScrollToTop 方法调用");
+
+      this.show_gotop = false;
+
+      this.searchScrollTop = 0;
+      setTimeout(
+        () => {
+          this.searchScrollTop = undefined;
+        }, 500);
+
+      wx.pageScrollTo({
+        scrollTop: 0,
+        duration: 300
+      });
+    },
     scrollToTop() {
       this.dLog("scrollToTop 方法调用");
 
       this.show_gotop = false;
 
-      if (this.isSearch) {
-          this.searchScrollTop = 0;
-          setTimeout(
-            () => {
-              this.searchScrollTop = undefined;
-            }, 500);
-      } else {
-          this.scrollTop = 0;
-          setTimeout(
-            () => {
-              this.scrollTop = undefined;
-            }, 500);
-      }
+      this.scrollTop = 0;
+      setTimeout(
+        () => {
+          this.scrollTop = undefined;
+        }, 500);
 
       wx.pageScrollTo({
         scrollTop: 0,
@@ -253,7 +277,7 @@ export default {
         return;
       }
       if (!this.hasMore) {
-        this.dLog("已经加载全部 return")
+        this.dLog("已经加载全部 return");
         return;
       }
 
@@ -275,9 +299,14 @@ export default {
           for (let key in res.spotList) {
             this.spots.push(res.spotList[key]);
           }
+
           this.loading = false;
         },
-        (err) => {this.dLog("取得景点列表失败", err);}
+        (err) => {
+          this.showErrorRoast("取得景点列表失败");
+
+          this.loading = false;
+        }
       )
     },
     handleLocationChange(event) {
@@ -325,16 +354,10 @@ export default {
               }
             } else {
               // 不支持该地区
-              this.dError(res.errMsg);
-          
-              // 输出提示信息 
-              wx.showToast({
-                icon: 'none',
-                title: res.errMsg
-              });
+              this.showErrorRoast(res.errMsg);
             }
           },
-          (rej) => {this.dLog("检查所在城市是否支持失败", rej);}
+          (rej) => {this.showErrorRoast("检查所在城市是否支持失败", rej);}
         );
       }
     },
@@ -342,6 +365,15 @@ export default {
       // 初始化景点信息
       this.hasMore = true;
       this.spots.splice(0, this.spots.length);// 清空原 spot 数组
+
+      // 上滑到顶部
+      this.show_gotop = false;
+      
+      this.scrollTop = 0;
+      setTimeout(
+        () => {
+          this.scrollTop = undefined;
+        }, 500);
       
       // 重新获取景点信息
 
@@ -360,19 +392,15 @@ export default {
           for (let key in res.spotList) {
             this.spots.push(res.spotList[key]);
           }
+
           this.loading = false;
         },
-        (err) => {this.dLog("取得景点列表失败", err);}
-      )
+        (err) => {
+          this.showErrorRoast("取得景点列表失败", err);
 
-      // 上滑到顶部
-      this.show_gotop = false;
-      
-      this.scrollTop = 0;
-      setTimeout(
-        () => {
-          this.scrollTop = undefined;
-        }, 500);
+          this.loading = false;
+        }
+      )
     },
     handleGetMoreSpots(event) {
       this.dLog("handleGetMoreSpots 方法调用", event);
@@ -381,6 +409,7 @@ export default {
     handleSearchFocus(event) {
       this.dLog("handleSearchFocus 方法调用", event);
       this.isSearch = true;
+      this.show_gotop = false;
     },
     handleSearchInput(e) {
       this.dLog("handleInput 方法调用", e);
@@ -398,12 +427,13 @@ export default {
       // 加载
       this.loading = true;
 
+      // 上滑到顶部
+      this.searchScrollToTop();
+
       // 按照关键词搜索景点
       spotApi.querySpotsByKeywordAndCity(
         this.searchWord,
-        this.location,
-        // @Modified 这里我改了，只需要传 city TODO
-        // this.location.city,
+        this.location.city,
         0,
         (res) => {
           this.dLog("搜索景点列表成功", res);
@@ -414,23 +444,14 @@ export default {
             this.searchSpots.push(res.spotList[key]);
           }
 
-          // 更新景点显示
-          this.resetSpots();
+          this.loading = false;
         },
         (fai) => {
-            const errMsg = "搜索景点列表失败";
-            this.dError(errMsg, fai);
-            
-            // 输出提示信息 
-            wx.showToast({
-              icon: 'none',
-              title: errMsg
-            });
+          this.showErrorRoast("搜索景点列表失败", fai);
+
+          this.loading = false;
         }
       );
-
-      // 上滑到顶部
-      this.scrollToTop();
     },
     handleScrollToSearch(event) {
       this.dLog("handleScrollToSearch 方法调用", event);
@@ -440,7 +461,7 @@ export default {
         return;
       }
       if (!this.searchHasMore) {
-        this.dLog("已经加载全部 return")
+        this.dLog("已经加载全部 return");
         return;
       }
 
@@ -467,14 +488,9 @@ export default {
           this.loading = false;
         },
         (fai) => {
-            const errMsg = "搜索景点列表失败";
-            this.dError(errMsg, fai);
-            
-            // 输出提示信息 
-            wx.showToast({
-              icon: 'none',
-              title: errMsg
-            });
+          this.showErrorRoast("搜索景点列表失败");
+          
+          this.loading = false;
         }
       );
     },
@@ -487,7 +503,7 @@ export default {
       this.isSearch = false;
     },
     handleClearSearch(event) {
-      this.dLog("handleClickBack 方法调用", event);
+      this.dLog("handleClearSearch 方法调用", event);
       
       // 清空搜索框
       this.searchValue = "";
@@ -503,7 +519,7 @@ export default {
       this.searchSpots.splice(0, this.searchSpots.length);// 清空搜索的 spot 数组
 
       // 回滚
-      this.scrollToTop();
+      this.searchScrollToTop();
     },
     handleToPersonCenter(event) {
       this.dLog("handleToPersonCenter 方法调用", event);
