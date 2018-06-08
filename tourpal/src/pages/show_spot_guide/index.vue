@@ -171,8 +171,6 @@ export default {
                   icon: 'none',
                   title: errMsg
               });
-
-              wx.navigateBack();
           }
         });
       },
@@ -187,8 +185,6 @@ export default {
               icon: 'none',
               title: errMsg
           });
-
-          wx.navigateBack();
       }
     })
   },

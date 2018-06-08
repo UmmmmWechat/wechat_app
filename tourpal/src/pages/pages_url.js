@@ -22,6 +22,10 @@ const GUIDE_CENTER_EXPERIENCE = "pages/guide_center_experience/main";
 // 景点选择界面
 const SELECT_SPOTS = "pages/select_spots/main";
 
+// 展示工具页面
+const SHOW_SPOT_PAGE = "pages/show_spot_page/main";
+const SHOW_GUIDE_PAGE = "pages/show_guide_page/main";
+
 // 测试
 const TEST = "pages/test/main";
 const Z_TEST = "pages/z_test/main";
@@ -49,6 +53,10 @@ export {
 
     // 景点选择界面
     SELECT_SPOTS,
+
+    // 展示工具页面
+    SHOW_GUIDE_PAGE,
+    SHOW_SPOT_PAGE,
 
     // 测试
     TEST,

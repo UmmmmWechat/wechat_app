@@ -568,9 +568,6 @@ z-index: 100;
   height: 100rpx;
   width: 100rpx;
   border-radius: 50%;
-  /* border: solid #42b9704d;
-  box-shadow: #42b9704d 0 0 5px;
-  background: #a2ddb9af; */
   border: solid #42b970;
   box-shadow: #42b970 0 0 5px;
   background: #a2ddb9;

@@ -14,7 +14,7 @@
   </div>
 
   <div
-    v-if="isSearch" 
+    v-if="isSearch"
     class="d-search-list">
     <div 
     style="text-align:center;padding:10rpx;">
@@ -35,8 +35,11 @@
       </button>
     </div>
     <order-list-tourist
-    :orders="searchOrders"/>
-    <d-loading :loading="loading" color="white" />
+      :color="'white'"
+      :orders="searchOrders"
+      @scrolltolower="handleScrollToSearch"/>
+    <d-loading :loading="loading" :color="'white'" />
+    <d-no-more :has-more="searchHasMore" :color="'white'"/>
   </div>
 
   <div v-if="!isSearch">
@@ -85,6 +88,7 @@ import orderApi from '../../api/order';
 
 import DNavigatorBar from '../../components/common/DNavigatorBar';
 import DInput from '../../components/common/DInput';
+import DNoMore from '../../components/common/DNoMore';
 import DLoading from '../../components/common/DLoading';
 import OrderListTourist from '../../components/order/OrderList';
 import { STATE_MENU, STATES_ARRAY, TOURIST_ID } from '../../components/tourist/constant';
@@ -95,6 +99,7 @@ export default {
     DNavigatorBar,
     OrderListTourist,
     DInput,
+    DNoMore,
     DLoading
   },
   data () {
@@ -117,10 +122,6 @@ export default {
       ongoingOrders: [],
       finishedOrders: [],
       invalidOrders: [],
-
-      scrollTop: undefined,
-      searchScrollTop: undefined,
-      show_gotop: false,
 
       pageName: 'tourist_orders'
     }
@@ -191,28 +192,11 @@ export default {
     handleSearchFocus (event) {
       this.dLog("handleSearchFocus 方法调用", event);
       this.isSearch = true;
-      this.show_gotop = false;
     },
     handleSearchInput(e) {
       this.dLog("handleInput 方法调用", e);
       this.searchWord = e;
       this.dLog(`message 更新 ${this.message}`);
-    },
-    searchScrollToTop() {
-      this.dLog("searchScrollToTop 方法调用");
-
-      this.show_gotop = false;
-
-      this.searchScrollTop = 0;
-      setTimeout(
-        () => {
-          this.searchScrollTop = undefined;
-        }, 500);
-
-      wx.pageScrollTo({
-        scrollTop: 0,
-        duration: 300
-      });
     },
     handleResetSearch(event) {
       this.dLog("handleResetSearch 方法调用", event);
@@ -222,37 +206,8 @@ export default {
 
       // 重新搜索
 
-      // 加载
-      this.loading = true;
-
       // 按照关键词搜索邀请
-      spotApi.queryOrdersByKeywordAndCity(
-        this.touristId,
-        this.searchWord,
-        0,
-        (res) => {
-          this.dLog("搜索邀请列表成功", res);
-
-          this.searchHasMore = res.hasMoreOrder;
-
-          for (let key in res.orderList) {
-            this.searchOrders.push(res.orderList[key]);
-          }
-        },
-        (fai) => {
-            const errMsg = "搜索邀请列表失败";
-            this.dError(errMsg, fai);
-            
-            // 输出提示信息 
-            wx.showToast({
-              icon: 'none',
-              title: errMsg
-            });
-        }
-      );
-
-      // 上滑到顶部
-      this.searchScrollToTop();
+      this.searchOrderByKeyword(0);
     },
     handleScrollToSearch(event) {
       this.dLog("handleScrollToSearch 方法调用", event);
@@ -266,39 +221,34 @@ export default {
         return;
       }
 
+      // 按照关键词搜索邀请
+      this.searchOrderByKeyword(this.searchOrders.length);
+    },
+    searchOrderByKeyword(lastIndex) {
       // 加载
       this.loading = true;
 
-      // 保留下上次最后的index
-      let lastIndex = this.searchOrders.length;
-
-      // 按照关键词搜索邀请
-      spotApi.queryOrdersByKeywordAndCity(
+      touristApi.queryOrdersByKeyword(
+        this.touristId,
         this.searchWord,
-        this.location,
         lastIndex,
         (res) => {
           this.dLog("搜索邀请列表成功", res);
 
-          this.searchHasMore = res.hasMoreSpot;
+          this.searchHasMore = res.hasMoreOrder;
 
-          for (let key in res.spotList) {
-            this.searchOrders.push(res.spotList[key]);
+          for (let key in res.orderList) {
+            this.searchOrders.push(res.orderList[key]);
           }
-          
+
           this.loading = false;
         },
         (fai) => {
-            const errMsg = "搜索邀请列表失败";
-            this.dError(errMsg, fai);
-            
-            // 输出提示信息 
-            wx.showToast({
-              icon: 'none',
-              title: errMsg
-            });
+          this.showErrorRoast("搜索邀请列表失败");
+
+          this.loading = false;
         }
-      );
+      )
     },
     handleClickBack(event) {
       this.dLog("handleClickBack 方法调用", event);
@@ -323,9 +273,6 @@ export default {
       this.searchWord = "";
       this.searchHasMore = true;
       this.searchOrders.splice(0, this.searchOrders.length);// 清空搜索的 spot 数组
-
-      // 回滚
-      this.searchScrollToTop();
     }
   }
 }

@@ -9,8 +9,8 @@ export default {
 
     /**
      * 打印信息的方法
-     * @param {*} message 
-     * @param {*} optionalParams 
+     * @param {*} message
+     * @param {*} optionalParams
      */
     dLog(message, ...optionalParams) {
         console.log(apiName, message, optionalParams);
@@ -18,10 +18,10 @@ export default {
 
     /**
      * 根据定位查询景点
-     * @param {} location 
+     * @param {} location
      * @param {int} lastIndex
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} resolve
+     * @param {*} reject
      */
     querySpots(location, lastIndex, resolve, reject) {
         this.dLog('querySpots 方法请求', "location", location, `lastIndes: ${lastIndex}`);
@@ -56,11 +56,11 @@ export default {
 
     /**
      * 通过关键词和城市获取 spots 的方法
-     * @param {*} keyword 
-     * @param {*} city 
-     * @param {*} lastIndex 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} keyword
+     * @param {*} city
+     * @param {*} lastIndex
+     * @param {*} resolve
+     * @param {*} reject
      */
     querySpotsByKeywordAndCity(keyword, city, lastIndex, resolve, reject) {
         this.dLog('querySpotsByKeywordAndCity 方法请求',
@@ -97,9 +97,9 @@ export default {
 
     /**
      * 检查 location 是否在服务范围内的方法
-     * @param {*} location 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} location
+     * @param {*} resolve
+     * @param {*} reject
      */
     checkLocationAvailable(location, resolve, reject) {
         // TODO 前端方法
