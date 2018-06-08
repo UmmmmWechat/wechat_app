@@ -166,4 +166,41 @@ export default {
         );
     },
 
+    /**
+     * 通过状态取得邀请列表
+     * @param {*} touristId 
+     * @param {*} state 
+     * @param {*} lastIndex 
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    queryOrders(touristId, state, lastIndex, resolve, reject) {
+        this.dLog(`queryOrders 方法请求 touristId:${touristId} state:${state} lastIndex:${lastIndex}`);
+
+        const totalSize = 2 * constant.ORDER_MAX_NUM;
+        const getAll = lastIndex == constant.GET_ALL_TAG;
+        const hasMoreOrder = !getAll && lastIndex < totalSize;
+        var orderList = [];
+
+        if (hasMoreOrder) {
+            var size = getAll ?
+                totalSize :
+                (totalSize - lastIndex > constant.ORDER_MAX_NUM ?
+                    constant.ORDER_MAX_NUM :
+                    totalSize - lastIndex);
+
+            for (let i = 0; i < size; i++) {
+                let mockOrder = createMockOrder(i + lastIndex, state);
+                orderList.push(mockOrder);
+            }
+        }
+
+        setTimeout(
+            () => {
+                resolve({ orderList, hasMoreOrder });
+            },
+            300
+        );
+    },
+
 }
