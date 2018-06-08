@@ -7,7 +7,8 @@
         <span
         class="underline-span"
         @click="handleToPersonCenter">
-        {{ tourist.touristName }}
+        <!-- @Modify 这里直接显示 id 吧 -->
+        {{ '游客：' + tourist.touristId }}
         </span>
       </span>
     </div>
