@@ -10,8 +10,12 @@ const INVALID_STATE = 2;
 const FINISHED_STATE = 3;
 const STATE_SIZE = 4;
 const STATE_MENU = ['等待中', '进行中', '失效', '已完成'];
-const STATES_ARRAY = ['waiting', 'ongoing', 'invalid', 'finished'];
+const STATES_ARRAY = ['WAITING', 'ONGOING', 'INVALID', 'FINISHED'];
 const ORDER_MAX_NUM = 10;
+
+// 查看订单详情
+const CHECK_SPOT_ID = "dCheckSpotID";
+const CHECK_GUIDE_ID = "dCheckGuideID";
 
 export {
     TOURIST_ID,
@@ -24,5 +28,7 @@ export {
     STATE_SIZE,
     STATE_MENU,
     STATES_ARRAY,
-    ORDER_MAX_NUM
+    ORDER_MAX_NUM,
+    CHECK_SPOT_ID,
+    CHECK_GUIDE_ID
 }

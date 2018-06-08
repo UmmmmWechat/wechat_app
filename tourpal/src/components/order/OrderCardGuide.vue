@@ -1,11 +1,11 @@
 /* 邀请卡片，也就是一项订单，这个是为guide准备的*/
-
 <template>
-  <div class="d-card">
+  <div class="d-card" :style="{backgroundColor: color}">
     <section @click="checkOrderDetail">
-            <div class="head">
+      <div class="head">
         <span>{{order.state}}</span>
       </div>
+
       <div id="body">
         <div><span class="title-span">景点：</span><span class="link">{{ spotName }}</span></div>
         <div><span class="title-span">游客：</span><span class="link">{{ touristName }}</span></div>
@@ -14,17 +14,18 @@
       </div>
     </section>
 
-      <div 
-      id="foot"
-      v-if="order.state === 'waiting'">
-        <button class="op-btn"
-        size="mini">
-          婉拒
-        </button>
-        <button class="d-a op-btn" size="mini">
-          同意
-        </button>
-      </div>
+    <div 
+    id="foot"
+    v-if="order.state === 'waiting'">
+      <button class="op-btn"
+      size="mini">
+        婉拒
+      </button>
+      
+      <button class="d-a op-btn" size="mini">
+        同意
+      </button>
+    </div>
   </div>
 </template>
 
@@ -39,7 +40,10 @@ export default {
     order: {
       type: Object,
       required: true
-    }
+    },
+     color: {
+         type: String
+     }
   },
   data () {
     return {
