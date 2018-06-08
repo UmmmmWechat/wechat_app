@@ -1,32 +1,43 @@
 
 /* 邀请卡片，也就是一项订单，这个是为tourist准备的*/
-
 <template>
-  <div class="d-card">
+  <div class="d-card" :style="{backgroundColor: color}">
       <div id="head">
         <span>{{order.state}}</span>
       </div>
+
       <div id="body">
-        <div><span class="title-span">景点：</span><span class="link">{{ spotName }}</span></div>
-        <div><span class="title-span">向导：</span><span class="link">{{ guideName }}</span></div>
+        <div>
+          <span class="title-span">景点：</span>
+          <span class="link" @click="onSpotNameClicled">{{ spotName }}</span>
+        </div>
+
+        <div>
+          <span class="title-span">向导：</span>
+          <span class="link" @click="onGuideNameClicled">{{ guideName }}</span>
+        </div>
+
         <div><span class="title-span">邀请日期：</span>{{ order.generatedDate }}</div>
+        
         <div><span class="title-span">旅游日期：</span>{{ order.travelDate }}</div>
       </div>
-      <div
+
+      <div 
       class="foot"
-      v-if="order.state === 'WAITING'">
-        <button
-        class="d-a"
+      v-if="order.state === waiting">
+        <button 
+        class="d-a" 
         size="mini"
         @click="handleCancel">
           撤回
         </button>
       </div>
-      <div
+
+      <div 
       class="foot"
-      v-if="order.state === 'FINISHED'">
-        <button
-        class="d-a"
+      v-if="order.state === finished">
+        <button 
+        class="d-a" 
         size="mini"
         @click="handleRate">
           评价
@@ -39,17 +50,26 @@
 import commonApi from '../../api/common';
 import touristApi from '../../api/tourist';
 import ResultMessage from '../../api/returnMessage'
+import orderApi from '../../api/order'
+import { STATES_ARRAY, WAITING_STATE, FINISHED_STATE } from '../tourist/constant';
+import { SHOW_SPOT_PAGE, SHOW_GUIDE_PAGE } from '../../pages/pages_url';
 export default {
   props: {
     order: {
       type: Object,
       required: true
-    }
+    },
+     color: {
+         type: String
+     }
   },
   data () {
     return {
       spotName: '',
       guideName: '',
+      componentName: 'OrderCardTourist',
+      waiting: STATES_ARRAY[WAITING_STATE],
+      finished: STATES_ARRAY[FINISHED_STATE]
     }
   },
   mounted () {
@@ -80,6 +100,19 @@ export default {
     // )
   },
   methods: {
+    dLog(message, ...optionalParams) {
+        console.log(this.componentName, message, optionalParams);
+    },
+    onSpotNameClicled(event) {
+      const url = `/${SHOW_SPOT_PAGE}`;
+      this.dLog('跳转', url);
+      wx.navigateTo({ url });
+    },
+    onGuideNameClicled(event) {
+      const url = `/${SHOW_GUIDE_PAGE}`;
+      this.dLog('跳转', url);
+      wx.navigateTo({ url });
+    },
     handleCancel (event) {
       wx.showModal({
         title: '你确定要撤回这个邀请么？',

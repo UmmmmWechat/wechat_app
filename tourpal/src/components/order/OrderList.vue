@@ -1,29 +1,41 @@
 /* 邀请列表，装载一项项的邀请， 用type区分是tourist 还是 guide */
 <template>
-  <scroll-view
-  id="scroll"
-  scroll-with-animation
-  enable-back-to-top
-  scroll-y
-  :style="{height: (orders.length > 4 ? 1200 : orders.length * 300) + 'rpx'}">
-      <div v-if="type === 'tourist' ">
-          <order-card-tourist 
-            v-for="order in orders"
-            :key="order.id"
-            :order="order"/>
-      </div>
-      <div v-else>
-          <order-card-guide 
-            v-for="order in orders"
-            :key="order.id"
-            :order="order"/>
-      </div>
-  </scroll-view>
+<scroll-view
+    class="scroll" 
+    scroll-with-animation
+    enable-back-to-top
+    scroll-y
+    :scroll-top="scrollTop"
+    @scroll="handleScroll"
+    @scrolltolower="handleScrolltolower">
+    <div v-if="type === 'tourist' ">
+        <order-card-tourist 
+        v-for="order in orders"
+        :color="color"
+        :key="order.id"
+        :order="order"/>
+    </div>
+    <div v-else>
+        <order-card-guide 
+        v-for="order in orders"
+        :color="color"
+        :key="order.id"
+        :order="order"/>
+    </div>
+
+    <section class="to-top-wrapper" v-if="show_gotop">
+        <span id="to-top" @click="scrollToTop">
+            Top
+        </span>
+    </section>
+</scroll-view>
 </template>
 
 <script>
 import OrderCardTourist from './OrderCardTourist';
 import OrderCardGuide from './OrderCardGuide';
+const SHOW_TOP_SCROLLTOP = 700;
+
 export default {
     components: {
         OrderCardTourist,
@@ -40,11 +52,87 @@ export default {
                 return ['tourist', 'guide'].indexOf(value) !== -1;
             },
             default: 'tourist'
+        },
+        color: {
+            type: String
         }
     },
+    data() {
+        return {
+            scrollTop: undefined,
+            show_gotop: false,
+            componentName: "OrderList"
+        }
+    },
+    mounted() {
+        this.scrollToTop();
+    },
+    methods: {
+        dLog(message, ...optionalParams) {
+            console.log(this.componentName, message, optionalParams);
+        },
+        handleScroll(event) {
+            // this.dLog("handleScroll 响应");
 
+            var top = event.mp.detail.scrollTop;
+
+            if (top > SHOW_TOP_SCROLLTOP) {
+                if (!this.show_gotop) {
+                    this.dLog("显示 gotop 浮标", top);
+                    this.show_gotop = true;
+                }
+            } else {
+                if (this.show_gotop) {
+                    this.dLog("隐藏 gotop 浮标", top);
+                    this.show_gotop = false;
+                }
+            }
+        },
+        scrollToTop() {
+            this.dLog("scrollToTop 方法调用");
+
+            this.show_gotop = false;
+
+            this.scrollTop = 0;
+            setTimeout(
+                () => {
+                this.scrollTop = undefined;
+                }, 500
+            );
+        },
+        handleScrolltolower(event) {
+            this.$emit("scrolltolower", event);
+        }
+    }
 }
 </script>
 
 <style scoped>
+.scroll {
+  height: 1000rpx;
+}
+
+.to-top-wrapper {
+  position: fixed;
+  left: 5%;
+  bottom: 10%;
+  opacity: 0.7;
+}
+
+#to-top {
+  height: 100rpx;
+  width: 100rpx;
+  border-radius: 50%;
+  border: solid #42b970;
+  box-shadow: #42b970 0 0 5px;
+  background: #a2ddb9;
+  
+  color: #314237af;
+  font-weight: bold;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;/*垂直居中*/
+  justify-content: center;/*水平居中*/
+}
 </style>

@@ -39,6 +39,10 @@ export default {
 
             'pages/select_spots/main',
 
+            /** 展示工具页面 */
+            'pages/show_spot_page/main',
+            'pages/show_guide_page/main',
+
             'pages/test/main',
             'pages/z_test/main',
         ],
