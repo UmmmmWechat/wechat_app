@@ -211,7 +211,7 @@
 - 返回
   - [ {spot1}...  ]
 
-### 根据ID获取 guide
+### 根据ID获取 guide 的完整信息
 
 - /guides/by-id
 - GET
@@ -219,6 +219,15 @@
   - guideId
 - 返回
   - guide(数据结构见会议)
+
+### 根据id获取guide的基本信息
+
+- /guides/by-id/basic
+- GET
+- 参数
+  - guideId
+- 返回
+  - guide 去掉了敏感信息，包括联系方式
 
 ### 根据ID获取 order
 
