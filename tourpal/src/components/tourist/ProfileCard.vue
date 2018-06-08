@@ -1,17 +1,14 @@
 /* tourist的个人信息卡片 */
-
 <template>
-  <div id="wrapper">
-      <div id="avatar"> 
-          <!-- <img 
-            id="avatar"
-            :src="avatar" 
-            alt="头像加载失败"
-            > -->
-            <open-data style="margin:auto;" type="userAvatarUrl"/>
-      </div>
-      <div id="text"><open-data type="userNickName"/></div>
-  </div>
+<div id="wrapper">
+    <div id="avatar">
+        <open-data style="margin:auto;" type="userAvatarUrl"/>
+    </div>
+
+    <div id="text">
+        <open-data type="userNickName"/>
+    </div>
+</div>
 </template>
 
 <script>
@@ -25,20 +22,18 @@ export default {
             type:String,
             required: true
         }
-    },
-    mounted () {
     }
 }
 </script>
 
 <style scoped>
 #wrapper {
-   
     text-align: center;
     padding: 20rpx;
 }
 
 #text {
+    margin-top: 20rpx;
     padding: 20rpx;
 }
 

@@ -4,10 +4,12 @@
     <div id="user-info-div">
       <span>欢迎：</span>
       <span class="underline-span">
+        
         <span
         class="underline-span"
         @click="handleToPersonCenter">
-        {{ tourist.touristName }}
+          <open-data type="userNickName"/>
+        <!-- {{ tourist.touristName }} -->
         <!-- @Modify 这里直接显示 id 吧 TODO -->
         <!-- {{ '游客：' + tourist.touristId }} -->
         </span>
