@@ -107,6 +107,6 @@ export default {
         this.dLog('querySpots 方法请求', "location", location);
 
         spotStub.checkLocationAvailable(location, resolve, reject);
-    },
+    }
 
 }

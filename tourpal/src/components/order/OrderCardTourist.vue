@@ -12,21 +12,21 @@
         <div><span class="title-span">邀请日期：</span>{{ order.generatedDate }}</div>
         <div><span class="title-span">旅游日期：</span>{{ order.travelDate }}</div>
       </div>
-      <div 
+      <div
       class="foot"
-      v-if="order.state === 'waiting'">
-        <button 
-        class="d-a" 
+      v-if="order.state === 'WAITING'">
+        <button
+        class="d-a"
         size="mini"
         @click="handleCancel">
           撤回
         </button>
       </div>
-      <div 
+      <div
       class="foot"
-      v-if="order.state === 'finished'">
-        <button 
-        class="d-a" 
+      v-if="order.state === 'FINISHED'">
+        <button
+        class="d-a"
         size="mini"
         @click="handleRate">
           评价
@@ -36,7 +36,9 @@
 </template>
 
 <script>
-import orderApi from '../../api/order'
+import commonApi from '../../api/common';
+import touristApi from '../../api/tourist';
+import ResultMessage from '../../api/returnMessage'
 export default {
   props: {
     order: {
@@ -51,25 +53,60 @@ export default {
     }
   },
   mounted () {
-    orderApi.querySpotById(
-      this.order.spotId,
-      (res) => {this.spotName = res.name;},
-      (err) => {}
-    );
-    orderApi.queryGuideById(
-      this.order.guideId,
-      (res) => {this.guideName = res.realName;},
+    commonApi.querySpotById(
+      this.order.spotApi,
+      (res) => {
+        this.spotName = res.name
+      },
       (err) => {}
     )
+    commonApi.queryGuideById(
+      this.order.guideId,
+      (res) => {
+        this.guideName = res.realName
+      },
+      (err) => {}
+    )
+
+    // orderApi.querySpotById(
+    //   this.order.spotId,
+    //   (res) => {this.spotName = res.name;},
+    //   (err) => {}
+    // );
+    // orderApi.queryGuideById(
+    //   this.order.guideId,
+    //   (res) => {this.guideName = res.realName;},
+    //   (err) => {}
+    // )
   },
   methods: {
     handleCancel (event) {
       wx.showModal({
         title: '你确定要撤回这个邀请么？',
         success: (res) => {
-          console.log(res);
-          if(res.confirm) {
+          console.log(res)
+          if (res.confirm) {
             // api
+            touristApi.cancelOrders(
+              this.order.id,
+              (res) => {
+                this.$emit('on-cancel', this.order.id)
+              },
+              (err) => {
+                let title = ''
+                if (err === ResultMessage.ALREADY_ACCEPTED) {
+                  title = '订单已经被接受，不能撤回'
+                } else if (err === ResultMessage.ALREADY_REJECTED){
+                  title = '订单已经被回拒'
+                } else {
+                  title = '回撤失败，请重试'
+                }
+                wx.showToast({
+                  title: title,
+                  icon: 'none'
+                })
+              }
+            )
           }
         }
       })
