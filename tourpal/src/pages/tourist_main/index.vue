@@ -118,6 +118,7 @@ import spotApi from '../../api/spot';
 import { TOURIST_ID } from '../../components/tourist/constant';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
 import { TOURIST_CENTER, ROLE_SELECT } from '../pages_url';
+import { mockUserAvatorUrl } from '../../assets/image/imgMock';
 
 const SHOW_TOP_SCROLLTOP = 700;
 
@@ -131,7 +132,7 @@ export default {
   data () {
     return {
       tourist: {
-        avatar: "/static/image/用户.svg",
+        avatar: mockUserAvatorUrl,
         touristName: "体验游客",
         touristId: MOCK_TOURIST_ID,
       },

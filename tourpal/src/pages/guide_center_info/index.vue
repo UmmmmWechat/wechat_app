@@ -90,6 +90,7 @@ import DTextArea from '../../components/common/DTextarea'
 import DChooseSpots from '../../components/common/DChooseSpots'
 
 import guideApi from '../../api/guide'
+import { mockUserAvatorUrl } from '../../assets/image/imgMock';
 
 export default {
     components: {
@@ -101,7 +102,7 @@ export default {
         return {
             editmode: false,
             guide: {
-                avatar: "/static/image/用户.svg",
+                avatar: mockUserAvatorUrl,
                 realName: "体验向导",
                 wechat: "youbanwechat",
                 phone: "000-0000-0000",

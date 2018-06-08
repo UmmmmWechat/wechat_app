@@ -16,11 +16,12 @@
 <script>
 import GuideApi from "../../api/guide"
 import * as constant from "./constant"
+import { mockUserAvatorUrl } from '../../assets/image/imgMock';
 
 export default {
     data() {
         return {
-            avatar: "/static/image/用户.svg",
+            avatar: mockUserAvatorUrl,
             realName: "体验向导",
             userId: ""
         }

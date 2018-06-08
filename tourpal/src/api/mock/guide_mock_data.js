@@ -1,7 +1,9 @@
+import { mockUserAvatorUrl } from "../../assets/image/imgMock";
+
 var createMockGuide = function(i) {
     return {
         id: "testGuideID" + i,
-        avatar: "/static/image/用户.svg",
+        avatar: mockUserAvatorUrl,
         realName: '体验导游' + i,
         idCard: "000000199001010001",
         age: 18 + i,
