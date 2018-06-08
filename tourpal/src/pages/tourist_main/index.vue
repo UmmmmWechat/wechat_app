@@ -9,9 +9,6 @@
         class="underline-span"
         @click="handleToPersonCenter">
           <open-data type="userNickName"/>
-        <!-- {{ tourist.touristName }} -->
-        <!-- @Modify 这里直接显示 id 吧 TODO -->
-        <!-- {{ '游客：' + tourist.touristId }} -->
         </span>
       </span>
     </div>
@@ -120,7 +117,7 @@ import DNoMore from '../../components/common/DNoMore';
 import touristApi from '../../api/tourist';
 import spotApi from '../../api/spot';
 
-import { TOURIST_ID, TOURIST_INFO } from '../../components/tourist/constant';
+import { TOURIST_ID } from '../../components/tourist/constant';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
 import { TOURIST_CENTER, ROLE_SELECT } from '../pages_url';
 import { mockUserAvatorUrl } from '../../assets/image/imgMock';
@@ -136,11 +133,7 @@ export default {
   },
   data () {
     return {
-      tourist: {
-        avatar: mockUserAvatorUrl,
-        touristName: "体验游客",
-        touristId: MOCK_TOURIST_ID,
-      },
+      touristId: MOCK_TOURIST_ID,
       
       location: {
         province: '江苏省',
@@ -183,8 +176,8 @@ export default {
     }
   },
   mounted () {
-    this.tourist.touristId = wx.getStorageSync(TOURIST_ID);
-    if (!this.tourist.touristId) {
+    this.touristId = wx.getStorageSync(TOURIST_ID);
+    if (!this.touristId) {
       // 未找到游客ID 需要先去登录
       const errMsg = "未找到游客ID 需要先去登录";
       this.dError(errMsg);
@@ -200,26 +193,6 @@ export default {
       wx.redirectTo({ url });
 
       return;
-    }
-
-    // 尝试取得游客信息
-    const tourist = wx.getStorageSync(TOURIST_INFO);
-    // 取得游客信息
-    if (tourist) {
-      this.dLog("取得游客信息", tourist);
-      // 信息过期
-      if (tourist.touristId !== this.tourist.touristId) {
-        this.dLog("游客信息过期");
-        // 删除过期信息
-        wx.removeStorage({
-          key: TOURIST_INFO
-        })
-      } else {
-        this.dLog("游客信息有效");
-        // 设置游客信息
-        this.tourist.avatar = tourist.avatar;
-        this.tourist.touristName = tourist.touristName;
-      }
     }
     
     this.getSpots();
