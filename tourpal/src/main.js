@@ -49,19 +49,25 @@ export default {
             navigationBarTextStyle: 'white'
         },
         "tabBar": {
-            backgroundColor: '#42b970',
-            color: '#ffffff',
+            backgroundColor: '#ffffff',
+            color: '#aaaaaa',
+            selectedColor: '#42b970',
             borderStyle: 'white',
             "list": [{
                 "pagePath": "pages/guide_main/main",
                 "text": "邀请",
-                // iconPath: 'assets/image/spot.svg'
+                "iconPath": './static/image/invitation.png',
+                "selectedIconPath": './static/image/invitation_selected.png'
             }, {
                 "pagePath": "pages/guide_calendar/main",
-                "text": "日程"
+                "text": "日程",
+                "iconPath": './static/image/calendar.png',
+                "selectedIconPath": './static/image/calendar_selected.png'
             }, {
                 "pagePath": "pages/guide_center/main",
-                "text": "我的"
+                "text": "个人中心",
+                "iconPath": './static/image/user_center.png',
+                "selectedIconPath": './static/image/user_center_selected.png',
             }]
         }
     }

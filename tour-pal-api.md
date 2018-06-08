@@ -9,7 +9,7 @@
   * cancelMessage
 * 返回
   * SUCCESS
-  * ERROR
+  * ERROR, ALREADY_ACCEPTED, ALREADY_REJECTED (已经被导游处理了)
 
 ### tourist评论订单
 
@@ -93,6 +93,7 @@
   - orderId
 - 返回
   - SUCCESS
+  - NOT_FOUND, ALREADY_CANCELED(已经被游客取消了)
 
 ### guide拒绝邀请
 
@@ -102,6 +103,7 @@
   - orderId
 - 返回
   - SUCCESS
+  - NOT_FOUND, ALREADY_CANCELED(已经被游客取消了)
 
 ### guide获取导游信息
 
@@ -150,8 +152,21 @@
 - 参数
   - code (微信小程序临时凭证)
 - 返回
-  - guideId (向导在系统中的标识)
-  - NOT_FOUND (没有这个guide，需要注册了)
+  - {
+
+    ​	message: 'NOT_REGISTER',
+
+    ​	guideId: guideId 
+
+    }  // 未实名注册
+
+  - {
+
+    ​	message: 'SUCCESS',
+
+    ​	guideId: guideId 
+
+    }
 
 ### guide注册
 
@@ -159,8 +174,10 @@
 - POST
 - 参数
   - guide （数据结构见会议）
+  - code 
 - 返回
-  - guideId (向导在系统中的标识)
+  - 'SUCCESS' 200  onSuccess
+  - 非200 onFail
 
 ## **
 
