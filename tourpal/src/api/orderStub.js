@@ -1,4 +1,4 @@
-const apiName = 'orderApi';
+const apiName = 'orderApiStub';
 
 export default {
 
@@ -8,7 +8,7 @@ export default {
      * @param {*} optionalParams 
      */
     dLog(message, ...optionalParams) {
-        console.log(apiName, message, optionalParams);
+        console.log(apiName, 'stub', message, optionalParams);
     },
 
     /**

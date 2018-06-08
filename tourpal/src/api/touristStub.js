@@ -1,6 +1,7 @@
 import * as mockData from "./mock/tourist_mock_data";
 import * as constant from "./../components/tourist/constant";
 import { createMockGuide } from "./mock/guide_mock_data";
+import { createMockOrder } from "./mock/order_mock_data";
 
 const apiName = 'touristApiStub';
 
@@ -124,6 +125,45 @@ export default {
 
         // 直接返回成功
         resolve();
-    }
+    },
+
+    /**
+     * 游客根据关键字获取orders
+     * @param {*} touristId 
+     * @param {*} keyword 
+     * @param {*} lastIndex 
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    queryOrdersByKeywordStub(touristId, keyword, lastIndex, resolve, reject) {
+        this.dLog(`queryOrdersByKeywordStub 方法请求 touristId:${touristId} keyword:${keyword} lastIndex:${lastIndex}`);
+
+        const totalSize = 2 * constant.ORDER_MAX_NUM;
+        const getAll = lastIndex == constant.GET_ALL_TAG;
+        const hasMoreOrder = !getAll && lastIndex < totalSize;
+        var orderList = [];
+
+        if (hasMoreOrder) {
+            var size = getAll ?
+                totalSize :
+                (totalSize - lastIndex > constant.ORDER_MAX_NUM ?
+                    constant.ORDER_MAX_NUM :
+                    totalSize - lastIndex);
+
+            for (let i = 0; i < size; i++) {
+                let mockOrder = createMockOrder(
+                    i + lastIndex,
+                    constant.STATES_ARRAY[(i + lastIndex) % constant.STATE_SIZE]);
+                orderList.push(mockOrder);
+            }
+        }
+
+        setTimeout(
+            () => {
+                resolve({ orderList, hasMoreOrder });
+            },
+            300
+        );
+    },
 
 }

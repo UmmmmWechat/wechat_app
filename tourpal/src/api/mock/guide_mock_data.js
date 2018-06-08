@@ -17,37 +17,6 @@ var createMockGuide = function(i) {
     }
 }
 
-var createMockOrder = function() {
-    return {
-        id: 1,
-        touristId: 1,
-        guideId: 1,
-        spotId: 1,
-        generatedDate: createDate(),
-        travelDate: createDate(),
-        message: '老司机带我飞',
-        state: 'waiting',
-        cancelReason: null,
-        feedback: {
-            spotPoint: null,
-            guidePoint: null,
-            comment: null
-        }
-    }
-}
-
-var createDate = function() {
-    return new Date().toLocaleDateString()
-}
-
-var mockOrders = [
-    createMockOrder(),
-    createMockOrder(),
-    createMockOrder(),
-    createMockOrder(),
-    createMockOrder()
-]
-
 var mockGuide = createMockGuide(-1);
 var mockGuideList = [
     mockGuide,
@@ -63,7 +32,6 @@ var mockGuideList = [
 ]
 
 export {
-    mockOrders,
     mockGuideList,
     mockGuide,
     createMockGuide

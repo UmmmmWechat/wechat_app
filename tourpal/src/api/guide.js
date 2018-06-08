@@ -6,6 +6,7 @@ import * as returnMessage from "./returnMessage";
 import * as httpRequest from "./httpRequestApi";
 
 import guideStub from "./guideStub";
+import { MOCK_ORDERS } from "./mock/order_mock_data";
 
 const apiName = 'guideApi';
 
@@ -129,14 +130,14 @@ export default {
      */
     queryOrders(guideId, state, lastIndex, resolve, reject) {
         /* 导游只有以下类型有效
-        "finished": mockData.mockOrders,
-        "waiting": mockData.mockOrders,
-        "ongoing": mockData.mockOrders,
-        "rejected": mockData.mockOrders,
-        "timeout": mockData.mockOrders*/
+        "finished": MOCK_ORDERS,
+        "waiting": MOCK_ORDERS,
+        "ongoing": MOCK_ORDERS,
+        "rejected": MOCK_ORDERS,
+        "timeout": MOCK_ORDERS*/
         console.log('queryOrders', guideId, state, lastIndex)
         console.log(mockData)
-        resolve(mockData.mockOrders)
+        resolve(MOCK_ORDERS)
     },
 
     /**
@@ -205,11 +206,11 @@ export default {
     queryOrdersByKeyword(keyword, userId, resolve, reject) {
         // 导游只需要以下五种类型的邀请
         resolve({
-            "finished": mockData.mockOrders,
-            "waiting": mockData.mockOrders,
-            "ongoing": mockData.mockOrders,
-            "rejected": mockData.mockOrders,
-            "timeout": mockData.mockOrders
+            "finished": MOCK_ORDERS,
+            "waiting": MOCK_ORDERS,
+            "ongoing": MOCK_ORDERS,
+            "rejected": MOCK_ORDERS,
+            "timeout": MOCK_ORDERS
         });
     }
 
