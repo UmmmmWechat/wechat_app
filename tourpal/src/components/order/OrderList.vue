@@ -1,5 +1,4 @@
 /* 邀请列表，装载一项项的邀请， 用type区分是tourist 还是 guide */
-
 <template>
   <scroll-view
   id="scroll"
