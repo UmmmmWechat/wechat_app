@@ -11,8 +11,8 @@ export default {
 
     /**
      * 打印信息的方法
-     * @param {*} message 
-     * @param {*} optionalParams 
+     * @param {*} message
+     * @param {*} optionalParams
      */
     dLog(message, ...optionalParams) {
         console.log(apiName, message, optionalParams);
@@ -20,8 +20,8 @@ export default {
 
     /**
      * 游客登录
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} resolve
+     * @param {*} reject
      * {
      *  touristId
      * }
@@ -79,10 +79,10 @@ export default {
 
     /**
      * 根据景点查询向导
-     * @param {*} spotId 
-     * @param {*} lastIndex 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} spotId
+     * @param {*} lastIndex
+     * @param {*} resolve
+     * @param {*} reject
      */
     queryGuideBySpot(spotId, lastIndex, resolve, reject) {
         this.dLog(`queryGuideBySpot 方法请求 spotId:${spotId} lastIndex:${lastIndex}`);
@@ -119,10 +119,10 @@ export default {
 
     /**
      * 根据关键词查找导游
-     * @param {*} keyword 
-     * @param {*} lastIndex 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} keyword
+     * @param {*} lastIndex
+     * @param {*} resolve
+     * @param {*} reject
      */
     queryGuideByKeyword(keyword, lastIndex, resolve, reject) {
         this.dLog(`queryGuideByKeyword 方法请求 keyword:${keyword} lastIndex:${lastIndex}`);
@@ -159,10 +159,10 @@ export default {
 
     /**
      * 发起新邀请
-     * @param {*} order 
-     * @param {*} formId 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} order
+     * @param {*} formId
+     * @param {*} resolve
+     * @param {*} reject
      */
     newOrder(order, formId, resolve, reject) {
         this.dLog("queryGuideByKeyword 方法请求",
@@ -202,11 +202,11 @@ export default {
 
     /**
      * 游客根据关键字获取orders
-     * @param {*} touristId 
-     * @param {*} keyword 
-     * @param {*} lastIndex 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} touristId
+     * @param {*} keyword
+     * @param {*} lastIndex
+     * @param {*} resolve
+     * @param {*} reject
      */
     queryOrdersByKeyword(touristId, keyword, lastIndex, resolve, reject) {
         this.dLog(`queryOrdersByKeyword 方法请求 touristId:${touristId} keyword:${keyword} lastIndex:${lastIndex}`);
@@ -244,37 +244,51 @@ export default {
     },
 
     /**
-     * 
-     * @param {String} touristId 
+     *
+     * @param {String} touristId
      * @param {String} state
-     * @param {Function} resolve 
-     * @param {Function} reject 
+     * @param {Function} resolve
+     * @param {Function} reject
      */
     queryOrders(touristId, state, lastIndex, resolve, reject) {
         console.log('query orders' + state);
-        var res = [];
-        for (let i = 0; i < 5; i++) {
+        if (httpRequest.isTestMode) {
+          var res = [];
+          for (let i = 0; i < 5; i++) {
             res.push({
-                id: state + i,
-                touristId: i,
-                guideId: i,
-                spotId: i,
-                state: state,
-                generatedDate: new Date().toLocaleDateString(),
-                travelDate: new Date().toLocaleDateString()
+              id: state + i,
+              touristId: i,
+              guideId: i,
+              spotId: i,
+              state: state,
+              generatedDate: new Date().toLocaleDateString(),
+              travelDate: new Date().toLocaleDateString()
             })
-        }
-        setTimeout(
+          }
+          setTimeout(
             () => resolve(res),
             1000
-        )
+          )
+        } else {
+          httpRequest.dRequest(
+            serverUrl.TOURIST_GET_ORDER_BY_STATE,
+            {
+              touristId: touristId,
+              state: state,
+              lastIndex: lastIndex
+            },
+            httpRequest.GET,
+            resolve,
+            reject
+          )
+        }
     },
 
     /**
      * 取消一单
-     * @param {*} orderId 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} orderId
+     * @param {*} resolve
+     * @param {*} reject
      */
     cancelOrders(orderId, resolve, reject) {
 
@@ -283,15 +297,15 @@ export default {
 
     /**
      * 评价一单
-     * @param {*} orderId 
-     * @param {Object} feedback 
-     * @param {*} resolve 
+     * @param {*} orderId
+     * @param {Object} feedback
+     * @param {*} resolve
      * @param {*} reject
      * feedback: {
         spotPoint: int
         guidePoint: int
         comment: String
-        } 
+        }
      */
     commendOrder(orderId, feedback, resolve, reject) {
 

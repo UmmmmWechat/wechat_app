@@ -1,10 +1,11 @@
 /* 这是一些共同的会用到api */
 
-import * as serverUrl from "./apiUrl";
-import * as returnMessage from "./returnMessage";
+import * as serverUrl from './apiUrl'
+import * as httpRequest from './httpRequestApi'
+import * as returnMessage from './returnMessage'
 
 export default {
-  querySpotById(spotId, resolve, reject) {
+  querySpotById (spotId, resolve, reject) {
     if (httpRequest.isTestMode) {
 
     } else {
@@ -18,7 +19,7 @@ export default {
       )
     }
   },
-  queryGuideById(guideId, resolve, reject) {
+  queryGuideById (guideId, resolve, reject) {
     if (httpRequest.isTestMode) {
 
     } else {
@@ -32,7 +33,7 @@ export default {
       )
     }
   },
-  queryOrderById(orderId, resolve, reject) {
+  queryOrderById (orderId, resolve, reject) {
     if (httpRequest.isTestMode) {
 
     } else {
@@ -45,5 +46,5 @@ export default {
         reject
       )
     }
-  },
+  }
 }

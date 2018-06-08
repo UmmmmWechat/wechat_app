@@ -2,8 +2,8 @@
 <div id="wrapper" class="d-card">
     <div id="img-wrapper">
         <img
-        id="image" 
-        :src="spot.pictureUrl" 
+        id="image"
+        :src="spot.pictureUrl"
         alt="景点图片加载失败">
     </div>
     <div id="text-wrapper">
@@ -14,7 +14,7 @@
             {{ spot.introduction }}
         </div>
     </div>
-    <div 
+    <div
     v-if="!noAction"
     id="btn-wrapper">
         <a
@@ -27,43 +27,43 @@
 </template>
 
 <script>
-import { D_SPOT_ID, D_SPOT_NAME } from '../../api/const/spotConst';
-import { SHOW_SPOT_GUIDE } from '../../pages/pages_url';
+import { D_SPOT_ID, D_SPOT_NAME } from '../../api/const/spotConst'
+import { SHOW_SPOT_GUIDE } from '../../pages/pages_url'
 
 export default {
-    props: {
-        spot: {
-            type: Object,
-            required: true
-        },
-        noAction: {
-            type: Boolean,
-            default: false
-        }
+  props: {
+    spot: {
+      type: Object,
+      required: true
     },
-    methods: {
-        handleClick (event) {
+    noAction: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    handleClick (event) {
             // 保存景点 ID
-            wx.setStorage({
-                key: D_SPOT_ID,
-                data: this.spot.id,
-                success: () => {
-                    console.log(`SpotCard 保存 spot id 成功 ${this.spot.id}`);
-                    
+      wx.setStorage({
+        key: D_SPOT_ID,
+        data: this.spot.id,
+        success: () => {
+          console.log(`SpotCard 保存 spot id 成功 ${this.spot.id}`)
+
                     // 保存景点名称
-                    wx.setStorage({
-                        key: D_SPOT_NAME,
-                        data: this.spot.name,
-                        success: () => {
-                            console.log(`SpotCard 保存 spot name 成功 ${this.spot.name}`);
-                            const url = `/${SHOW_SPOT_GUIDE}`;
-                            wx.navigateTo({ url });
-                        }
-                    }) 
-                }
-            });
+          wx.setStorage({
+            key: D_SPOT_NAME,
+            data: this.spot.name,
+            success: () => {
+              console.log(`SpotCard 保存 spot name 成功 ${this.spot.name}`)
+              const url = `/${SHOW_SPOT_GUIDE}`
+              wx.navigateTo({ url })
+            }
+          })
         }
-    },
+      })
+    }
+  }
 }
 </script>
 
