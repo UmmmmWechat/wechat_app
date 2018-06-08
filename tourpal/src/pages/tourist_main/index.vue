@@ -381,6 +381,7 @@ export default {
     handleSearchFocus(event) {
       this.dLog("handleSearchFocus 方法调用", event);
       this.isSearch = true;
+      this.show_gotop = false;
     },
     handleSearchInput(e) {
       this.dLog("handleInput 方法调用", e);
@@ -487,7 +488,7 @@ export default {
       this.isSearch = false;
     },
     handleClearSearch(event) {
-      this.dLog("handleClickBack 方法调用", event);
+      this.dLog("handleClearSearch 方法调用", event);
       
       // 清空搜索框
       this.searchValue = "";
