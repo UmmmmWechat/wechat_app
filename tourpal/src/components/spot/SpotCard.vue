@@ -6,13 +6,23 @@
         :src="spot.pictureUrl"
         alt="景点图片加载失败">
     </div>
-    <div id="text-wrapper">
+    <div class="text-wrapper">
         <div id="title-div">
             {{ spot.name }}
         </div>
         <div id="content-div">
             {{ spot.introduction }}
         </div>
+    </div>
+    <div class="text-wrapper">
+      <div class="text-item-wrapper">
+        <span class="title-span">热度：</span>
+        <span>{{ spot.popularity }}</span>
+      </div>
+      <div class="text-item-wrapper">
+        <span class="title-span">推荐指数：</span>
+        <span>{{ spot.recommendLevel }}</span>
+      </div>
     </div>
     <div
     v-if="!noAction"
@@ -82,7 +92,7 @@ export default {
     height: 500rpx;
 }
 
-#text-wrapper {
+.text-wrapper {
     padding: 20rpx 30rpx;
     background-color: #fff;
 }
@@ -105,6 +115,13 @@ export default {
     padding: 40rpx;
     text-align: right;
 }
+
+  .text-item-wrapper {
+    padding: 4rpx 0;
+  }
+  .title-span {
+    font-weight: bold;
+  }
 </style>
 <style src="../../assets/style/d-card.css" scoped/>
 <style src="../../assets/style/d-a.css" scoped/>

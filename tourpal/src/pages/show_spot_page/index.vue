@@ -1,52 +1,74 @@
 <template>
 <section>
-  show spot page!
+  <spot-card :spot="spot" :no-action="true"/>
+  <div style="padding: 20rpx;">
+    <button open-type="share" type="primary">分享给好友</button>
+  </div>
 </section>
 </template>
 
 <script>
-import { CHECK_SPOT_ID } from '../../components/tourist/constant';
+import { CHECK_SPOT_ID } from '../../components/tourist/constant'
+import SpotCard from '../../components/spot/SpotCard'
+import commonApi from '../../api/common'
+import spot from '../../api/spot'
 
 export default {
-  data() {
+  components: {
+    SpotCard
+  },
+  data () {
     return {
       spotId: undefined,
-      pageName: "show_spot_page"
+      pageName: 'show_spot_page',
+      spot: {}
     }
   },
-  mounted() {
-    this.spotId = wx.getStorageSync(CHECK_SPOT_ID);
+  mounted () {
+    this.spotId = wx.getStorageSync(CHECK_SPOT_ID)
+    // this.spotId = 1 // 测试的时候 我写死是 1
     if (!this.spotId) {
       // 未找到景点ID
-      this.showErrorRoast("粗错啦QWQ");
+      this.showErrorRoast('粗错啦QWQ')
 
       // 跳回
-      wx.navigateBack();
-      return;
+      wx.navigateBack()
+      return
     }
 
     // TODO 取得 Spot
-    this.querySpot();
+    this.querySpot()
   },
   methods: {
-    dLog(message, ...optionalParams) {
-        console.log(this.pageName, message, optionalParams);
+    onShareAppMessage () {
+      this.dLog('share')
     },
-    dError(message, ...optionalParams) {
-        console.error(this.pageName, message, optionalParams);
+    dLog (message, ...optionalParams) {
+      console.log(this.pageName, message, optionalParams)
     },
-    showErrorRoast(errMsg, ...fai) {
-      this.dError(errMsg, fai);
-    
-      // 输出提示信息 
+    dError (message, ...optionalParams) {
+      console.error(this.pageName, message, optionalParams)
+    },
+    showErrorRoast (errMsg, ...fai) {
+      this.dError(errMsg, fai)
+
+      // 输出提示信息
       wx.showToast({
-          icon: 'none',
-          title: errMsg
-      });
+        icon: 'none',
+        title: errMsg
+      })
     },
-    querySpot() {
-      this.dLog(`querySpot 方法调用 spotId: ${this.spotId}`);
-      // TODO
+    querySpot () {
+      this.dLog(`querySpot 方法调用 spotId: ${this.spotId}`)
+      commonApi.querySpotById(
+        this.spotId,
+        (res) => {
+          this.spot = res
+        },
+        (err) => {
+          this.dError(err)
+        }
+      )
     }
   }
 }
