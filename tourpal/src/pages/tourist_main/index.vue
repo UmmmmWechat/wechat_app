@@ -401,7 +401,8 @@ export default {
       // 按照关键词搜索景点
       spotApi.querySpotsByKeywordAndCity(
         this.searchWord,
-        this.location,
+        // @Modified 这里我改了，只需要传 city
+        this.location.city,
         0,
         (res) => {
           this.dLog("搜索景点列表成功", res);
@@ -483,6 +484,8 @@ export default {
       this.scrollToTop();
 
       this.isSearch = false;
+      // @Add 返回时也把搜索词清空
+      this.searchWord = ''
     },
     handleClearSearch(event) {
       this.dLog("handleClickBack 方法调用", event);
@@ -492,6 +495,7 @@ export default {
       this.searchHasMore = true;
       this.searchSpots.splice(0, this.searchSpots.length);// 清空搜索的 spot 数组
       
+      // TODO: @Question 清空的话不需要返回吧？
       // 返回
       this.handleClickBack(event);
     },

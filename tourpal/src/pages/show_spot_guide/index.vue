@@ -366,6 +366,8 @@ export default {
       this.scrollToTop();
 
       this.isSearch = false;
+      // @Add 返回时也把搜索词清空
+      this.searchWord = ''
     },
     handleClearSearch(event) {
       this.dLog("handleClickBack 方法调用", event);
