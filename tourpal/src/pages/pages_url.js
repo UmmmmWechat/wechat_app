@@ -3,6 +3,7 @@ const ROLE_SELECT = "pages/role_select/main";
 
 /** 游客 */
 const TOURIST_MAIN = "pages/tourist_main/main";
+const TOURIST_CENTER = 'pages/tourist_center/main';
 const TOURIST_INVITE_GUIDE = "pages/tourist_invite_guide/main";
 const TOURIST_RATE_ORDER = "pages/tourist_rate_order/main";
 const TOURIST_ORDERS = "pages/tourist_orders/main";
@@ -30,6 +31,7 @@ export {
 
     /** 游客 */
     TOURIST_MAIN,
+    TOURIST_CENTER,
     TOURIST_INVITE_GUIDE,
     TOURIST_RATE_ORDER,
     TOURIST_ORDERS,

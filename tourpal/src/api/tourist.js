@@ -13,44 +13,24 @@ var mockGuide = function(i) {
     }
 }
 
-const touristLoginUrl = 'https://test.com/onLogin';
-const apiName = 'touristApi';
-const isTestMode = true;
-
 import * as constant from "./../components/tourist/constant";
+import * as serverUrl from "./apiUrl";
+import * as httpRequest from "./httpRequestApi";
+import * as returnMessage from "./returnMessage";
+
+import touristStub from "./touristStub";
+
+const apiName = 'touristApi';
 
 export default {
 
+    /**
+     * 打印信息的方法
+     * @param {*} message 
+     * @param {*} optionalParams 
+     */
     dLog(message, ...optionalParams) {
         console.log(apiName, message, optionalParams);
-    },
-
-    stubLog(message, ...optionalParams) {
-        console.log(apiName, 'stub', message, optionalParams);
-    },
-
-    /**
-     * 游客登录桩
-     * @param {*} resolve 
-     * @param {*} reject 
-     */
-    logInStub(resolve, reject) {
-        this.stubLog('logIn 方法请求');
-
-        const touristId = 'testTouristID';
-        // 保存 游客ID
-        wx.setStorage({
-            key: constant.TOURIST_ID,
-            data: touristId,
-            success: () => {
-                this.stubLog('保存游客ID成功');
-                resolve();
-            },
-            fail: () => {
-                this.stubLog('保存游客ID失败');
-                reject();
-            }
-        })
     },
 
     /**
@@ -64,49 +44,45 @@ export default {
     logIn(resolve, reject) {
         this.dLog('logIn 方法请求');
 
-        if (isTestMode) {
-            this.logInStub(resolve, reject);
+        if (httpRequest.isTestMode) {
+            touristStub.logInStub(resolve, reject);
         } else {
             wx.login({
                 success: (res) => {
                     this.dLog('登录成功！', res);
 
                     if (res.code) {
-                        // TODO 发起网络请求
-                        wx.request({
-                            url: touristLoginUrl,
-                            data: {
-                                code: res.code
-                            },
-                            method: POST,
-                            success: (suc) => {
-                                // 成功的返回信息中应包含 touristId
-                                this.dLog('服务器端登录成功', suc);
+                        // 发起网络请求
+                        var onSuccess = (touristId) => {
+                            // 成功的返回信息中包含 touristId
+                            this.dLog('服务器端登录成功', touristId);
 
-                                // 保存 游客ID
-                                if (suc.touristId) {
-                                    wx.setStorage({
-                                        key: constant.TOURIST_ID,
-                                        data: suc.touristId,
-                                        success: () => {
-                                            this.dLog('保存游客ID成功');
-                                            resolve();
-                                        },
-                                        fail: () => {
-                                            this.dLog('保存游客ID失败');
-                                            reject();
-                                        }
-                                    })
-                                } else {
-                                    this.dLog('从服务器端取得游客ID失败');
+                            // 保存 游客ID
+                            wx.setStorage({
+                                key: constant.TOURIST_ID,
+                                data: touristId,
+                                success: () => {
+                                    this.dLog('保存游客ID成功');
+                                    resolve();
+                                },
+                                fail: () => {
+                                    this.dLog('保存游客ID失败');
                                     reject();
                                 }
+                            });
+                        };
+                        var onFail = (fai) => {
+                            this.dLog('服务器端登录失败', fai);
+                            reject();
+                        }
+                        httpRequest.dRequest(
+                            serverUrl.TOURIST_LOGIN, {
+                                code: res.code
                             },
-                            fail: (fai) => {
-                                this.dLog('服务器端登录失败', fai);
-                                reject();
-                            }
-                        })
+                            httpRequest.POST,
+                            onSuccess,
+                            onFail
+                        );
                     }
                 },
                 fail: (fai) => {
@@ -117,78 +93,126 @@ export default {
     },
 
     /**
-     * 根据定位查询景点
-     * @param {} location 
-     * @param {int} lastIndex
-     * @param {*} resolve 
-     * @param {*} reject 
-     */
-    querySpots(location, lastIndex, resolve, reject) {
-        console.log(location);
-        var result = JSON.parse(json);
-        var list = []
-        if (lastIndex > 10) {
-            resolve(list);
-        }
-        for (let i = lastIndex; i < lastIndex + 5; i++) {
-            let item = {
-                id: i,
-                name: result.name,
-                pictureUrl: result.pictureUrl,
-                introduction: result.introduction
-            }
-            list.push(item)
-        }
-        setTimeout(
-            () => resolve(list),
-            500
-        )
-
-    },
-
-    /**
      * 根据景点查询向导
-     * @param {String} spotId 景点ID
+     * @param {*} spotId 
+     * @param {*} lastIndex 
      * @param {*} resolve 
      * @param {*} reject 
      */
     queryGuideBySpot(spotId, lastIndex, resolve, reject) {
-        console.log('in tourist api:' + spotId);
-        var res = []
-        for (let i = lastIndex; i < lastIndex + 5; i++) {
-            res.push(mockGuide(i));
-        }
-        setTimeout(
-            () => resolve(res),
-            1000
-        )
+        this.dLog(`queryGuideBySpot 方法请求 spotId:${spotId} lastIndex:${lastIndex}`);
 
+        if (httpRequest.isTestMode) {
+            touristStub.queryGuideBySpot(spotId, lastIndex, resolve, reject);
+        } else {
+            // 发起网络请求
+            var onSuccess = (suc) => {
+                // 成功的返回信息中为 向导数组
+                this.dLog("服务器端通过景点取得导游成功", suc);
+
+                const hasMoreGuide = lastIndex != constant.GET_ALL_TAG && suc.length == constant.GUIDE_MAX_NUM;
+
+                resolve({ guideList: suc, hasMoreGuide });
+            };
+
+            var onFail = (fai) => {
+                this.dLog("服务器端通过景点取得导游失败", fai);
+                reject();
+            };
+
+            httpRequest.dRequest(
+                serverUrl.GET_GUIDE_BY_SPOT_ID, {
+                    spotId,
+                    lastIndex
+                },
+                httpRequest.GET,
+                onSuccess,
+                onFail
+            );
+        }
     },
 
     /**
      * 根据关键词查找导游
      * @param {*} keyword 
+     * @param {*} lastIndex 
      * @param {*} resolve 
      * @param {*} reject 
      */
-    queryGuideByKeyword(keyword, resolve, reject) {
+    queryGuideByKeyword(keyword, lastIndex, resolve, reject) {
+        this.dLog(`queryGuideByKeyword 方法请求 keyword:${keyword} lastIndex:${lastIndex}`);
 
+        if (httpRequest.isTestMode) {
+            touristStub.queryGuideByKeyword(keyword, lastIndex, resolve, reject);
+        } else {
+            // 发起网络请求
+            var onSuccess = (suc) => {
+                // 成功的返回信息中为 向导数组
+                this.dLog("服务器端通过关键词搜索导游成功", suc);
+
+                const hasMoreGuide = lastIndex != constant.GET_ALL_TAG && suc.length == constant.GUIDE_MAX_NUM;
+
+                resolve({ guideList: suc, hasMoreGuide });
+            };
+
+            var onFail = (fai) => {
+                this.dLog("服务器端通过关键词搜索导游失败", fai);
+                reject();
+            };
+
+            httpRequest.dRequest(
+                serverUrl.GET_GUIDE_BY_KEYWORD, {
+                    keyword,
+                    lastIndex
+                },
+                httpRequest.GET,
+                onSuccess,
+                onFail
+            );
+        }
     },
 
-
     /**
-     * 邀请 guide
-     * @param {String} guideId 
-     * @param {String} spotId 
-     * @param {String} touristId 
-     * @param {Function} resolve 
-     * @param {Function} reject
-     * {
-     *  orderId
-     * }
+     * 发起新邀请
+     * @param {*} order 
+     * @param {*} formId 
+     * @param {*} resolve 
+     * @param {*} reject 
      */
-    inviteGuide(guideId, spotId, touristId, resolve, reject) {
+    newOrder(order, formId, resolve, reject) {
+        this.dLog("queryGuideByKeyword 方法请求",
+            "order: ", order, "formId: ", formId);
 
+        if (httpRequest.isTestMode) {
+            touristStub.newOrderStub(order, formId, resolve, reject);
+        } else {
+            // 发起网络请求
+            var onFail = (fai) => {
+                this.dLog("服务器端通过关键词搜索导游失败", fai);
+                reject();
+            };
+
+            var onSuccess = (suc) => {
+                if (suc === returnMessage.SUCCESS) {
+                    // 成功的返回信息中为 SUCCESS
+                    this.dLog("服务器端通过关键词搜索导游成功", suc);
+
+                    resolve();
+                } else {
+                    onFail(suc);
+                }
+            };
+
+            httpRequest.dRequest(
+                serverUrl.TOURIST_NEW_ORDER, {
+                    order,
+                    formId
+                },
+                httpRequest.POST,
+                onSuccess,
+                onFail
+            );
+        }
     },
 
     /**

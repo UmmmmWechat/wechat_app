@@ -1,106 +1,81 @@
 import * as mockData from "./mock/guide_mock_data";
-import * as constant from "./../components/guide/constant";
 
-const guideLoginUrl = 'https://test.com/onLogin';
+import * as constant from "./../components/guide/constant";
+import * as serverUrl from "./apiUrl";
+import * as returnMessage from "./returnMessage";
+import * as httpRequest from "./httpRequestApi";
+
+import guideStub from "./guideStub";
+
 const apiName = 'guideApi';
-const isTestMode = true;
 
 export default {
 
+    /**
+     * 打印信息的方法
+     * @param {*} message 
+     * @param {*} optionalParams 
+     */
     dLog(message, ...optionalParams) {
         console.log(apiName, message, optionalParams);
     },
 
-    stubLog(message, ...optionalParams) {
-        console.log(apiName, 'stub', message, optionalParams);
-    },
-
-    /**
-     * 向导登录桩
-     * @param {*} resolve 
-     * @param {*} reject 
-     */
-    logInStub(resolve, reject) {
-        this.stubLog('logIn 方法请求');
-
-        const touristId = 'testTouristID';
-        // 保存 向导ID
-        wx.setStorage({
-            key: constant.TOURIST_ID,
-            data: touristId,
-            success: () => {
-                this.stubLog('保存向导ID成功');
-                resolve();
-            },
-            fail: () => {
-                this.stubLog('保存向导ID失败');
-                reject();
-            }
-        })
-    },
-
     /**
      * 导游登录
-     * @param {*} resolve 
+     * @param {*} resolve 返回 {isNewGuide:boolean}
      * @param {*} reject 
      */
     logIn(resolve, reject) {
         this.dLog('logIn 方法请求');
 
-        if (isTestMode) {
-            this.logInStub(resolve, reject);
+        if (httpRequest.isTestMode) {
+            guideStub.logInStub(resolve, reject);
         } else {
             wx.login({
                 success: (res) => {
                     this.dLog('登录成功！', res);
 
                     if (res.code) {
-                        // TODO 发起网络请求
-                        wx.request({
-                            url: guideLoginUrl,
-                            data: {
+                        // 发起网络请求
+                        var onSuccess = (suc) => {
+                            // 成功的返回信息中包含 guideId 或 NOT_FOUND 
+                            this.dLog('服务器端登录成功', suc);
+
+                            // 检查是否是 新的导游
+                            const isNewGuide = suc == returnMessage.NOT_FOUND;
+                            if (isNewGuide) {
+                                // 没有找到这个导游 需要进行注册
+                                this.dLog('新导游，需要进行注册');
+                                resolve({ isNewGuide: isNewGuide });
+                            } else {
+                                // 找到了这个导游 保存 guideId 取得信息并保存
+                                this.dLog('老导游，不需要进行注册');
+                                wx.setStorage({
+                                    key: constant.GUIDE_ID,
+                                    data: suc,
+                                    success: () => {
+                                        this.dLog('保存向导ID成功');
+                                        resolve({ isNewGuide: isNewGuide });
+                                    },
+                                    fail: () => {
+                                        this.dLog('保存向导ID失败');
+                                        reject();
+                                    }
+                                });
+                            }
+                        };
+                        var onFail = (fai) => {
+                            this.dLog('服务器端登录失败', fai);
+                            reject();
+                        }
+                        httpRequest.dRequest(
+                            serverUrl.GUIDE_LOGIN, {
                                 code: res.code
                             },
-                            method: POST,
-                            success: (suc) => {
-                                // 成功的返回信息中应包含 向导信息 guide 是否为新向导 isNewGuide TODO
-                                this.dLog('服务器端登录成功', suc);
-                                const guide = suc.guide;
-
-                                // 保存 向导ID 和 向导信息
-                                if (guide) {
-                                    wx.setStorage({
-                                        key: constant.GUIDE_ID,
-                                        data: guide.id,
-                                        success: () => {
-                                            this.dLog('保存向导ID成功');
-                                            wx.setStorage({
-                                                key: constant.GUIDE_INFO,
-                                                data: guide,
-                                                success: () => {
-
-                                                },
-                                                fail: () => {
-
-                                                }
-                                            })
-                                            resolve();
-                                        },
-                                        fail: () => {
-                                            this.dLog('保存向导ID失败');
-                                            reject();
-                                        }
-                                    })
-                                } else {
-                                    this.dLog('从服务器端取得向导信息失败');
-                                    reject();
-                                }
-                            },
-                            fail: (fai) => {
-                                this.dLog('服务器端登录失败', fai);
-                                reject();
-                            }
-                        })
+                            httpRequest.POST,
+                            onSuccess,
+                            onFail
+                        );
                     }
                 },
                 fail: (fai) => {
@@ -111,6 +86,7 @@ export default {
     },
 
     /**
+     * 准备丢弃
      * 查询是否是新的guide
      * @param {string} code 临时登陆凭证
      * @param {Function} resolve 

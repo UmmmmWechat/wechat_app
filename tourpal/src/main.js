@@ -17,7 +17,7 @@ export default {
     config: {
         // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
         pages: [
-            'pages/role_select/main',
+            '^pages/role_select/main',
 
             /** 游客 */
             'pages/tourist_main/main',
@@ -26,6 +26,7 @@ export default {
             'pages/tourist_orders/main',
             'pages/tourist_travel_records/main',
             'pages/show_spot_guide/main',
+            'pages/tourist_center/main',
 
             /** 向导 */
             'pages/guide_sign_up/main',
@@ -38,7 +39,7 @@ export default {
 
             'pages/select_spots/main',
 
-            '^pages/test/main',
+            'pages/test/main',
             'pages/z_test/main',
         ],
         window: {

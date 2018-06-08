@@ -1,24 +1,24 @@
 /* 输入框，包装原组件 */
 /* 事件有 on-enter input  on-focus */
 <template>
-  <div id="wrapper">
-      <label
-      for="d-input" 
-      class="label" 
-      v-if="label !== '' ">
-          {{label}}
-      </label>
-      <div id="input-wrapper">
-          <input
-          id="d-input"
+<div id="wrapper">
+    <label
+    for="d-input" 
+    class="label" 
+    v-if="label !== '' ">
+        {{label}}
+    </label>
+    <div id="input-wrapper">
+        <input
+            id="d-input"
             :value="value"
             :placeholder="placeholder"
             placeholder-style="color:rgba(0,0,0,0.3);"
             @confirm="handleEnter"
             @input="handleInput"
             @focus="handleFocus"/>
-      </div>
-  </div>
+    </div>
+</div>
 </template>
 
 
@@ -30,8 +30,7 @@ export default {
           default: ''
       },
       value: {
-          type: [String,Number],
-          default: ''
+          type: [String,Number]
       },
       label: {
           type: String,
@@ -40,7 +39,6 @@ export default {
   },
   methods: {
       handleEnter (event) {
-          console.log('on-enter');
           this.$emit('on-enter', event);
       },
       handleInput (event) {
@@ -48,7 +46,7 @@ export default {
       },
       handleFocus (event) {
           this.$emit('on-focus', event);
-      },
+      }
   }
 }
 </script>
