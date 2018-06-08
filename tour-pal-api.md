@@ -106,7 +106,7 @@
 ### guide获取导游信息
 
 - /guides/info
-- POST
+- GET
 - 参数
   - guideId
 - 返回
