@@ -118,7 +118,7 @@ import DNoMore from '../../components/common/DNoMore';
 import touristApi from '../../api/tourist';
 import spotApi from '../../api/spot';
 
-import { TOURIST_ID } from '../../components/tourist/constant';
+import { TOURIST_ID, TOURIST_INFO } from '../../components/tourist/constant';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
 import { TOURIST_CENTER, ROLE_SELECT } from '../pages_url';
 import { mockUserAvatorUrl } from '../../assets/image/imgMock';
@@ -198,6 +198,26 @@ export default {
       wx.redirectTo({ url });
 
       return;
+    }
+
+    // 尝试取得游客信息
+    const tourist = wx.getStorageSync(TOURIST_INFO);
+    // 取得游客信息
+    if (tourist) {
+      this.dLog("取得游客信息", tourist);
+      // 信息过期
+      if (tourist.touristId !== this.tourist.touristId) {
+        this.dLog("游客信息过期");
+        // 删除过期信息
+        wx.removeStorage({
+          key: TOURIST_INFO
+        })
+      } else {
+        this.dLog("游客信息有效");
+        // 设置游客信息
+        this.tourist.avatar = tourist.avatar;
+        this.tourist.touristName = tourist.touristName;
+      }
     }
     
     this.getSpots();

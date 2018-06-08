@@ -20,13 +20,13 @@ export default {
             'pages/role_select/main',
 
             /** 游客 */
-            '^pages/tourist_main/main',
+            'pages/tourist_main/main',
             'pages/tourist_invite_guide/main',
             'pages/tourist_rate_order/main',
             'pages/tourist_orders/main',
             'pages/tourist_travel_records/main',
             'pages/show_spot_guide/main',
-            'pages/tourist_center/main',
+            '^pages/tourist_center/main',
 
             /** 向导 */
             'pages/guide_sign_up/main',
