@@ -21,9 +21,9 @@
         <span class="link" @click="onGuideNameClicled">{{ guideName }}</span>
       </div>
 
-      <div><span class="title-span">邀请日期：</span>{{ order.generatedDate }}</div>
+      <div><span class="title-span">邀请日期：</span>{{ computedCreatedDate }}</div>
 
-      <div><span class="title-span">旅游日期：</span>{{ order.travelDate }}</div>
+      <div><span class="title-span">旅游日期：</span>{{ computedTravelDate }}</div>
     </div>
 
     <div
@@ -85,6 +85,16 @@ export default {
       spotName: ''
     }
   },
+  computed: {
+    computedTravelDate () {
+      if (!this.order) return ''
+      return new Date(this.order.travelDate).toLocaleDateString()
+    },
+    computedCreatedDate () {
+      if (!this.order) return ''
+      return new Date(this.order.generatedDate).toLocaleDateString()
+    }
+  },
   mounted () {
     this.errorOccur = false
     this.rateAble = false
@@ -126,11 +136,11 @@ export default {
       onGetGuideFail
     )
 
-    this.order.generatedDate = new Date(this.order.generatedDate).toLocaleDateString()
-    this.order.travelDate = new Date(this.order.travelDate).toLocaleDateString()
+    // this.order.generatedDate = new Date(this.order.generatedDate).toLocaleDateString()
+    // this.order.travelDate = new Date(this.order.travelDate).toLocaleDateString()
 
     if (this.order.state === this.ongoing) {
-      const today = new Date().toLocaleDateString()
+      // const today = new Date().toLocaleDateString()
       // this.rateAble = today > this.order.travelDate;
       this.rateAble = true
     }

@@ -10,7 +10,7 @@ import guide from '../../api/guide'
 export default {
   methods: {
     handleClick () {
-      guide.queryFinishedOrdersGroupByDate(
+      guide.queryOngoingOrdersGroupByDate(
         1,
         (res) => {
           console.log(res)

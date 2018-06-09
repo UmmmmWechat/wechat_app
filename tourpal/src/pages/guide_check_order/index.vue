@@ -21,18 +21,18 @@
       </section>
       <section class="info-item">
         <span class="title-span">提交日期：</span>
-        <span class="link">{{ order.generatedDate }}</span>
+        <span class="link">{{ computedCreatedDate }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">旅行日期：</span>
-        <span class="link">{{ order.travelDate }}</span>
+        <span class="link">{{ computedTravelDate }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">邀请留言：</span>
         <span class="link">{{ order.message }}</span>
       </section>
     </section>
-    
+
     <footer v-if="order.state === waiting">
       <button
       class="op-btn"
@@ -40,9 +40,9 @@
       @click="handleReject">
         婉拒
       </button>
-      
+
       <button
-      class="d-a op-btn" 
+      class="d-a op-btn"
       size="mini"
       @click="handleAccept">
         同意
@@ -63,7 +63,7 @@ export default {
   components: {
     DLoading
   },
-  data() {
+  data () {
     return {
       order: undefined,
       loading: false,
@@ -71,7 +71,17 @@ export default {
       pageName: 'guide_check_order'
     }
   },
-  mounted() {
+  computed: {
+    computedTravelDate () {
+      if (!this.order) return ''
+      return new Date(this.order.travelDate).toLocaleDateString()
+    },
+    computedCreatedDate () {
+      if (!this.order) return ''
+      return new Date(this.order.generatedDate).toLocaleDateString()
+    }
+  },
+  mounted () {
     // 取得order
     this.loading = true
 
@@ -135,7 +145,7 @@ export default {
                 }
                 // 跳回
                 wx.navigateBack()
-                
+
                 wx.showToast({
                   title: title,
                   icon: 'none'
@@ -160,7 +170,7 @@ export default {
               (res) => {
                 // 跳回
                 wx.navigateBack()
-                
+
                 wx.showToast({
                   title: '接受成功 请耐心等待',
                   icon: 'none'
@@ -175,7 +185,7 @@ export default {
                 }
                 // 跳回
                 wx.navigateBack()
-                
+
                 wx.showToast({
                   title: title,
                   icon: 'none'
@@ -210,7 +220,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    
+
     padding: 10rpx;
 }
 

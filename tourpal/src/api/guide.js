@@ -230,9 +230,9 @@ export default {
    *  '2018-6-12': [{order1}, {order2}]
    * }
    */
-  queryFinishedOrdersGroupByDate (guideId, resolve, reject) {
+  queryOngoingOrdersGroupByDate (guideId, resolve, reject) {
     let ordersGroupByDate = {}
-    this.queryOrders(guideId, constant.STATES_ARRAY[constant.FINISHED_STATE], -1,
+    this.queryOrders(guideId, constant.STATES_ARRAY[constant.ONGOING_STATE], -1,
         res => {
           res.orderList.forEach(order => {
             let date = new Date(order.travelDate).toLocaleDateString()
@@ -241,6 +241,7 @@ export default {
             }
             ordersGroupByDate[date].push(order)
           })
+          console.log('order by date', ordersGroupByDate)
           resolve(ordersGroupByDate)
         },
         reject)
