@@ -8,8 +8,8 @@ export default {
 
     /**
      * 打印信息的方法
-     * @param {*} message 
-     * @param {*} optionalParams 
+     * @param {*} message
+     * @param {*} optionalParams
      */
     dLog(message, ...optionalParams) {
         console.log(apiName, 'stub', message, optionalParams);
@@ -17,8 +17,8 @@ export default {
 
     /**
      * 向导登录桩
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} resolve
+     * @param {*} reject
      */
     logInStub(resolve, reject) {
         this.dLog('logIn 方法请求');
@@ -65,11 +65,11 @@ export default {
 
     /**
      * 导游取得邀请列表的方法
-     * @param {*} guideId 
-     * @param {*} state 
-     * @param {*} lastIndex 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} guideId
+     * @param {*} state
+     * @param {*} lastIndex
+     * @param {*} resolve
+     * @param {*} reject
      */
     queryOrders(guideId, state, lastIndex, resolve, reject) {
         this.dLog(`query orders by state 方法
@@ -95,7 +95,7 @@ export default {
 
         setTimeout(
             () => {
-                resolve({ orderList, hasMoreOrder });
+                resolve(orderList);
             },
             300
         );

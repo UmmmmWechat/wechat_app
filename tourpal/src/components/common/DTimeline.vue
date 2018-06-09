@@ -25,10 +25,10 @@
 <script>
 export default {
   props: {
-      events: {
-          type: Array,
-          required: true
-      }
+    events: {
+      type: Array,
+      required: true
+    }
   }
 }
 </script>

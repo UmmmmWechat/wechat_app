@@ -1,13 +1,18 @@
 <!--suppress ALL -->
 <template>
-  <div>
+  <scroll-view
+    class="scroll"
+    scroll-y
+    enable-back-to-top
+    @scrolltolower="handleScrollToLower"
+    :style="scrollViewStyle">
     <div id="timeline-wrapper">
       <d-timeline :events="events"/>
     </div>
     <d-loading :loading="loading"/>
     <d-no-more :has-more="hasMore" />
     <d-no-more :has-more="!hasMore || events.length || loading"/>
-  </div>
+  </scroll-view>
 </template>
 
 <script>
@@ -32,12 +37,19 @@ export default {
       touristId: '',
       loading: false,
       hasMore: true,
-      pageName: "tourist_travel_record"
+      pageName: "tourist_travel_record",
+      scrollHeight: 500
+    }
+  },
+  computed: {
+    scrollViewStyle () {
+      return 'height:' + this.scrollHeight + 'px'
     }
   },
   mounted () {
     // 获取touristId参数
-    this.touristId = wx.getStorageSync(TOURIST_ID)
+    // this.touristId = wx.getStorageSync(TOURIST_ID)
+    this.touristId = 1
     if (!this.touristId) {
       // 跳回
       wx.navigateBack()
@@ -106,75 +118,88 @@ export default {
     transOrdersToEvents(orderList) {
       this.dLog("transOrdersToEvents", orderList);
 
-      for (let i = 0; i < orderList.length; i++) {
-        let order = orderList[i]
-        let feedback = order.feedback
+      orderList.forEach(this.translateToEvent)
+    },
+    translateToEvent (order) {
+      let feedback = order.feedback
 
-        // 景点的评价
-        let spotCommend = ''
-        switch (feedback.spotPoint) {
-          case 1:
-          case 2:
-            spotCommend = '景点一般'
-            break;
-          case 3:
-          case 4:
-            spotCommend = '景点不错'
-            break;
-          case 5:
-            spotCommend = '景点太棒了'
-            break;
-        }
-
-        let event = {
-          date: new Date(order.travelDate).toLocaleString(),
-          content: ''
-        }
-
-        // 导游的评价
-        let guideCommend = ''
-        switch (feedback.guidePoint) {
-          case 1:
-          case 2:
-            guideCommend = '向导一般'
-            break;
-          case 3:
-          case 4:
-            guideCommend = '向导人还不赖嘛'
-            break;
-          case 5:
-            guideCommend = '向导人超好的'
-            break
-        }
-
-        const onFail = (fai) => {
-          this.showErrorRoast("邀请记录粗错啦QWQ")
-          this.loading = false;
-        }
-
-        // 查询向导姓名
-        commonApi.queryBasicGuideById(
-          order.guideId,
-          (res) => {
-            this.dLog("取得基本导游信息成功", res)
-            const guide = res
-            event.content += `和${guide.realName}一起游玩了`
-            // 查询景点名称
-            commonApi.querySpotById(
-              order.spotId,
-              (res) => {
-                this.dLog("取得景点信息成功", res)
-                const spot = res
-                event.content += `景点${spot.name}，${spotCommend}，${guideCommend}。`
-              },
-              onFail
-            )
-          },
-          onFail
-        )
-
-        this.events.push(event)
+      let event = {
+        date: new Date(order.travelDate).toLocaleString(),
+        content: ''
       }
+      this.events.push(event)
+      if (!feedback) return
+
+      // 景点的评价
+      let spotCommend = ''
+      switch (feedback.spotPoint) {
+        case 0:
+          spotCommend = '感觉景点很不好'
+          break
+        case 1:
+        case 2:
+          spotCommend = '景点一般'
+          break;
+        case 3:
+        case 4:
+          spotCommend = '景点不错'
+          break;
+        case 5:
+          spotCommend = '景点太棒了'
+          break;
+      }
+
+      // 导游的评价
+      let guideCommend = ''
+      switch (feedback.guidePoint) {
+        case 0:
+          guideCommend = '向导太差劲了'
+          break
+        case 1:
+        case 2:
+          guideCommend = '向导一般'
+          break;
+        case 3:
+        case 4:
+          guideCommend = '向导人还不赖嘛'
+          break;
+        case 5:
+          guideCommend = '向导人超好的'
+          break
+      }
+
+      const onFail = (fai) => {
+        this.showErrorRoast("邀请记录粗错啦QWQ")
+        this.loading = false;
+      }
+
+      // 查询向导姓名
+      commonApi.queryBasicGuideById(
+        order.guideId,
+        (res) => {
+          this.dLog("取得基本导游信息成功", res)
+          const guide = res
+          event.content += `和${guide.realName}一起游玩了`
+          // 查询景点名称
+          commonApi.querySpotById(
+            order.spotId,
+            (res) => {
+              this.dLog("取得景点信息成功", res)
+              const spot = res
+              event.content += `景点${spot.name}，${spotCommend}，${guideCommend}。`
+            },
+            onFail
+          )
+        },
+        onFail
+      )
+
+    },
+    handleScrollToLower (event) {
+      if (this.loading || !this.hasMore) {
+        return
+      }
+      this.getEvents()
     }
   }
 }
