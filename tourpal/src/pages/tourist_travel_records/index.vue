@@ -48,6 +48,9 @@ export default {
       return
     }
 
+    // 初始化数据
+    this.hasMore = true;
+
     // 获取 events
     this.getEvents();
   },

@@ -44,6 +44,7 @@ import OrderCardTourist from './OrderCardTourist'
 import OrderCardGuide from './OrderCardGuide'
 import DNoMore from '../common/DNoMore'
 import DLoading from '../common/DLoading'
+import { TOURIST_TYPE, GUIDE_TYPE } from '../../api/const/orderConst'
 
 const SHOW_TOP_SCROLLTOP = 700
 
@@ -62,9 +63,9 @@ export default {
     type: {
       type: String,
       validator (value) {
-        return ['tourist', 'guide'].indexOf(value) !== -1
+        return [ TOURIST_TYPE, GUIDE_TYPE ].indexOf(value) !== -1
       },
-      default: 'tourist'
+      default: TOURIST_TYPE
     },
     color: {
       type: String
