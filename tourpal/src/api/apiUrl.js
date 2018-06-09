@@ -25,6 +25,7 @@ const GET_SPOTS_BY_ID = "/spots/by-id";
 const GET_SPOTS_BY_KEYWORD_AND_CITY = "/spots/by-keyword-and-city";
 const GET_SPOTS_BY_LOCATION = "/spots/by-location";
 const GET_GUIDES_BY_ID = "/guides/by-id";
+const GET_GUIDES_BY_ID_BASIC = "/guides/by-id/basic";
 const GET_ORDERS_BY_ID = "/orders/by-id";
 
 export {
@@ -48,5 +49,6 @@ export {
     GET_SPOTS_BY_KEYWORD_AND_CITY,
     GET_SPOTS_BY_LOCATION,
     GET_GUIDES_BY_ID,
+    GET_GUIDES_BY_ID_BASIC,
     GET_ORDERS_BY_ID
 }

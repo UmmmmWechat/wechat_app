@@ -34,6 +34,7 @@
       :guide="guide"/>
     <d-loading :loading="loading" />
     <d-no-more :has-more="hasMore" />
+    <d-no-more :has-more="toShowGuides.length || loading"/>
   </scroll-view>
 
   <section
@@ -75,6 +76,7 @@
       :guide="guide"/>
       <d-loading :loading="loading" :color="'white'"/>
       <d-no-more :has-more="searchHasMore" :color="'white'"/>
+      <d-no-more :has-more="toShowGuides.length || loading || firstSearch"/>
     </scroll-view>
   </section>
 
@@ -120,6 +122,7 @@ export default {
       searchWord: "",
       searchValue: undefined, // 用于清空搜索框
       searchGuides: [],
+      firstSearch: true,
 
       pageName: 'show_spot_guide',
 
@@ -151,8 +154,9 @@ export default {
             this.hasMore = true;
             this.guides.splice(0, this.guides.length);// 清空原 guides 数组
             
-            this.isSearch = false,
-            this.searchHasMore = true,
+            this.isSearch = false
+            this.firstSearch = true
+            this.searchHasMore = true
             this.searchWord = '';
             this.searchGuides.splice(0, this.searchGuides.length);// 清空原 searchGuides 数组
             
@@ -296,7 +300,14 @@ export default {
     handleResetSearch(event) {
       this.dLog("handleResetSearch 方法调用", event);
 
+      // 非空检查
+      if (!this.searchWord) {
+        this.showErrorRoast("请输入搜索关键词w");
+        return;
+      }
+
       this.searchHasMore = true;
+      this.firstSearch = false
       this.searchGuides.splice(0, this.searchGuides.length);// 清空搜索的 spot 数组
 
       // 重新搜索

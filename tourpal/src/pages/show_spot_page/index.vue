@@ -63,11 +63,16 @@ export default {
       this.dLog(`querySpot 方法调用 spotId: ${this.spotId}`)
       commonApi.querySpotById(
         this.spotId,
-        (res) => {
-          this.spot = res
+        res => {
+          this.dLog("取得景点信息成功", res);
+          this.spot = res;
         },
-        (err) => {
-          this.dError(err)
+        err => {
+          // 跳回
+          wx.navigateBack();
+
+          const errMsg = "没找到景点信息QWQ";
+          this.showErrorRoast(errMsg, err);
         }
       )
     }

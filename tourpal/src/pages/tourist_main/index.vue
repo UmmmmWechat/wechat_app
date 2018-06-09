@@ -4,7 +4,6 @@
     <div id="user-info-div">
       <span>欢迎：</span>
       <span class="underline-span">
-        
         <span
         class="underline-span"
         @click="handleToPersonCenter">
@@ -56,6 +55,7 @@
     />
     <d-loading :loading="loading"/>
     <d-no-more :has-more="hasMore" />
+    <d-no-more :has-more="toShowSpots.length || loading"/>
   </scroll-view>
 
   <section
@@ -96,6 +96,7 @@
       :spot="spot"/>
       <d-loading :loading="loading" :color="'white'"/>
       <d-no-more :has-more="searchHasMore" :color="'white'"/>
+      <d-no-more :has-more="toShowSpots.length || loading || firstSearch" :color="'white'"/>
     </scroll-view>
   </section>
 
@@ -151,6 +152,7 @@ export default {
       searchWord: '',
       searchValue: undefined, // 用于清空搜索框
       searchSpots: [],
+      firstSearch: true,
 
       pageName: 'tourist_main',
 
@@ -194,6 +196,17 @@ export default {
 
       return;
     }
+      
+    this.hasMore = true;
+    this.spots.splice(0, this.spots.length);// 清空原 spots 数组
+    
+    this.isSearch = false
+    this.firstSearch = true
+    this.searchHasMore = true
+    this.searchWord = '';
+    this.searchSpots.splice(0, this.searchSpots.length);// 清空原 searchSpots 数组
+    
+    this.show_gotop = false;
     
     this.getSpots();
   },
@@ -419,7 +432,14 @@ export default {
     handleResetSearch(event) {
       this.dLog("handleResetSearch 方法调用", event);
 
+      // 非空检查
+      if (!this.searchWord) {
+        this.showErrorRoast("请输入搜索关键词w");
+        return;
+      }
+
       this.searchHasMore = true;
+      this.firstSearch = false
       this.searchSpots.splice(0, this.searchSpots.length);// 清空搜索的 spot 数组
 
       // 重新搜索

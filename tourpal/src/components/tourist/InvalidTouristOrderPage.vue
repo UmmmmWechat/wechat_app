@@ -20,6 +20,7 @@
           @scrolltolower="queryOrders"/>
         <d-loading :loading="loadingArray[0]"/>
         <d-no-more :has-more="hasMoreArray[0]"/>
+        <d-no-more :has-more="ordersArray[0].length || loadingArray[0]"/>
       </swiper-item>
 
       <swiper-item class="swiper-item">
@@ -28,6 +29,7 @@
           @scrolltolower="queryOrders"/>
         <d-loading :loading="loadingArray[1]"/>
         <d-no-more :has-more="hasMoreArray[1]"/>
+        <d-no-more :has-more="ordersArray[1].length || loadingArray[1]"/>
       </swiper-item>
 
       <swiper-item class="swiper-item">
@@ -36,6 +38,7 @@
           @scrolltolower="queryOrders"/>
         <d-loading :loading="loadingArray[2]"/>
         <d-no-more :has-more="hasMoreArray[2]"/>
+        <d-no-more :has-more="ordersArray[2].length || loadingArray[2]"/>
       </swiper-item>
 
     </swiper>

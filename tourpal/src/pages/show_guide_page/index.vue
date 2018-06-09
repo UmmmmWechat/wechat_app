@@ -70,7 +70,7 @@ export default {
         success: res => {
           switch (res.tapIndex) {
             case 0:
-              console.log('make phone call')
+              this.dLog('make phone call')
               wx.makePhoneCall({
                 phoneNumber: this.guide.phone
               })
@@ -127,12 +127,11 @@ export default {
     },
     queryGuide () {
       this.dLog(`queryGuide 方法调用 guideId: ${this.guideId}`);
-      // TODO
       commonApi.queryGuideById(
         this.guideId,
         res => {
           this.dLog("取得向导信息成功", res);
-          this.guide = res.guide;
+          this.guide = res;
         },
         err => {
           // 跳回

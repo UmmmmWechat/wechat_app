@@ -30,7 +30,7 @@ export default {
         // 直接返回
         setTimeout(
             () => {
-                resolve({ spot: mockSpot });
+                resolve(mockSpot);
             }, 500
         );
     },
@@ -47,7 +47,7 @@ export default {
         // 直接返回
         setTimeout(
             () => {
-                resolve({ guide: mockGuide });
+                resolve(mockGuide);
             }, 500
         );
     },
@@ -64,7 +64,7 @@ export default {
         // 直接返回
         setTimeout(
             () => {
-                resolve({ order: createMockOrder(0, "state") });
+                resolve(createMockOrder(0, "state"));
             }, 500
         );
     }

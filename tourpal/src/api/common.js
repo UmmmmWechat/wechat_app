@@ -63,6 +63,28 @@ export default {
     },
 
     /**
+     * 通过id取得导游的方法
+     * @param {*} guideId 
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    queryBasicGuideById(guideId, resolve, reject) {
+        this.dLog(`queryBasicGuideById 方法调用 guideId: ${guideId}`);
+        if (httpRequest.isTestMode) {
+            commonStub.queryGuideById(guideId, resolve, reject);
+        } else {
+            httpRequest.dRequest(
+                serverUrl.GET_GUIDES_BY_ID_BASIC, {
+                    guideId: guideId
+                },
+                httpRequest.GET,
+                resolve,
+                reject
+            )
+        }
+    },
+
+    /**
      * 通过id取得邀请的方法
      * @param {*} orderId 
      * @param {*} resolve 

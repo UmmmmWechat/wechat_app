@@ -43,6 +43,7 @@
     <d-loading :loading="loading" :color="'white'" />
 
     <d-no-more :has-more="searchHasMore" :color="'white'"/>
+    <d-no-more :has-more="searchOrders.length || loading || firstSearch" :color="'white'"/>
   </div>
 
   <div v-if="!isSearch">
@@ -66,6 +67,7 @@
             @scrolltolower="queryOrders"/>
           <d-loading :loading="loadingArray[0]"/>
           <d-no-more :has-more="hasMoreArray[0]"/>
+          <d-no-more :has-more="ordersArray[0].length || loadingArray[0]"/>
         </swiper-item>
 
         <swiper-item class="swiper-item">
@@ -74,6 +76,7 @@
             @scrolltolower="queryOrders"/>
           <d-loading :loading="loadingArray[1]"/>
           <d-no-more :has-more="hasMoreArray[1]"/>
+          <d-no-more :has-more="ordersArray[1].length || loadingArray[1]"/>
         </swiper-item>
 
         <swiper-item class="swiper-item">
@@ -82,6 +85,7 @@
             @scrolltolower="queryOrders"/>
           <d-loading :loading="loadingArray[2]"/>
           <d-no-more :has-more="hasMoreArray[2]"/>
+          <d-no-more :has-more="ordersArray[2].length || loadingArray[2]"/>
         </swiper-item>
 
         <swiper-item class="swiper-item">
@@ -130,6 +134,7 @@ export default {
       searchWord: '',
       searchValue: undefined, // 用于清空搜索框
       searchOrders: [],
+      firstSearch: true,
 
       menus: STATE_MENU,
       current: WAITING_STATE,
@@ -160,7 +165,25 @@ export default {
       return;
     }
     
-    this.queryOrders();// TODO
+    this.isSearch = false
+    this.firstSearch = true
+    this.searchHasMore = true
+    this.searchWord = '';
+    this.searchOrders.splice(0, this.searchOrders.length);// 清空原 searchOrders 数组
+    
+    this.show_gotop = false;
+
+    this.current = WAITING_STATE
+
+    this.hasMoreArray = [
+      true, true, true, true
+    ]
+    
+    this.ordersArray = [
+      [], [], [], []
+    ]
+    
+    this.queryOrders();
   },
   methods: {
     dLog(message, ...optionalParams) {
@@ -247,7 +270,14 @@ export default {
     handleResetSearch(event) {
       this.dLog("handleResetSearch 方法调用", event);
 
+      // 非空检查
+      if (!this.searchWord) {
+        this.showErrorRoast("请输入搜索关键词w", rej);
+        return;
+      }
+
       this.searchHasMore = true;
+      this.firstSearch = false
       this.searchOrders.splice(0, this.searchOrders.length);// 清空搜索的 spot 数组
 
       // 重新搜索

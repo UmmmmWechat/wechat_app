@@ -87,7 +87,7 @@ export default {
     commonApi.querySpotById(
       this.order.spotId,
       (res) => {
-        this.spot = res.spot;
+        this.spot = res;
         if (!this.spot) {
           this.dError("取得spot失败", res);
         }
@@ -99,7 +99,7 @@ export default {
     commonApi.queryGuideById(
       this.order.guideId,
       (res) => {
-        this.guide = res.guide;
+        this.guide = res;
         if (!this.guide) {
           this.dError("取得guide失败", res);
         }
