@@ -66,7 +66,8 @@ import DSelector from '../../components/common/DSelector'
 import DChooseSpots from '../../components/common/DChooseSpots'
 
 import guideApi from '../../api/guide'
-import { SELECT_SPOTS, GUIDE_MAIN } from '../pages_url';
+import { GUIDE_MAIN } from '../pages_url';
+import { SELECTED_SPOTS } from '../../api/const/guideConst';
 
 export default {
   components: {
@@ -119,7 +120,7 @@ export default {
       this.dLog("refreshFavorSpots 方法响应");
       this.form.favorSpots.splice(0, this.form.favorSpots.length);// 清空原 spot 数组
 
-      this.form.favorSpots = wx.getStorageSync(SELECT_SPOTS);
+      this.form.favorSpots = wx.getStorageSync(SELECTED_SPOTS);
       if (!this.form.favorSpots) {
         this.dLog("没找到 favorSpots");
         this.form.favorSpots = [];
@@ -178,7 +179,7 @@ export default {
 
           // 清空选中的景点
           wx.removeStorage({
-            key: SELECT_SPOTS
+            key: SELECTED_SPOTS
           })
         },
         (err) => {

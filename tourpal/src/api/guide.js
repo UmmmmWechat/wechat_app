@@ -22,6 +22,15 @@ export default {
     },
 
     /**
+     * 打印错误信息的方法
+     * @param {*} message
+     * @param {*} optionalParams
+     */
+    dError(message, ...optionalParams) {
+        console.error(apiName, message, optionalParams)
+    },
+
+    /**
      * 打印报错信息的方法
      * @param {*} message
      * @param {*} optionalParams
@@ -59,6 +68,10 @@ export default {
 
                             const message = suc.message;
 
+                            // 保存向导ID
+                            wx.setStorageSync(constant.GUIDE_ID, suc.guideId)
+                            this.dLog('保存向导ID成功')
+
                             // 检查是否是 新的导游
                             const isNewGuide = message == returnMessage.NOT_REGISTER
                             if (isNewGuide) {
@@ -78,15 +91,8 @@ export default {
                             } else {
                                 // 找到了这个导游 保存 guideId 取得信息并保存
                                 this.dLog('老导游，不需要进行注册')
-                                wx.setStorage({
-                                    key: constant.GUIDE_ID,
-                                    data: suc.guideId,
-                                    success: () => {
-                                        this.dLog('保存向导ID成功')
-                                        resolve({
-                                            isNewGuide: isNewGuide
-                                        })
-                                    }
+                                resolve({
+                                    isNewGuide: isNewGuide
                                 })
                             }
                         }
@@ -182,40 +188,44 @@ export default {
     },
 
     /**
-     *
-     * @param {*} guideId
-     * @param {*} state
-     * @param {*} resolve
-     * @param {*} reject
+     * 导游取得邀请列表的方法
+     * @param {*} guideId 
+     * @param {*} state 
+     * @param {*} lastIndex 
+     * @param {*} resolve 
+     * @param {*} reject 
      */
     queryOrders(guideId, state, lastIndex, resolve, reject) {
-        /* 导游只有以下类型有效
-        "finished": MOCK_ORDERS,
-        "waiting": MOCK_ORDERS,
-        "ongoing": MOCK_ORDERS,
-        "rejected": MOCK_ORDERS,
-        "timeout": MOCK_ORDERS*/
-        this.dLog('query orders by state 方法')
+        this.dLog(`query orders by state 方法
+         guideId: ${guideId} state: ${state} lastIndex: ${lastIndex}`)
+
         if (httpRequest.isTestMode) {
-            console.log('queryOrders', guideId, state, lastIndex)
-            console.log(mockData)
-            resolve(MOCK_ORDERS)
+            guideStub.queryOrders(guideId, state, lastIndex, resolve, reject)
         } else {
+            // 发起网络请求
+            var onSuccess = (suc) => {
+                // 成功的返回信息中为 邀请数组
+                this.dLog('guide get orders by state 请求成功', suc)
+
+                const hasMoreOrder = lastIndex != constant.GET_ALL_TAG && suc.length == constant.ORDER_MAX_NUM
+
+                resolve({ orderList: suc, hasMoreOrder })
+            }
+
+            var onFail = (fai) => {
+                this.dLog('guide get orders by state 请求失败', fai)
+                reject(fai)
+            }
+
             httpRequest.dRequest(
                 serverUrl.GUIDE_GET_ORDER_BY_STATE, {
-                    guideId: guideId,
-                    state: state,
-                    lastIndex: lastIndex
+                    guideId,
+                    state,
+                    lastIndex
                 },
                 httpRequest.GET,
-                (res) => {
-                    this.dLog('guide get orders by state 请求成功', res)
-                    resolve(res)
-                },
-                (err) => {
-                    this.dLog('guide get orders by state 请求失败', err)
-                    reject(err)
-                }
+                onSuccess,
+                onFail
             )
         }
     },
@@ -242,7 +252,7 @@ export default {
                     resolve(res)
                 },
                 (err) => {
-                    this.dLog('guide accept order 请求失败', err)
+                    this.dError('guide accept order 请求失败', err)
                     reject(err)
                 }
             )
@@ -270,7 +280,7 @@ export default {
                     resolve(res)
                 },
                 (err) => {
-                    this.dLog('guide reject order 请求失败', err)
+                    this.dError('guide reject order 请求失败', err)
                     reject(err)
                 }
             )
@@ -304,7 +314,7 @@ export default {
                     resolve(res)
                 },
                 (err) => {
-                    this.dLog('modify user info 请求失败', err)
+                    this.dError('modify user info 请求失败', err)
                     reject(err)
                 }
             )
@@ -312,15 +322,15 @@ export default {
     },
 
     /**
-     *
+     * 获取向导信息的方法
      * @param {*} id
      * @param {*} resolve
      * @param {*} reject
      */
     queryUserInfo(id, resolve, reject) {
-        this.dLog('query user info 方法')
+        this.dLog('query user info 方法 id:', id)
         if (httpRequest.isTestMode) {
-            var guide = mockData.mockGuide[0]
+            var guide = mockData.mockGuide
             resolve(guide)
         } else {
             httpRequest.dRequest(
@@ -333,7 +343,7 @@ export default {
                     resolve(res)
                 },
                 (err) => {
-                    this.dLog('query user info 请求失败', err)
+                    this.dError('query user info 请求失败', err)
                     reject(err)
                 }
             )
@@ -379,7 +389,7 @@ export default {
                     resolve(res)
                 },
                 (err) => {
-                    this.dLog('get orders by keyword 请求失败', err)
+                    this.dError('get orders by keyword 请求失败', err)
                     reject(err)
                 }
             )

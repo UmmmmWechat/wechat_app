@@ -1,6 +1,10 @@
 /* 邀请卡片，也就是一项订单，这个是为guide准备的*/
 <template>
-  <div class="d-card" :style="{backgroundColor: color}">
+<div class="d-card" :style="{backgroundColor: color}">
+  <div class="error-wrapper" v-if="errorOccur">
+    粗错啦 QWQ
+  </div>
+  <div v-else>
     <section @click="checkOrderDetail">
       <div class="head">
         <span>{{order.state}}</span>
@@ -27,6 +31,7 @@
       </button>
     </div>
   </div>
+</div>
 </template>
 
 <script>

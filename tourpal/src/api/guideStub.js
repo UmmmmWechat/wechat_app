@@ -1,5 +1,6 @@
 import * as mockData from "./mock/guide_mock_data";
 import * as constant from "./../api/const/guideConst";
+import { createMockOrder } from "./mock/order_mock_data";
 
 const apiName = 'guideApiStub';
 
@@ -60,5 +61,45 @@ export default {
                 resolve()
             }, 500
         )
+    },
+
+    /**
+     * 导游取得邀请列表的方法
+     * @param {*} guideId 
+     * @param {*} state 
+     * @param {*} lastIndex 
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    queryOrders(guideId, state, lastIndex, resolve, reject) {
+        this.dLog(`query orders by state 方法
+         guideId: ${guideId} state: ${state} lastIndex: ${lastIndex}`)
+
+        const totalSize = 2 * constant.ORDER_MAX_NUM;
+        const getAll = lastIndex == constant.GET_ALL_TAG;
+        const hasMoreOrder = !getAll && lastIndex < totalSize;
+        var orderList = [];
+
+        if (getAll || hasMoreOrder) {
+            var size = getAll ?
+                totalSize :
+                (totalSize - lastIndex > constant.ORDER_MAX_NUM ?
+                    constant.ORDER_MAX_NUM :
+                    totalSize - lastIndex);
+
+            for (let i = 0; i < size; i++) {
+                let mockOrder = createMockOrder(i + lastIndex, state)
+                orderList.push(mockOrder);
+            }
+        }
+
+        setTimeout(
+            () => {
+                resolve({ orderList, hasMoreOrder });
+            },
+            300
+        );
+
     }
+
 }

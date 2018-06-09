@@ -101,8 +101,6 @@ import orderApi from '../../api/order'
 
 import DNavigatorBar from '../../components/common/DNavigatorBar'
 import DInput from '../../components/common/DInput'
-import DNoMore from '../../components/common/DNoMore'
-import DLoading from '../../components/common/DLoading'
 import OrderListTourist from '../../components/order/OrderList'
 import InvalidTouristOrderPage from '../../components/tourist/InvalidTouristOrderPage'
 
@@ -115,8 +113,6 @@ export default {
     DNavigatorBar,
     OrderListTourist,
     DInput,
-    DNoMore,
-    DLoading,
     InvalidTouristOrderPage
   },
   data () {

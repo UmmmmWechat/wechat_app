@@ -5,7 +5,7 @@ const GET_ALL_TAG = -1;
 
 const TOURIST_ID = "dTouristId";
 
-// 要求状态列表
+// 邀请状态列表
 const WAITING_STATE = 0;
 const ONGOING_STATE = 1;
 const FINISHED_STATE = 2;

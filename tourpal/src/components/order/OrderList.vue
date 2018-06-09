@@ -1,4 +1,9 @@
-/* 邀请列表，装载一项项的邀请， 用type区分是tourist 还是 guide */
+/* 邀请列表，装载一项项的邀请， 用type区分是tourist 还是 guide
+可监听的事件有
+  this.$emit('scrolltoupper', event)
+  this.$emit('scrolltolower', event)
+  this.$emit('on-cancel', orderId)
+ */
 <template>
 <scroll-view
     class="scroll"

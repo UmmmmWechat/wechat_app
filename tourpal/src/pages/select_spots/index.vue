@@ -98,8 +98,7 @@ import DLoading from '../../components/common/DLoading';
 import DInput from '../../components/common/DInput';
 
 import spotApi from '../../api/spot';
-
-import { SELECT_SPOTS } from '../pages_url';
+import { SELECTED_SPOTS } from '../../api/const/guideConst';
 
 export default {
   components: {
@@ -271,7 +270,7 @@ export default {
       }
 
       wx.setStorage({
-        key: SELECT_SPOTS,
+        key: SELECTED_SPOTS,
         data: this.selectedSpots,
         success: () => {
           const sucMsg = "保存景点成功";
