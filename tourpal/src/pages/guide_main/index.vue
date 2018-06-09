@@ -29,7 +29,7 @@ import OrderListGuide from "../../components/order/OrderList"
 
 import guideApi from '../../api/guide'
 
-import { GUIDE_ID } from '../../api/const/guideConst';
+import { GUIDE_ID, GUIDE_INFO } from '../../api/const/guideConst';
 import { STATES_ARRAY, WAITING_STATE } from '../../api/const/guideConst';
 import { GUIDE_TYPE } from '../../api/const/orderConst';
 import { mockGuide } from '../../api/mock/guide_mock_data';
@@ -93,7 +93,16 @@ export default {
         (res) => {
           this.dLog("取得向导信息成功", res)
           this.guide = res;
-          this.getOrders()
+          // 存储向导信息
+          wx.setStorage({
+            key: GUIDE_INFO,
+            data: this.guide,
+            success: (suc) => {
+              // 存储向导信息成功
+              this.dLog("存储向导信息成功", suc)
+              this.getOrders()
+            }
+          })
         },
         (rej) => {
           const errMsg = "粗错啦QWQ没有找到你的向导信息";
