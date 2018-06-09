@@ -1,4 +1,5 @@
 /* 邀请卡片，也就是一项订单，这个是为tourist准备的*/
+/* 发射事件 on-cancel(orderId) */
 <template>
 <div class="d-card" :style="{backgroundColor: color}">
   <div class="error-wrapper" v-if="errorOccur">
@@ -21,26 +22,26 @@
       </div>
 
       <div><span class="title-span">邀请日期：</span>{{ order.generatedDate }}</div>
-      
+
       <div><span class="title-span">旅游日期：</span>{{ order.travelDate }}</div>
     </div>
 
-    <div 
+    <div
     class="foot"
     v-if="order.state === waiting">
-      <button 
-      class="d-a" 
+      <button
+      class="d-a"
       size="mini"
       @click="handleCancel">
         撤回
       </button>
     </div>
 
-    <div 
+    <div
     class="foot"
     v-if="order.state === ongoing && rateAble">
-      <button 
-      class="d-a" 
+      <button
+      class="d-a"
       size="mini"
       @click="handleRate">
         评价
@@ -51,14 +52,14 @@
 </template>
 
 <script>
-import commonApi from '../../api/common';
-import touristApi from '../../api/tourist';
+import commonApi from '../../api/common'
+import touristApi from '../../api/tourist'
 import * as ResultMessage from '../../api/returnMessage'
 import orderApi from '../../api/order'
-import { STATES_ARRAY, WAITING_STATE, CHECK_GUIDE, CHECK_SPOT, ONGOING_STATE, RATE_ORDER } from '../../api/const/touristConst';
-import { SHOW_SPOT_PAGE, SHOW_GUIDE_PAGE, TOURIST_RATE_ORDER } from '../../pages/pages_url';
-import { mockSpot } from '../../api/mock/spot_mock_data';
-import { mockGuide } from '../../api/mock/guide_mock_data';
+import { STATES_ARRAY, WAITING_STATE, CHECK_GUIDE, CHECK_SPOT, ONGOING_STATE, RATE_ORDER } from '../../api/const/touristConst'
+import { SHOW_SPOT_PAGE, SHOW_GUIDE_PAGE, TOURIST_RATE_ORDER } from '../../pages/pages_url'
+import { mockSpot } from '../../api/mock/spot_mock_data'
+import { mockGuide } from '../../api/mock/guide_mock_data'
 
 export default {
   props: {
@@ -66,9 +67,9 @@ export default {
       type: Object,
       required: true
     },
-     color: {
-         type: String
-     }
+    color: {
+      type: String
+    }
   },
   data () {
     return {
@@ -81,21 +82,21 @@ export default {
     }
   },
   mounted () {
-    this.errorOccur = false;
-    this.rateAble = false;
+    this.errorOccur = false
+    this.rateAble = false
 
     // 取得 spot
     const onGetSpotFail = (fai) => {
-      this.dError("取得spot失败", fai);
-      this.errorOccur = true;
+      this.dError('取得spot失败', fai)
+      this.errorOccur = true
     }
 
     commonApi.querySpotById(
       this.order.spotId,
       (res) => {
-        this.order.spot = res;
+        this.order.spot = res
         if (!this.order.spot) {
-          onGetSpotFail(res);
+          onGetSpotFail(res)
         }
       },
       onGetSpotFail
@@ -103,63 +104,63 @@ export default {
 
     // 取得导游
     const onGetGuideFail = (fai) => {
-      this.dError("取得guide失败", fai);
-      this.errorOccur = true;
+      this.dError('取得guide失败', fai)
+      this.errorOccur = true
     }
 
     commonApi.queryGuideById(
       this.order.guideId,
       (res) => {
-        this.order.guide = res;
+        this.order.guide = res
         if (!this.order.guide) {
-          onGetGuideFail(res);
+          onGetGuideFail(res)
         }
       },
       onGetGuideFail
     )
-    
+
     this.order.generatedDate = new Date(this.order.generatedDate).toLocaleDateString()
     this.order.travelDate = new Date(this.order.travelDate).toLocaleDateString()
 
     if (this.order.state === this.ongoing) {
-      const today = new Date().toLocaleDateString();
+      const today = new Date().toLocaleDateString()
       // this.rateAble = today > this.order.travelDate;
-      this.rateAble = true;
+      this.rateAble = true
     }
   },
   methods: {
-    dLog(message, ...optionalParams) {
-        console.log(this.componentName, message, optionalParams);
+    dLog (message, ...optionalParams) {
+      console.log(this.componentName, message, optionalParams)
     },
-    dError(message, ...optionalParams) {
-        console.error(this.componentName, message, optionalParams);
+    dError (message, ...optionalParams) {
+      console.error(this.componentName, message, optionalParams)
     },
-    onSpotNameClicled(event) {
-      this.dLog("onSpotNameClicled 方法响应", event);
+    onSpotNameClicled (event) {
+      this.dLog('onSpotNameClicled 方法响应', event)
       wx.setStorage({
         key: CHECK_SPOT,
         data: this.order.spot,
         success: (suc) => {
-          this.dLog("spot 保存成功", suc);
+          this.dLog('spot 保存成功', suc)
 
-          const url = `/${SHOW_SPOT_PAGE}`;
-          this.dLog('跳转', url);
-          wx.navigateTo({ url });
+          const url = `/${SHOW_SPOT_PAGE}`
+          this.dLog('跳转', url)
+          wx.navigateTo({ url })
         }
-      });
+      })
     },
-    onGuideNameClicled(event) {
-      this.dLog("onGuideNameClicled 方法响应", event);
+    onGuideNameClicled (event) {
+      this.dLog('onGuideNameClicled 方法响应', event)
       wx.setStorage({
         key: CHECK_GUIDE,
         data: this.order.guide,
         success: (suc) => {
-          this.dLog("guide 保存成功", suc);
-          const url = `/${SHOW_GUIDE_PAGE}`;
-          this.dLog('跳转', url);
-          wx.navigateTo({ url });
+          this.dLog('guide 保存成功', suc)
+          const url = `/${SHOW_GUIDE_PAGE}`
+          this.dLog('跳转', url)
+          wx.navigateTo({ url })
         }
-      });
+      })
     },
     handleCancel (event) {
       wx.showModal({
@@ -171,14 +172,20 @@ export default {
             touristApi.cancelOrders(
               this.order.id,
               (res) => {
+                wx.showToast({
+                  title: '邀请撤销成功',
+                  icon: 'none'
+                })
                 this.$emit('on-cancel', this.order.id)
               },
               (err) => {
                 let title = ''
                 if (err === ResultMessage.ALREADY_ACCEPTED) {
-                  title = '订单已经被接受，不能撤回'
-                } else if (err === ResultMessage.ALREADY_REJECTED){
-                  title = '订单已经被回拒'
+                  title = '邀请已经被接受，不能撤回'
+                  this.$emit('on-cancel', this.order.id)
+                } else if (err === ResultMessage.ALREADY_REJECTED) {
+                  title = '邀请已经被回拒'
+                  this.$emit('on-cancel', this.order.id)
                 } else {
                   title = '回撤失败，请重试'
                 }
@@ -197,9 +204,9 @@ export default {
         key: RATE_ORDER,
         data: this.order,
         success: () => {
-          const url = `/${TOURIST_RATE_ORDER}`;
-          this.dLog('跳转', url);
-          wx.redirectTo({ url });
+          const url = `/${TOURIST_RATE_ORDER}`
+          this.dLog('跳转', url)
+          wx.navigateTo({ url })
         }
       })
     }

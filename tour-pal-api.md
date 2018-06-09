@@ -201,6 +201,16 @@
 - 返回
   - [ {spot1}...  ]
 
+### 根据关键词获取 spots
+
+- /spots/by-keyword
+- GET
+- 参数
+  - keyword
+  - lastIndex
+- 返回
+  - [ {spot1}...  ]
+
 ### 根据地区获取 spots
 
 - /spots/by-location

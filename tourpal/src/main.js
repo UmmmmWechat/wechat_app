@@ -17,7 +17,7 @@ export default {
     config: {
         // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
         pages: [
-            '^pages/role_select/main',
+            'pages/role_select/main',
 
             /** 游客 */
             'pages/tourist_main/main',
@@ -43,7 +43,7 @@ export default {
             'pages/show_spot_page/main',
             'pages/show_guide_page/main',
 
-            'pages/test/main',
+            '^pages/test/main',
             'pages/z_test/main',
         ],
         window: {
@@ -51,6 +51,7 @@ export default {
             navigationBarBackgroundColor: '#42b970',
             navigationBarTitleText: 'WeChat',
             navigationBarTextStyle: 'white'
+            // enablePullDownRefresh: true
         },
         "tabBar": {
             backgroundColor: '#ffffff',

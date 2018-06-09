@@ -1,7 +1,7 @@
 <template>
 <div>
     <button @click="handleClick">测试</button>
-</div>  
+</div>
 </template>
 
 <script>
@@ -9,7 +9,12 @@ export default {
   methods: {
     handleClick () {
       wx.request({
-        url: 'http://111.231.99.122:3000/index',
+        url: 'https://www.wenxiangdong.cn/spots/by-keyword',
+        method: 'GET',
+        data: {
+          keyword: '夫',
+          lastIndex: 0
+        },
         success: res => {
           console.log(res)
         }

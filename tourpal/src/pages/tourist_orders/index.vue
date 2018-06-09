@@ -16,16 +16,16 @@
   <div
     v-if="isSearch"
     class="d-search-list">
-    <div 
+    <div
       style="text-align:center;padding:10rpx;">
-      <button 
+      <button
       class="d-back-btn-white"
       size="mini"
       plain
       @click="handleClickBack">
         返回
       </button>
-      <button 
+      <button
       class="d-back-btn-white"
       style="margin-left:33rpx;"
       size="mini"
@@ -46,7 +46,7 @@
 
   <div v-if="!isSearch">
     <div id="navigator-bar">
-      <d-navigator-bar 
+      <d-navigator-bar
       :menus="menus"
       :current="current"
       @on-change="onNavigatorChange"/>
@@ -64,7 +64,8 @@
           <order-list-tourist :orders="ordersArray[0]"
             :loading="loadingArray[0]"
             :has-more="hasMoreArray[0]"
-            @scrolltolower="queryOrders"/>
+            @scrolltolower="queryOrders"
+            @on-cancel="handleCancelOrder"/>
         </swiper-item>
 
         <swiper-item class="swiper-item">
@@ -95,19 +96,19 @@
 </template>
 
 <script>
-import touristApi from '../../api/tourist';
-import orderApi from '../../api/order';
+import touristApi from '../../api/tourist'
+import orderApi from '../../api/order'
 
-import DNavigatorBar from '../../components/common/DNavigatorBar';
-import DInput from '../../components/common/DInput';
-import DNoMore from '../../components/common/DNoMore';
-import DLoading from '../../components/common/DLoading';
-import OrderListTourist from '../../components/order/OrderList';
-import InvalidTouristOrderPage from '../../components/tourist/InvalidTouristOrderPage';
+import DNavigatorBar from '../../components/common/DNavigatorBar'
+import DInput from '../../components/common/DInput'
+import DNoMore from '../../components/common/DNoMore'
+import DLoading from '../../components/common/DLoading'
+import OrderListTourist from '../../components/order/OrderList'
+import InvalidTouristOrderPage from '../../components/tourist/InvalidTouristOrderPage'
 
-import { STATE_MENU, STATES_ARRAY, TOURIST_ID, WAITING_STATE, INVALID_STATE } from '../../api/const/touristConst';
-import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
-import { ROLE_SELECT } from '../pages_url';
+import { STATE_MENU, STATES_ARRAY, TOURIST_ID, WAITING_STATE, INVALID_STATE } from '../../api/const/touristConst'
+import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data'
+import { ROLE_SELECT } from '../pages_url'
 
 export default {
   components: {
@@ -123,7 +124,7 @@ export default {
       touristId: MOCK_TOURIST_ID,
 
       loading: false,
-      
+
       searchHasMore: true,
       isSearch: false,
       searchWord: '',
@@ -147,204 +148,215 @@ export default {
       pageName: 'tourist_orders'
     }
   },
-  mounted() {
-    this.touristId = wx.getStorageSync(TOURIST_ID);
+  mounted () {
+    this.touristId = wx.getStorageSync(TOURIST_ID)
     if (!this.touristId) {
       // 未找到游客ID 需要先去登录
-      const url = `/${ROLE_SELECT}`;
-      this.dLog('跳转', url);
-      wx.redirectTo({ url });
-      
-      this.showErrorRoast("未找到游客ID 需要先去登录");
+      const url = `/${ROLE_SELECT}`
+      this.dLog('跳转', url)
+      wx.redirectTo({ url })
 
-      return;
+      this.showErrorRoast('未找到游客ID 需要先去登录')
+
+      return
     }
-    
+
     this.isSearch = false
     this.firstSearch = true
     this.searchHasMore = true
-    this.searchWord = '';
-    this.searchOrders.splice(0, this.searchOrders.length);// 清空原 searchOrders 数组
-    
-    this.show_gotop = false;
+    this.searchWord = ''
+    this.searchOrders.splice(0, this.searchOrders.length)// 清空原 searchOrders 数组
+
+    this.show_gotop = false
 
     this.current = WAITING_STATE
 
     this.hasMoreArray = [
       true, true, true, true
     ]
-    
+
     this.ordersArray = [
       [], [], [], []
     ]
-    
-    this.queryOrders();
+
+    this.queryOrders()
   },
   methods: {
-    dLog(message, ...optionalParams) {
-        console.log(this.pageName, message, optionalParams);
+    dLog (message, ...optionalParams) {
+      console.log(this.pageName, message, optionalParams)
     },
-    dError(message, ...optionalParams) {
-        console.error(this.pageName, message, optionalParams);
+    dError (message, ...optionalParams) {
+      console.error(this.pageName, message, optionalParams)
     },
-    showErrorRoast(errMsg, ...fai) {
-      this.dError(errMsg, fai);
-    
-      // 输出提示信息 
-      wx.showToast({
-          icon: 'none',
-          title: errMsg
-      });
-    },
-    queryOrders(...event) {
-      this.dLog("queryOrders 方法响应", event);
+    showErrorRoast (errMsg, ...fai) {
+      this.dError(errMsg, fai)
 
-      if (this.loading){
-        this.dLog("加载中 return");
-        return;
+      // 输出提示信息
+      wx.showToast({
+        icon: 'none',
+        title: errMsg
+      })
+    },
+    queryOrders (...event) {
+      this.dLog('queryOrders 方法响应', event)
+
+      if (this.loading) {
+        this.dLog('加载中 return')
+        return
       }
 
-      const index = this.current;
+      const index = this.current
 
       if (!this.hasMoreArray[index]) {
-        this.dLog("已经加载全部 return");
-        return;
+        this.dLog('已经加载全部 return')
+        return
       }
 
       if (index == INVALID_STATE) {
-        this.dLog("invalid!");
-        return;
+        this.dLog('invalid!')
+        return
       }
 
       // 加载
-      this.loadingArray[index] = true;
+      this.loadingArray[index] = true
 
       // 保留下上次最后的index
-      let lastIndex = this.ordersArray[index].length;
+      let lastIndex = this.ordersArray[index].length
 
       touristApi.queryOrders(
         this.touristId,
         STATES_ARRAY[index],
         lastIndex,
         (res) => {
-          this.dLog("取得邀请列表成功", res);
+          this.dLog('取得邀请列表成功', res)
 
-          this.hasMoreArray[index] = res.hasMoreOrder;
+          this.hasMoreArray[index] = res.hasMoreOrder
 
           for (let key in res.orderList) {
-            this.ordersArray[index].push(res.orderList[key]);
+            this.ordersArray[index].push(res.orderList[key])
           }
 
-          this.loadingArray[index] = false;
+          this.loadingArray[index] = false
         },
         (rej) => {
-          this.showErrorRoast("取得邀请列表失败");
+          this.showErrorRoast('取得邀请列表失败')
 
-          this.loadingArray[index] = false;
+          this.loadingArray[index] = false
         }
       )
     },
-    onNavigatorChange(index) {
-      this.dLog(`onNavigatorChange 方法响应 index: ${index}`);
-      this.current = index;
+    onNavigatorChange (index) {
+      this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
+      this.current = index
     },
     handleSwiperChange (event) {
-      this.dLog("handleSwiperChange 方法响应", event);
-      this.current = event.target.current;
-      this.queryOrders();
+      this.dLog('handleSwiperChange 方法响应', event)
+      this.current = event.target.current
+      this.queryOrders()
     },
     handleSearchFocus (event) {
-      this.dLog("handleSearchFocus 方法调用", event);
-      this.isSearch = true;
+      this.dLog('handleSearchFocus 方法调用', event)
+      this.isSearch = true
     },
-    handleSearchInput(e) {
-      this.dLog("handleInput 方法调用", e);
-      this.searchWord = e;
-      this.dLog(`message 更新 ${this.message}`);
+    handleSearchInput (e) {
+      this.dLog('handleInput 方法调用', e)
+      this.searchWord = e
+      this.dLog(`message 更新 ${this.message}`)
     },
-    handleResetSearch(event) {
-      this.dLog("handleResetSearch 方法调用", event);
+    handleResetSearch (event) {
+      this.dLog('handleResetSearch 方法调用', event)
 
       // 非空检查
       if (!this.searchWord) {
-        this.showErrorRoast("请输入搜索关键词w");
-        return;
+        this.showErrorRoast('请输入搜索关键词w')
+        return
       }
 
-      this.searchHasMore = true;
+      this.searchHasMore = true
       this.firstSearch = false
-      this.searchOrders.splice(0, this.searchOrders.length);// 清空搜索的 spot 数组
+      this.searchOrders.splice(0, this.searchOrders.length)// 清空搜索的 spot 数组
 
       // 重新搜索
 
       // 按照关键词搜索邀请
-      this.searchOrderByKeyword(0);
+      this.searchOrderByKeyword(0)
     },
-    handleScrollToSearch(event) {
-      this.dLog("handleScrollToSearch 方法调用", event);
+    handleScrollToSearch (event) {
+      this.dLog('handleScrollToSearch 方法调用', event)
 
-      if (this.loading){
-        this.dLog("加载中 return");
-        return;
+      if (this.loading) {
+        this.dLog('加载中 return')
+        return
       }
       if (!this.searchHasMore) {
-        this.dLog("已经加载全部 return")
-        return;
+        this.dLog('已经加载全部 return')
+        return
       }
 
       // 按照关键词搜索邀请
-      this.searchOrderByKeyword(this.searchOrders.length);
+      this.searchOrderByKeyword(this.searchOrders.length)
     },
-    searchOrderByKeyword(lastIndex) {
+    searchOrderByKeyword (lastIndex) {
       // 加载
-      this.loading = true;
+      this.loading = true
 
       touristApi.queryOrdersByKeyword(
         this.touristId,
         this.searchWord,
         lastIndex,
         (res) => {
-          this.dLog("搜索邀请列表成功", res);
+          this.dLog('搜索邀请列表成功', res)
 
-          this.searchHasMore = res.hasMoreOrder;
+          this.searchHasMore = res.hasMoreOrder
 
           for (let key in res.orderList) {
-            this.searchOrders.push(res.orderList[key]);
+            this.searchOrders.push(res.orderList[key])
           }
 
-          this.loading = false;
+          this.loading = false
         },
         (fai) => {
-          this.showErrorRoast("搜索邀请列表失败");
+          this.showErrorRoast('搜索邀请列表失败')
 
-          this.loading = false;
+          this.loading = false
         }
       )
     },
-    handleClickBack(event) {
-      this.dLog("handleClickBack 方法调用", event);
-      
-      // 清空
-      this.handleClearSearch(event);
+    handleClickBack (event) {
+      this.dLog('handleClickBack 方法调用', event)
 
-      this.isSearch = false;
+      // 清空
+      this.handleClearSearch(event)
+
+      this.isSearch = false
     },
-    handleClearSearch(event) {
-      this.dLog("handleClickBack 方法调用", event);
-      
+    handleClearSearch (event) {
+      this.dLog('handleClickBack 方法调用', event)
+
       // 清空搜索框
-      this.searchValue = "";
+      this.searchValue = ''
       setTimeout(
         () => {
-          this.searchValue = undefined;
+          this.searchValue = undefined
         }, 500
-      );
+      )
 
       // 重置属性
-      this.searchWord = "";
-      this.firstSearch = true;
-      this.searchHasMore = true;
-      this.searchOrders.splice(0, this.searchOrders.length);// 清空搜索的 spot 数组
+      this.searchWord = ''
+      this.firstSearch = true
+      this.searchHasMore = true
+      this.searchOrders.splice(0, this.searchOrders.length)// 清空搜索的 spot 数组
+    },
+    handleCancelOrder (orderId) {
+      this.dLog('取消一个邀请，orderId为', orderId)
+      // this
+      const index = this.current
+      const orders = this.ordersArray[index]
+      // 去掉这一个
+      orders.splice(
+        orders.findIndex(item => item.id === orderId),
+        1
+      )
     }
   }
 }

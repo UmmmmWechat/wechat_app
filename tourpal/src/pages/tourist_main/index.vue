@@ -14,7 +14,7 @@
     <div>
       <span>旅游地点：</span>
       <div style="display:inline-block;">
-      <picker 
+      <picker
       mode="region"
       @change="handleLocationChange"
       >
@@ -35,13 +35,13 @@
         @input="handleSearchInput"
         @on-focus="handleSearchFocus"
         @on-enter="handleResetSearch"/>
-      </div>     
+      </div>
     </div>
   </div>
 
   <scroll-view
   v-if="!isSearch"
-  class="scroll" 
+  class="scroll"
   scroll-y
   scroll-with-animation
   enable-back-to-top
@@ -62,16 +62,16 @@
     v-else
     class="d-search-list">
     <header>
-      <div 
+      <div
       style="text-align:center;padding:10rpx;">
-        <button 
+        <button
         class="d-back-btn-white"
         size="mini"
         plain
         @click="handleClickBack">
           返回
         </button>
-        <button 
+        <button
         class="d-back-btn-white"
         style="margin-left:33rpx;"
         size="mini"
@@ -135,18 +135,18 @@ export default {
   data () {
     return {
       touristId: MOCK_TOURIST_ID,
-      
+
       location: {
         province: '江苏省',
         city: '南京市',
         region: '栖霞区'
       },
-      
+
       loading: false,
 
       hasMore: true,
       spots: [],
-      
+
       searchHasMore: true,
       isSearch: false,
       searchWord: '',
@@ -176,8 +176,8 @@ export default {
       // 未找到游客ID 需要先去登录
       const errMsg = "未找到游客ID 需要先去登录";
       this.dError(errMsg);
-      
-      // 输出提示信息 
+
+      // 输出提示信息
       wx.showToast({
         icon: 'none',
         title: errMsg
@@ -189,18 +189,18 @@ export default {
 
       return;
     }
-      
+
     this.hasMore = true;
     this.spots.splice(0, this.spots.length);// 清空原 spots 数组
-    
+
     this.isSearch = false
     this.firstSearch = true
     this.searchHasMore = true
     this.searchWord = '';
     this.searchSpots.splice(0, this.searchSpots.length);// 清空原 searchSpots 数组
-    
+
     this.show_gotop = false;
-    
+
     this.getSpots();
   },
   methods: {
@@ -212,8 +212,8 @@ export default {
     },
     showErrorRoast(errMsg, ...fai) {
       this.dError(errMsg, fai);
-    
-      // 输出提示信息 
+
+      // 输出提示信息
       wx.showToast({
           icon: 'none',
           title: errMsg
@@ -367,20 +367,20 @@ export default {
         );
       }
     },
-    resetSpots() {
+    resetSpots(resolve) {
       // 初始化景点信息
       this.hasMore = true;
       this.spots.splice(0, this.spots.length);// 清空原 spot 数组
 
       // 上滑到顶部
       this.show_gotop = false;
-      
+
       this.scrollTop = 0;
       setTimeout(
         () => {
           this.scrollTop = undefined;
         }, 500);
-      
+
       // 重新获取景点信息
 
       // 加载
@@ -400,6 +400,10 @@ export default {
           }
 
           this.loading = false;
+
+          if (resolve) {
+            resolve()
+          }
         },
         (err) => {
           this.showErrorRoast("取得景点列表失败", err);
@@ -497,19 +501,19 @@ export default {
           for (let key in res.spotList) {
             this.searchSpots.push(res.spotList[key]);
           }
-          
+
           this.loading = false;
         },
         (fai) => {
           this.showErrorRoast("搜索景点列表失败");
-          
+
           this.loading = false;
         }
       );
     },
     handleClickBack(event) {
       this.dLog("handleClickBack 方法调用", event);
-      
+
       // 清空
       this.handleClearSearch(event);
 
@@ -517,7 +521,7 @@ export default {
     },
     handleClearSearch(event) {
       this.dLog("handleClearSearch 方法调用", event);
-      
+
       // 清空搜索框
       this.searchValue = "";
       setTimeout(
@@ -535,13 +539,13 @@ export default {
       // 回滚
       this.searchScrollToTop();
     },
-    handleToPersonCenter(event) {
+    handleToPersonCenter (event) {
       this.dLog("handleToPersonCenter 方法调用", event);
 
       const url = `/${TOURIST_CENTER}`;
       this.dLog('跳转', url);
       wx.navigateTo({ url });
-    }
+    },
   }
 }
 </script>
@@ -564,7 +568,7 @@ z-index: 100;
 
 #search {
   margin: 20rpx 0;
-  font-size: 0.8em; 
+  font-size: 0.8em;
 }
 
 .scroll {
@@ -585,7 +589,7 @@ z-index: 100;
   border: solid #42b970;
   box-shadow: #42b970 0 0 5px;
   background: #a2ddb9;
-  
+
   color: #314237af;
   font-weight: bold;
 
