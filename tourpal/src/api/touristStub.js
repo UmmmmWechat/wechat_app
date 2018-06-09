@@ -143,7 +143,7 @@ export default {
         const hasMoreOrder = !getAll && lastIndex < totalSize;
         var orderList = [];
 
-        if (hasMoreOrder) {
+        if (getAll || hasMoreOrder) {
             var size = getAll ?
                 totalSize :
                 (totalSize - lastIndex > constant.ORDER_MAX_NUM ?
@@ -182,7 +182,7 @@ export default {
         const hasMoreOrder = !getAll && lastIndex < totalSize;
         var orderList = [];
 
-        if (hasMoreOrder) {
+        if (getAll || hasMoreOrder) {
             var size = getAll ?
                 totalSize :
                 (totalSize - lastIndex > constant.ORDER_MAX_NUM ?
