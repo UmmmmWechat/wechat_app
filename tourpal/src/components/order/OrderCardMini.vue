@@ -14,6 +14,7 @@
 import * as urlList from '../../pages/pages_url'
 
 import orderApi from '../../api/order'
+import commonApi from '../../api/common'
 import { SELECTED_ORDER_INFO } from '../../api/const/guideConst';
 
 export default {
@@ -30,16 +31,12 @@ export default {
     }
   },
   mounted () {
-    orderApi.querySpotById(
+    commonApi.querySpotById(
       this.order.spotId,
       (res) => {this.spotName = res.name;},
       (err) => {}
     );
-    orderApi.queryTouristById(
-      this.order.touristId,
-      (res) => {this.touristName = res.name;},
-      (err) => {}
-    )
+    this.touristName = this.order.touristId
   },
   methods: {
     checkOrderDetail() {

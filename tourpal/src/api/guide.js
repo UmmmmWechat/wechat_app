@@ -221,6 +221,32 @@ export default {
     },
 
     /**
+     * 根据日期分组获得所有已完成的订单
+     * @param guideId
+     * @param resolve
+     * @param reject
+     * @return 返回一个对象， key值 为 Date对象的toLocaleDateString()方法得到的字符串，value为数组，包含在这个日期里的所有 order
+     * {
+     *  '2018-6-12': [{order1}, {order2}]
+     * }
+     */
+    queryOngoingOrdersGroupByDate(guideId, resolve, reject) {
+        let ordersGroupByDate = {}
+        this.queryOrders(guideId, constant.STATES_ARRAY[constant.ONGOING_STATE], -1,
+            res => {
+                res.orderList.forEach(order => {
+                    let date = new Date(order.travelDate).toLocaleDateString()
+                    if (!ordersGroupByDate[date]) {
+                        ordersGroupByDate[date] = []
+                    }
+                    ordersGroupByDate[date].push(order)
+                })
+                console.log('order by date', ordersGroupByDate)
+                resolve(ordersGroupByDate)
+            },
+            reject)
+    },
+    /**
      * 通过一个受邀
      * @param {*} orderId
      * @param {*} resolve
@@ -397,26 +423,26 @@ export default {
 
     /**
      * 将spot数组转换为spotid数组
-     * @param {*} favorSpots 
+     * @param {*} favorSpots
      */
     transSpotToSpotID(favorSpots) {
-        this.dLog("transSpotToSpotID 方法调用", favorSpots)
+        this.dLog('transSpotToSpotID 方法调用', favorSpots)
         const favorSpotsID = []
         for (let key in favorSpots) {
             favorSpotsID.push(favorSpots[key].id)
         }
-        this.dLog("transSpotToSpotID 转换后", favorSpotsID)
+        this.dLog('transSpotToSpotID 转换后', favorSpotsID)
         return favorSpotsID
     },
 
     /**
      * 将spotid数组转换为spot数组
-     * @param {*} guide 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} guide
+     * @param {*} resolve
+     * @param {*} reject
      */
     transSpotIDToSpot(guide, resolve, reject) {
-        this.dLog("transSpotIDToSpot 方法调用", guide)
+        this.dLog('transSpotIDToSpot 方法调用', guide)
 
         let count = 0
         const length = guide.favorSpots.length
@@ -433,7 +459,7 @@ export default {
                         transSingleID(guide.favorSpots[count])
                     } else {
                         guide.favorSpots = favorSpots
-                        this.dLog("transSpotIDToSpot 转换后", guide)
+                        this.dLog('transSpotIDToSpot 转换后', guide)
                         resolve(guide)
                     }
                 },

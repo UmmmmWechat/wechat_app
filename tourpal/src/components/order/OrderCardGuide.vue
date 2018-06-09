@@ -22,13 +22,13 @@
           <span class="link">{{ order.touristId }}</span>
         </div>
 
-        <div><span class="title-span">邀请日期：</span>{{ order.generatedDate }}</div>
-        
-        <div><span class="title-span">旅游日期：</span>{{ order.travelDate }}</div>
+        <div><span class="title-span">邀请日期：</span>{{ computedCreatedDate }}</div>
+
+        <div><span class="title-span">旅游日期：</span>{{ computedTravelDate }}</div>
       </div>
     </section>
 
-    <div 
+    <div
     id="foot"
     v-if="order.state === waiting">
       <button
@@ -37,9 +37,9 @@
       @click="handleReject">
         婉拒
       </button>
-      
+
       <button
-      class="d-a op-btn" 
+      class="d-a op-btn"
       size="mini"
       @click="handleAccept">
         同意
@@ -55,8 +55,8 @@ import guideApi from '../../api/guide'
 
 import * as ResultMessage from '../../api/returnMessage'
 
-import { STATES_ARRAY, WAITING_STATE, SELECTED_ORDER_INFO } from '../../api/const/guideConst';
-import { GUIDE_CHECK_ORDER } from '../../pages/pages_url';
+import { STATES_ARRAY, WAITING_STATE, SELECTED_ORDER_INFO } from '../../api/const/guideConst'
+import { GUIDE_CHECK_ORDER } from '../../pages/pages_url'
 
 export default {
   props: {
@@ -64,9 +64,9 @@ export default {
       type: Object,
       required: true
     },
-     color: {
-         type: String
-     }
+    color: {
+      type: String
+    }
   },
   data () {
     return {
@@ -78,54 +78,66 @@ export default {
       spotName: ''
     }
   },
+  computed: {
+    computedTravelDate () {
+      return new Date(this.order.travelDate).toLocaleDateString()
+    },
+    computedCreatedDate () {
+      return new Date(this.order.generatedDate).toLocaleDateString()
+    }
+  },
   mounted () {
     this.errorOccur = false
 
     // 取得景点信息
     const onGetSpotFail = (err) => {
-      this.dError("取得景点信息失败", err)
+      this.dError('取得景点信息失败', err)
       this.errorOccur = true
     }
 
     commonApi.querySpotById(
       this.order.spotId,
       (res) => {
-        this.dLog("取得景点信息成功", res);
-        this.spotName = res.name;
+        this.dLog('取得景点信息成功', res)
+        this.spotName = res.name
         this.order.spotName = this.spotName
         if (!this.spotName) {
           onGetSpotFail(res)
         }
       },
       onGetSpotFail
-    );
+    )
   },
   methods: {
+    formatDate (date) {
+      console.log('date:', date)
+      return new Date(date).toLocaleDateString()
+    },
     dLog (message, ...optionalParams) {
       console.log(this.componentName, message, optionalParams)
     },
     dError (message, ...optionalParams) {
       console.error(this.componentName, message, optionalParams)
     },
-    checkOrderDetail() {
-      this.dLog("查看邀请详情")
+    checkOrderDetail () {
+      this.dLog('查看邀请详情')
 
       // 存储订单
       wx.setStorageSync(SELECTED_ORDER_INFO, this.order)
 
       // 跳转查看界面
-      const url = `/${GUIDE_CHECK_ORDER}`;
-      this.dLog('跳转', url);
-      wx.navigateTo({ url });
+      const url = `/${GUIDE_CHECK_ORDER}`
+      this.dLog('跳转', url)
+      wx.navigateTo({ url })
     },
-    handleReject(event) {
-      this.dLog("handleReject 方法调用", event)
+    handleReject (event) {
+      this.dLog('handleReject 方法调用', event)
 
       wx.showModal({
         title: '确定要拒绝这个邀请么？',
         success: (res) => {
           if (res.confirm) {
-            this.dLog("确认拒绝", res)
+            this.dLog('确认拒绝', res)
             // api
             guideApi.rejectOrder(
               this.order.id,
@@ -154,14 +166,14 @@ export default {
         }
       })
     },
-    handleAccept(event) {
-      this.dLog("handleAccept 方法调用", event)
+    handleAccept (event) {
+      this.dLog('handleAccept 方法调用', event)
 
       wx.showModal({
         title: '确定要接受这个邀请么？',
         success: (res) => {
           if (res.confirm) {
-            this.dLog("确认接受", res)
+            this.dLog('确认接受', res)
             // api
             guideApi.acceptOrder(
               this.order.id,
