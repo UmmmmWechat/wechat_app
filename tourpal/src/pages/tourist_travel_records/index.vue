@@ -26,7 +26,8 @@ export default {
       events: [],
       touristId: '',
       isLoading: false,
-      hasMore: true
+      hasMore: true,
+      pageName: "tourist_travel_record"
     }
   },
   mounted () {

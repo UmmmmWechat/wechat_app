@@ -49,13 +49,13 @@
   @scroll="handleScroll"
   @scrolltolower="handleGetMoreSpots">
     <spot-card
-    v-for="spot in toShowSpots"
+    v-for="spot in spots"
     :key="spot.id"
     :spot="spot"
     />
     <d-loading :loading="loading"/>
     <d-no-more :has-more="hasMore" />
-    <d-no-more :has-more="toShowSpots.length || loading"/>
+    <d-no-more :has-more="!hasMore || spots.length || loading"/>
   </scroll-view>
 
   <section
@@ -91,12 +91,12 @@
       @scroll="handleScroll"
       @scrolltolower="handleScrollToSearch">
       <spot-card
-      v-for="spot in toShowSpots"
+      v-for="spot in searchSpots"
       :key="spot.id"
       :spot="spot"/>
       <d-loading :loading="loading" :color="'white'"/>
       <d-no-more :has-more="searchHasMore" :color="'white'"/>
-      <d-no-more :has-more="toShowSpots.length || loading || firstSearch" :color="'white'"/>
+      <d-no-more :has-more="!searchHasMore || searchSpots.length || loading || firstSearch" :color="'white'"/>
     </scroll-view>
   </section>
 
@@ -168,13 +168,6 @@ export default {
         result = result + this.location[key] + '-'
       }
       return result.slice(0,result.length - 1);
-    },
-    toShowSpots () {
-      if(this.isSearch){
-        return this.searchSpots;
-      } else {
-        return this.spots;
-      }
     }
   },
   mounted () {
@@ -535,6 +528,7 @@ export default {
 
       // 重置属性
       this.searchWord = "";
+      this.firstSearch = true;
       this.searchHasMore = true;
       this.searchSpots.splice(0, this.searchSpots.length);// 清空搜索的 spot 数组
 

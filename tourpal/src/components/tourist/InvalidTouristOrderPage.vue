@@ -17,28 +17,25 @@
       <swiper-item class="swiper-item">
         <!-- REJECTED -->
         <order-list-tourist :orders="ordersArray[0]"
+          :loading="loadingArray[0]"
+          :has-more="hasMoreArray[0]"
           @scrolltolower="queryOrders"/>
-        <d-loading :loading="loadingArray[0]"/>
-        <d-no-more :has-more="hasMoreArray[0]"/>
-        <d-no-more :has-more="ordersArray[0].length || loadingArray[0]"/>
       </swiper-item>
 
       <swiper-item class="swiper-item">
         <!-- CANCELED -->
         <order-list-tourist :orders="ordersArray[1]"
+          :loading="loadingArray[1]"
+          :has-more="hasMoreArray[1]"
           @scrolltolower="queryOrders"/>
-        <d-loading :loading="loadingArray[1]"/>
-        <d-no-more :has-more="hasMoreArray[1]"/>
-        <d-no-more :has-more="ordersArray[1].length || loadingArray[1]"/>
       </swiper-item>
 
       <swiper-item class="swiper-item">
         <!-- TIMEOUT -->
         <order-list-tourist :orders="ordersArray[2]"
+          :loading="loadingArray[2]"
+          :has-more="hasMoreArray[2]"
           @scrolltolower="queryOrders"/>
-        <d-loading :loading="loadingArray[2]"/>
-        <d-no-more :has-more="hasMoreArray[2]"/>
-        <d-no-more :has-more="ordersArray[2].length || loadingArray[2]"/>
       </swiper-item>
 
     </swiper>

@@ -29,12 +29,12 @@
   scroll-with-animation
   >
     <guide-profile-card
-      v-for="guide in toShowGuides"
+      v-for="guide in guides"
       :key="guide.id"
       :guide="guide"/>
     <d-loading :loading="loading" />
     <d-no-more :has-more="hasMore" />
-    <d-no-more :has-more="toShowGuides.length || loading"/>
+    <d-no-more :has-more="!hasMore || guides.length || loading"/>
   </scroll-view>
 
   <section
@@ -70,13 +70,13 @@
       @scroll="handleScroll"
       @scrolltolower="handleScrollToSearch">
       <guide-profile-card
-      v-for="guide in toShowGuides"
+      v-for="guide in searchGuides"
       :color="'white'"
       :key="guide.id"
       :guide="guide"/>
       <d-loading :loading="loading" :color="'white'"/>
       <d-no-more :has-more="searchHasMore" :color="'white'"/>
-      <d-no-more :has-more="toShowGuides.length || loading || firstSearch"/>
+      <d-no-more :has-more="!searchHasMore || searchGuides.length || loading || firstSearch" :color="'white'"/>
     </scroll-view>
   </section>
 
@@ -129,11 +129,6 @@ export default {
       scrollTop: undefined,
       searchScrollTop: undefined,
       show_gotop: false
-    }
-  },
-  computed: {
-    toShowGuides () {
-      return this.isSearch ? this.searchGuides : this.guides;
     }
   },
   mounted() {
@@ -401,6 +396,7 @@ export default {
 
       // 重置属性
       this.searchWord = "";
+      this.firstSearch = true;
       this.searchHasMore = true;
       this.searchGuides.splice(0, this.searchGuides.length);// 清空搜索的 spot 数组
 

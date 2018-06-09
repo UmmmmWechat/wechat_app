@@ -14,6 +14,9 @@
         :color="color"
         :key="order.id"
         :order="order"/>
+        <d-loading :loading="loading" :color="color" />
+        <d-no-more :has-more="hasMore" :color="color"/>
+        <d-no-more :has-more="!hasMore || orders.length || loading || firstSearch" :color="color"/>
     </div>
     <div v-else>
         <order-card-guide 
@@ -34,12 +37,17 @@
 <script>
 import OrderCardTourist from './OrderCardTourist';
 import OrderCardGuide from './OrderCardGuide';
+import DNoMore from '../common/DNoMore';
+import DLoading from '../common/DLoading';
+
 const SHOW_TOP_SCROLLTOP = 700;
 
 export default {
     components: {
         OrderCardTourist,
-        OrderCardGuide
+        OrderCardGuide,
+        DNoMore,
+        DLoading
     },
     props: {
         orders: {
@@ -55,6 +63,20 @@ export default {
         },
         color: {
             type: String
+        },
+        loading: {
+            type: Boolean,
+            default: false,
+            required: true
+        },
+        hasMore: {
+            type: Boolean,
+            default: true,
+            required: true
+        },
+        firstSearch: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

@@ -2,11 +2,11 @@ const BASE_URL = "https://www.wenxiangdong.cn";
 const POST = "POST";
 const GET = "GET";
 var dRequest = (url, data, method, onSuccess, onFail) => {
-  console.log(`request ${url}`)
-  console.log('params:')
-  for (let key in data) {
-    console.log(`${key}:${data[key]}`)
-  }
+    console.log(`request ${url}`)
+    console.log('params:')
+    for (let key in data) {
+        console.log(`${key}:${data[key]}`)
+    }
     wx.request({
         url: BASE_URL + url,
         data: data,
@@ -26,7 +26,7 @@ var dRequest = (url, data, method, onSuccess, onFail) => {
     })
 }
 
-const isTestMode = true;
+const isTestMode = false;
 
 export {
     dRequest,

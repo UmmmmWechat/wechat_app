@@ -38,12 +38,10 @@
     <order-list-tourist
       :color="'white'"
       :orders="searchOrders"
+      :loading="loading"
+      :has-more="searchHasMore"
+      :first-search="firstSearch"
       @scrolltolower="handleScrollToSearch"/>
-
-    <d-loading :loading="loading" :color="'white'" />
-
-    <d-no-more :has-more="searchHasMore" :color="'white'"/>
-    <d-no-more :has-more="searchOrders.length || loading || firstSearch" :color="'white'"/>
   </div>
 
   <div v-if="!isSearch">
@@ -64,28 +62,25 @@
         <swiper-item class="swiper-item">
           <!-- WAITING -->
           <order-list-tourist :orders="ordersArray[0]"
+            :loading="loadingArray[0]"
+            :has-more="hasMoreArray[0]"
             @scrolltolower="queryOrders"/>
-          <d-loading :loading="loadingArray[0]"/>
-          <d-no-more :has-more="hasMoreArray[0]"/>
-          <d-no-more :has-more="ordersArray[0].length || loadingArray[0]"/>
         </swiper-item>
 
         <swiper-item class="swiper-item">
           <!-- ONGOING -->
           <order-list-tourist :orders="ordersArray[1]"
+            :loading="loadingArray[1]"
+            :has-more="hasMoreArray[1]"
             @scrolltolower="queryOrders"/>
-          <d-loading :loading="loadingArray[1]"/>
-          <d-no-more :has-more="hasMoreArray[1]"/>
-          <d-no-more :has-more="ordersArray[1].length || loadingArray[1]"/>
         </swiper-item>
 
         <swiper-item class="swiper-item">
           <!-- FINISHED -->
           <order-list-tourist :orders="ordersArray[2]"
+            :loading="loadingArray[2]"
+            :has-more="hasMoreArray[2]"
             @scrolltolower="queryOrders"/>
-          <d-loading :loading="loadingArray[2]"/>
-          <d-no-more :has-more="hasMoreArray[2]"/>
-          <d-no-more :has-more="ordersArray[2].length || loadingArray[2]"/>
         </swiper-item>
 
         <swiper-item class="swiper-item">
@@ -272,7 +267,7 @@ export default {
 
       // 非空检查
       if (!this.searchWord) {
-        this.showErrorRoast("请输入搜索关键词w", rej);
+        this.showErrorRoast("请输入搜索关键词w");
         return;
       }
 
@@ -347,6 +342,7 @@ export default {
 
       // 重置属性
       this.searchWord = "";
+      this.firstSearch = true;
       this.searchHasMore = true;
       this.searchOrders.splice(0, this.searchOrders.length);// 清空搜索的 spot 数组
     }
