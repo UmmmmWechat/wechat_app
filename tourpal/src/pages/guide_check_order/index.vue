@@ -17,14 +17,12 @@
         <span class="link">{{ order.state }}</span>
       </section>
       <section class="info-item">
-        <span class="title-span">游客姓名：</span>
-        <span class="link" v-if="touristName">{{ touristName }}</span>
-        <span class="link" v-else>{{ prompt }}</span>
+        <span class="title-span">游客编号：</span>
+        <span class="link">{{ order.touristId }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">景点名称：</span>
-        <span class="link" v-if="spotName">{{ spotName }}</span>
-        <span class="link" v-else>{{ prompt }}</span>
+        <span class="link">{{ order.spotName }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">提交日期：</span>
@@ -58,13 +56,13 @@
 
 <script>
 import orderApi from '../../api/order'
-import * as constant from './constant'
+import { SELECTED_ORDER_INFO } from '../../api/const/guideConst';
 
 export default {
   data() {
     return {
       prompt: 'Loading...',
-      order: null,
+      order: {},
       touristName: null,
       spotName: null,
     }
@@ -78,7 +76,7 @@ export default {
       var that = this;
       this.order = this.mockOrder;
       wx.getStorage({
-        key: constant.SELECTED_ORDER_KEY,
+        key: SELECTED_ORDER_INFO,
         success: function(res) {
           that.order = res.data;
           that.setOrderInfo();

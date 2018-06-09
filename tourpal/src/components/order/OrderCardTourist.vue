@@ -11,12 +11,12 @@
     </div>
 
     <div id="body">
-      <div v-if="spotName">
+      <div>
         <span class="title-span">景点：</span>
         <span class="link" @click="onSpotNameClicled">{{ spotName }}</span>
       </div>
 
-      <div v-if="guideName">
+      <div>
         <span class="title-span">向导：</span>
         <span class="link" @click="onGuideNameClicled">{{ guideName }}</span>
       </div>
@@ -54,8 +54,10 @@
 <script>
 import commonApi from '../../api/common'
 import touristApi from '../../api/tourist'
-import * as ResultMessage from '../../api/returnMessage'
 import orderApi from '../../api/order'
+
+import * as ResultMessage from '../../api/returnMessage'
+
 import { STATES_ARRAY, WAITING_STATE, CHECK_GUIDE, CHECK_SPOT, ONGOING_STATE, RATE_ORDER } from '../../api/const/touristConst'
 import { SHOW_SPOT_PAGE, SHOW_GUIDE_PAGE, TOURIST_RATE_ORDER } from '../../pages/pages_url'
 import { mockSpot } from '../../api/mock/spot_mock_data'
@@ -96,6 +98,7 @@ export default {
     commonApi.querySpotById(
       this.order.spotId,
       (res) => {
+        this.dLog("取得景点信息成功", res);
         this.spotName = res.name
         this.order.spot = res
         if (!this.order.spot) {

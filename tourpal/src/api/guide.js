@@ -240,7 +240,7 @@ export default {
     acceptOrder(orderId, resolve, reject) {
         this.dLog('accept order 方法')
         if (httpRequest.isTestMode) {
-            resolve('SUCCESS')
+            resolve(returnMessage.SUCCESS)
         } else {
             httpRequest.dRequest(
                 serverUrl.GUIDE_ACCEPT_ORDER, {
@@ -260,7 +260,7 @@ export default {
     },
 
     /**
-     *
+     * 拒绝一个受邀
      * @param {*} orderId
      * @param {*} resolve
      * @param {*} reject
@@ -268,7 +268,7 @@ export default {
     rejectOrder(orderId, resolve, reject) {
         this.dLog('reject order 方法')
         if (httpRequest.isTestMode) {
-            resolve('SUCCESS')
+            resolve(returnMessage.SUCCESS)
         } else {
             httpRequest.dRequest(
                 serverUrl.GUIDE_REJECT_ORDER, {

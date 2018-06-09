@@ -24,6 +24,9 @@ const STATES_ARRAY = [
 ];
 const ORDER_MAX_NUM = 10;
 
+// 查看邀请
+const SELECTED_ORDER_INFO = "selectedOrder";
+
 export {
     GUIDE_ID,
     GUIDE_INFO,
@@ -40,5 +43,7 @@ export {
     STATE_MENU,
     STATES_ARRAY,
     ORDER_MAX_NUM,
-    GET_ALL_TAG
+    GET_ALL_TAG,
+
+    SELECTED_ORDER_INFO
 }

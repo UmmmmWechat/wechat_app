@@ -16,7 +16,10 @@
         :type="guideType"
         :loading="loading"
         :hasMore="hasMore"
-        :orders="orders"/>
+        :orders="orders"
+        @on-accept="handleOrderChanged"
+        @on-cancel="handleOrderChanged"
+        @on-reject="handleOrderChanged"/>
     </div>
   </div>
 </template>
@@ -30,7 +33,7 @@ import { GUIDE_ID } from '../../api/const/guideConst';
 import { STATES_ARRAY, WAITING_STATE } from '../../api/const/guideConst';
 import { GUIDE_TYPE } from '../../api/const/orderConst';
 import { mockGuide } from '../../api/mock/guide_mock_data';
-import { GUIDE_CENTER } from '../pages_url';
+import { GUIDE_CENTER, ROLE_SELECT } from '../pages_url';
 
 export default {
   components: {
@@ -54,7 +57,12 @@ export default {
     this.guide.id = wx.getStorageSync(GUIDE_ID);
     if (!this.guide.id) {
       const errMsg = "向导ID获取失败";
-      this.mountedError(errMsg, fai);
+
+      const url = `/${ROLE_SELECT}`;
+      this.dLog('跳转', url);
+      wx.redirectTo({ url });
+
+      this.showErrorRoast(errMsg);
       return;
     }
 
@@ -137,6 +145,14 @@ export default {
       const url = `/${GUIDE_CENTER}`;
       this.dLog('跳转', url);
       wx.switchTab({ url });
+    },
+    handleOrderChanged (orderId) {
+      this.dLog('一个邀请需要被删除，orderId为', orderId)
+      // 去掉这一个
+      this.orders.splice(
+        this.orders.findIndex(item => item.id === orderId),
+        1
+      )
     }
   }
 
