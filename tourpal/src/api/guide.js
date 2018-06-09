@@ -77,14 +77,8 @@ export default {
                             if (isNewGuide) {
                                 // 没有找到这个导游 需要进行注册
                                 this.dLog('新导游，需要进行注册')
-                                wx.setStorage({
-                                    key: constant.GUIDE_LOGIN_CODE,
-                                    data: res.code,
-                                    success: () => {
-                                        resolve({
-                                            isNewGuide: isNewGuide
-                                        })
-                                    }
+                                resolve({
+                                    isNewGuide: isNewGuide
                                 })
                             } else if (message !== returnMessage.SUCCESS) {
                                 onFail(suc);
@@ -126,26 +120,21 @@ export default {
         if (httpRequest.isTestMode) {
             guideStub.signUp(guide, resolve, reject)
         } else {
-            const code = wx.getStorageSync(constant.GUIDE_LOGIN_CODE);
-            if (!code) {
-                this.dError("未取得 code")
-                wx.login({
-                    success: (res) => {
-                        this.dLog('wx接口登录成功！', res)
-
-                        if (res.code) {
-                            // 发起网络请求
-                            this.requestSignUp(guide, res.code, resolve, reject)
-                        }
-                    },
-                    fail: (fai) => {
-                        const errMsg = "登录失败！";
-                        this.dError(errMsg, fai)
-                        reject({ errMsg, fai });
-                    }
-                })
+            guide.id = wx.getStorageSync(constant.GUIDE_ID);
+            if (!guide.id) {
+                this.dError("未取得 guideId")
+                const onSuccess = (suc) => {
+                    guide.id = wx.getStorageSync(constant.GUIDE_ID);
+                    this.requestSignUp(guide, resolve, reject)
+                }
+                const onFail = (fai) => {
+                    const errMsg = "sign up 请求失败";
+                    this.dError(errMsg, fai)
+                    reject({ errMsg, fai });
+                }
+                this.logIn(onSuccess, onFail)
             } else {
-                this.requestSignUp(guide, code, resolve, reject)
+                this.requestSignUp(guide, resolve, reject)
             }
         }
     },
@@ -153,11 +142,10 @@ export default {
     /**
      * 发起注册请求的方法
      * @param {*} guide 
-     * @param {*} code 
      * @param {*} resolve 
      * @param {*} reject 
      */
-    requestSignUp(guide, code, resolve, reject) {
+    requestSignUp(guide, resolve, reject) {
         this.dLog('requestSignUp方法')
 
         var onFail = (fai) => {
@@ -177,8 +165,7 @@ export default {
 
         httpRequest.dRequest(
             serverUrl.GUIDE_SIGN_UP, {
-                guide,
-                code
+                guide
             },
             httpRequest.POST,
             onSuccess,

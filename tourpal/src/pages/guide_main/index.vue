@@ -49,7 +49,7 @@ export default {
       pageName: 'guide_main'
     }
   },
-  mounted() {
+  onShow() {
     this.loading = false
     this.hasMore = true
 
@@ -97,7 +97,7 @@ export default {
         },
         (rej) => {
           const errMsg = "粗错啦QWQ没有找到你的向导信息";
-          this.mountedError(errMsg, rej);
+          this.showErrorRoast(errMsg, rej);
           return;
         }
       )
@@ -116,6 +116,8 @@ export default {
 
       // 改为正在loading
       this.loading = false
+      
+      this.orders.splice(0, this.orders.length);// 清空原 orders 数组
 
       // 取得等待中的邀请
       guideApi.queryOrders(

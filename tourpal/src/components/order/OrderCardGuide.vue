@@ -131,7 +131,7 @@ export default {
               this.order.id,
               (res) => {
                 wx.showToast({
-                  title: '邀请撤销成功',
+                  title: '邀请拒绝成功',
                   icon: 'none'
                 })
                 this.$emit('on-reject', this.order.id)
@@ -167,7 +167,7 @@ export default {
               this.order.id,
               (res) => {
                 wx.showToast({
-                  title: '邀请成功',
+                  title: '接受成功 请耐心等待',
                   icon: 'none'
                 })
                 this.$emit('on-accept', this.order.id)
