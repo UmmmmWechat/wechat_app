@@ -129,7 +129,7 @@ export default {
 
                         if (res.code) {
                             // 发起网络请求
-                            requestSignUp(guide, res.code, resolve, reject)
+                            this.requestSignUp(guide, res.code, resolve, reject)
                         }
                     },
                     fail: (fai) => {
@@ -139,7 +139,7 @@ export default {
                     }
                 })
             } else {
-                requestSignUp(guide, code, resolve, reject)
+                this.requestSignUp(guide, code, resolve, reject)
             }
         }
     },
@@ -161,7 +161,7 @@ export default {
         }
 
         var onSuccess = (suc) => {
-            this.dLog('sign up 请求成功', res)
+            this.dLog('sign up 请求成功', suc)
             if (suc !== returnMessage.SUCCESS) {
                 onFail(suc);
             } else {

@@ -51,7 +51,7 @@ export default {
             navigationBarBackgroundColor: '#42b970',
             navigationBarTitleText: 'WeChat',
             navigationBarTextStyle: 'white'
-            // enablePullDownRefresh: true
+                // enablePullDownRefresh: true
         },
         "tabBar": {
             backgroundColor: '#ffffff',
