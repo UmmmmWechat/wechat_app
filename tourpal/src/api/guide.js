@@ -418,7 +418,6 @@ export default {
             commonApi.querySpotById(
                 id,
                 (res) => {
-                    this.dLog(`count ${count} length ${length}`)
                     favorSpots.push(res)
                     count++
 

@@ -1,4 +1,5 @@
 import { mockUserAvatorUrl } from "../../assets/image/imgMock";
+import { mockSpotList } from "./spot_mock_data";
 
 var createMockGuide = function(i) {
     return {
@@ -13,7 +14,7 @@ var createMockGuide = function(i) {
         goodFeedbackRate: 80 + i,
         introduction: '简短的介绍',
         numOfFinishedOrder: 10 + i,
-        favorSpots: ['夫子庙', '秦淮河', '玄武湖']
+        favorSpots: mockSpotList
     }
 }
 

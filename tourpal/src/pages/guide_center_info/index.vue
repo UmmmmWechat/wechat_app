@@ -28,7 +28,7 @@
                 </div>
                 <div class="info-item">
                     <span class="title-span">负责景点：</span>
-                    <span class="link">{{ guide.favorSpots }}</span>
+                    <span class="link">{{ getSpotList }}</span>
                 </div>
                 <div class="info-item">
                     <span class="title-span">好评度：</span>
@@ -131,6 +131,18 @@ export default {
     computed: {
         computedGoodRate () {
             return this.guide ? Math.round(this.guide.goodFeedbackRate) : 0
+        },
+        getSpotList() {
+            if (!this.guide || this.guide.favorSpots.length === 0){
+                return '未选择，点击选择景点';
+            } else {  
+                var res = this.guide.favorSpots.map(
+                    (spot) => spot.name
+                ).reduce(
+                    (x, y) => x + '，' + y
+                )
+                return res;
+            }
         }
     },
     methods: {
