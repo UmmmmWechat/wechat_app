@@ -163,8 +163,6 @@ export default {
     this.searchWord = ''
     this.searchOrders.splice(0, this.searchOrders.length)// 清空原 searchOrders 数组
 
-    this.show_gotop = false
-
     this.current = WAITING_STATE
 
     this.hasMoreArray = [

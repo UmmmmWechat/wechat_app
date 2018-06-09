@@ -11,7 +11,6 @@
     enable-back-to-top
     scroll-y
     :scroll-top="scrollTop"
-    @scroll="handleScroll"
     @scrolltoupper="handleScrolltoUpper"
     @scrolltolower="handleScrolltolower">
     <div v-if="type === 'tourist' ">
@@ -38,12 +37,6 @@
         <d-no-more :has-more="hasMore" :color="color"/>
         <d-no-more :has-more="!hasMore || orders.length || loading || firstSearch" :color="color"/>
     </div>
-
-    <section class="to-top-wrapper" v-if="show_gotop">
-        <span id="to-top" @click="scrollToTop">
-            Top
-        </span>
-    </section>
 </scroll-view>
 </template>
 
@@ -96,7 +89,6 @@ export default {
   data () {
     return {
       scrollTop: undefined,
-      show_gotop: false,
       componentName: 'OrderList'
     }
   },
@@ -107,34 +99,15 @@ export default {
     dLog (message, ...optionalParams) {
       console.log(this.componentName, message, optionalParams)
     },
-    handleScroll (event) {
-            // this.dLog("handleScroll 响应");
-
-      var top = event.mp.detail.scrollTop
-
-      if (top > SHOW_TOP_SCROLLTOP) {
-        if (!this.show_gotop) {
-          this.dLog('显示 gotop 浮标', top)
-          this.show_gotop = true
-        }
-      } else {
-        if (this.show_gotop) {
-          this.dLog('隐藏 gotop 浮标', top)
-          this.show_gotop = false
-        }
-      }
-    },
     scrollToTop () {
       this.dLog('scrollToTop 方法调用')
 
-      this.show_gotop = false
-
       this.scrollTop = 0
       setTimeout(
-                () => {
-                  this.scrollTop = undefined
-                }, 500
-            )
+          () => {
+            this.scrollTop = undefined
+          }, 500
+      )
     },
     handleScrolltoUpper (event) {
       this.$emit('scrolltoupper', event)

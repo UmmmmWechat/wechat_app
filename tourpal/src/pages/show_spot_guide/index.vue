@@ -22,7 +22,6 @@
   class="scroll" 
   id="guide-list"
   :scroll-top="scrollTop"
-  @scroll="handleScroll"
   @scrolltolower="getGuides"
   scroll-y
   enable-back-to-top
@@ -67,7 +66,6 @@
       scroll-with-animation
       enable-back-to-top
       :scroll-top="searchScrollTop"
-      @scroll="handleScroll"
       @scrolltolower="handleScrollToSearch">
       <guide-profile-card
       v-for="guide in searchGuides"
@@ -78,12 +76,6 @@
       <d-no-more :has-more="searchHasMore" :color="'white'"/>
       <d-no-more :has-more="!searchHasMore || searchGuides.length || loading || firstSearch" :color="'white'"/>
     </scroll-view>
-  </section>
-
-  <section class="to-top-wrapper" v-if="show_gotop">
-    <a id="to-top" @click="scrollToTop">
-      Top
-    </a>
   </section>
 </div>
 </template>
@@ -127,8 +119,7 @@ export default {
       pageName: 'show_spot_guide',
 
       scrollTop: undefined,
-      searchScrollTop: undefined,
-      show_gotop: false
+      searchScrollTop: undefined
     }
   },
   mounted() {
@@ -154,8 +145,6 @@ export default {
             this.searchHasMore = true
             this.searchWord = '';
             this.searchGuides.splice(0, this.searchGuides.length);// 清空原 searchGuides 数组
-            
-            this.show_gotop = false;
             
             this.getGuides();
           },
@@ -203,27 +192,8 @@ export default {
           title: errMsg
       });
     },
-    handleScroll(event) {
-      // this.dLog("handleScroll 响应");
-
-      var top = event.mp.detail.scrollTop;
-
-      if (top > SHOW_TOP_SCROLLTOP) {
-        if (!this.show_gotop) {
-          this.dLog("显示 gotop 浮标", top);
-          this.show_gotop = true;
-        }
-      } else {
-        if (this.show_gotop) {
-          this.dLog("隐藏 gotop 浮标", top);
-          this.show_gotop = false;
-        }
-      }
-    },
     scrollToTop() {
       this.dLog("scrollToTop 方法调用");
-
-      this.show_gotop = false;
 
       if (this.isSearch) {
           this.searchScrollTop = 0;
@@ -285,7 +255,6 @@ export default {
     handleSearchFocus(event) {
       this.dLog("handleSearchFocus 方法调用", event);
       this.isSearch = true;
-      this.show_gotop = false;
     },
     handleSearchInput(e) {
       this.dLog("handleInput 方法调用", e);
@@ -426,33 +395,6 @@ export default {
 
 .scroll {
   height: 1000rpx;
-}
-
-.to-top-wrapper {
-  position: fixed;
-  left: 5%;
-  bottom: 10%;
-  opacity: 0.7;
-}
-
-#to-top {
-  height: 100rpx;
-  width: 100rpx;
-  border-radius: 50%;
-  /* border: solid #42b9704d;
-  box-shadow: #42b9704d 0 0 5px;
-  background: #a2ddb9af; */
-  border: solid #42b970;
-  box-shadow: #42b970 0 0 5px;
-  background: #a2ddb9;
-  
-  color: #314237af;
-  font-weight: bold;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;/*垂直居中*/
-  justify-content: center;/*水平居中*/
 }
 </style>
 <style scoped src="../../assets/style/d-head.css"/>

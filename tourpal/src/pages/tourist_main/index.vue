@@ -46,7 +46,6 @@
   scroll-with-animation
   enable-back-to-top
   :scroll-top="scrollTop"
-  @scroll="handleScroll"
   @scrolltolower="handleGetMoreSpots">
     <spot-card
     v-for="spot in spots"
@@ -88,7 +87,6 @@
       scroll-with-animation
       enable-back-to-top
       :scroll-top="searchScrollTop"
-      @scroll="handleScroll"
       @scrolltolower="handleScrollToSearch">
       <spot-card
       v-for="spot in searchSpots"
@@ -98,12 +96,6 @@
       <d-no-more :has-more="searchHasMore" :color="'white'"/>
       <d-no-more :has-more="!searchHasMore || searchSpots.length || loading || firstSearch" :color="'white'"/>
     </scroll-view>
-  </section>
-
-  <section class="to-top-wrapper" v-if="show_gotop">
-    <span id="to-top" @click="toTop">
-      Top
-    </span>
   </section>
 </div>
 </template>
@@ -156,8 +148,7 @@ export default {
       pageName: 'tourist_main',
 
       scrollTop: undefined,
-      searchScrollTop: undefined,
-      show_gotop: false
+      searchScrollTop: undefined
     }
   },
   computed: {
@@ -198,8 +189,6 @@ export default {
     this.searchWord = '';
     this.searchSpots.splice(0, this.searchSpots.length);// 清空原 searchSpots 数组
 
-    this.show_gotop = false;
-
     this.getSpots();
   },
   methods: {
@@ -218,34 +207,8 @@ export default {
           title: errMsg
       });
     },
-    handleScroll(event) {
-      // this.dLog("handleScroll 响应");
-
-      var top = event.mp.detail.scrollTop;
-
-      if (top > SHOW_TOP_SCROLLTOP) {
-        if (!this.show_gotop) {
-          this.dLog("显示 gotop 浮标", top);
-          this.show_gotop = true;
-        }
-      } else {
-        if (this.show_gotop) {
-          this.dLog("隐藏 gotop 浮标", top);
-          this.show_gotop = false;
-        }
-      }
-    },
-    toTop() {
-      if (this.isSearch) {
-        this.searchScrollToTop();
-      } else {
-        this.scrollToTop();
-      }
-    },
     searchScrollToTop() {
       this.dLog("searchScrollToTop 方法调用");
-
-      this.show_gotop = false;
 
       this.searchScrollTop = 0;
       setTimeout(
@@ -260,8 +223,6 @@ export default {
     },
     scrollToTop() {
       this.dLog("scrollToTop 方法调用");
-
-      this.show_gotop = false;
 
       this.scrollTop = 0;
       setTimeout(
@@ -372,8 +333,6 @@ export default {
       this.spots.splice(0, this.spots.length);// 清空原 spot 数组
 
       // 上滑到顶部
-      this.show_gotop = false;
-
       this.scrollTop = 0;
       setTimeout(
         () => {
@@ -418,7 +377,6 @@ export default {
     handleSearchFocus(event) {
       this.dLog("handleSearchFocus 方法调用", event);
       this.isSearch = true;
-      this.show_gotop = false;
     },
     handleSearchInput(e) {
       this.dLog("handleInput 方法调用", e);
@@ -572,30 +530,6 @@ z-index: 100;
 
 .scroll {
   height: 1200rpx;
-}
-
-.to-top-wrapper {
-  position: fixed;
-  left: 5%;
-  bottom: 10%;
-  opacity: 0.7;
-}
-
-#to-top {
-  height: 100rpx;
-  width: 100rpx;
-  border-radius: 50%;
-  border: solid #42b970;
-  box-shadow: #42b970 0 0 5px;
-  background: #a2ddb9;
-
-  color: #314237af;
-  font-weight: bold;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;/*垂直居中*/
-  justify-content: center;/*水平居中*/
 }
 </style>
 
