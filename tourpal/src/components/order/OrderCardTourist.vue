@@ -117,14 +117,15 @@ export default {
       },
       onGetGuideFail
     )
-
-    if (this.order.state === this.ongoing) {
-      const today = new Date().toLocaleDateString();
-      this.rateAble = today > this.order.travelDate;
-    }
     
     this.order.generatedDate = new Date(this.order.generatedDate).toLocaleDateString()
     this.order.travelDate = new Date(this.order.travelDate).toLocaleDateString()
+
+    if (this.order.state === this.ongoing) {
+      const today = new Date().toLocaleDateString();
+      // this.rateAble = today > this.order.travelDate;
+      this.rateAble = true;
+    }
   },
   methods: {
     dLog(message, ...optionalParams) {

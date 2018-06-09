@@ -1,21 +1,23 @@
 <template>
   <div id="out">
-    <div id="rate-spot" class="rate-item">
+    <div v-if="order.spot" id="rate-spot" class="rate-item">
       <spot-card 
       :spot="order.spot" 
       :noAction="true"/>
-      <div class="form-item">
-        <span class="label">给景点评分</span>
-        <slider :min="1" :max="5" show-value @change="rateSpot = $event.target.value;"/>
-      </div>
     </div>
-    <div id="rate-guide" class="rate-item">
+    <div v-if="order.guide" id="rate-guide" class="rate-item">
       <guide-card 
       :guide="order.guide"
       :invitable="false"/>
+    </div>
+    <div>
+      <div class="form-item">
+        <span class="label">给景点评分</span>
+        <slider :min="0" :max="5" show-value @change="rateSpot = $event.target.value;"/>
+      </div>
       <div class="form-item">
         <span class="label">给向导评分</span>
-        <slider :min="1" :max="5" show-value  @change="rateGuide = $event.target.value;"/>
+        <slider :min="0" :max="5" show-value  @change="rateGuide = $event.target.value;"/>
       </div>
     </div>
     <d-textarea label="留言" placeholder="请留下你对这次旅行的看法" />

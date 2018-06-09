@@ -15,8 +15,8 @@
 
 <script>
 import GuideApi from "../../api/guide"
-import * as constant from "./constant"
 import { mockUserAvatorUrl } from '../../assets/image/imgMock';
+import { GUIDE_ID, GUIDE_INFO } from '../../api/const/guideConst';
 
 export default {
     data() {
@@ -28,7 +28,7 @@ export default {
     },
     mounted() {
         wx.getStorage({
-            key: constant.GUIDE_ID,
+            key: GUIDE_ID,
             success: (res) => {
                 console.log("取得向导ID成功", res)
                 this.userId = res.data
@@ -48,7 +48,7 @@ export default {
                     this.avatar = guide.avatar
                     this.realName = guide.realName
                     wx.setStorage({
-                        key: constant.GUIDE_INFO,
+                        key: GUIDE_INFO,
                         data: guide,
                         success: (suc) => {
                             console.log("存储导游信息成功", suc)

@@ -42,9 +42,9 @@
 </template>
 
 <script>
-import { INVITE_GUIDE_INFO } from './constant';
 import { TOURIST_INVITE_GUIDE } from '../../pages/pages_url';
 import { mockGuide } from '../../api/mock/guide_mock_data';
+import { INVITE_GUIDE_INFO } from '../../api/const/guideConst';
 
 export default {
     props: {
