@@ -38,7 +38,7 @@
 
     <div 
     class="foot"
-    v-if="order.state === finished">
+    v-if="order.state === ongoing && rateAble">
       <button 
       class="d-a" 
       size="mini"
@@ -55,7 +55,7 @@ import commonApi from '../../api/common';
 import touristApi from '../../api/tourist';
 import * as ResultMessage from '../../api/returnMessage'
 import orderApi from '../../api/order'
-import { STATES_ARRAY, WAITING_STATE, FINISHED_STATE, CHECK_GUIDE_ID, CHECK_SPOT_ID } from '../tourist/constant';
+import { STATES_ARRAY, WAITING_STATE, CHECK_GUIDE_ID, CHECK_SPOT_ID, ONGOING_STATE } from '../tourist/constant';
 import { SHOW_SPOT_PAGE, SHOW_GUIDE_PAGE } from '../../pages/pages_url';
 import { mockSpot } from '../../api/mock/spot_mock_data';
 import { mockGuide } from '../../api/mock/guide_mock_data';
@@ -76,45 +76,63 @@ export default {
       guide: mockGuide,
       componentName: 'OrderCardTourist',
       waiting: STATES_ARRAY[WAITING_STATE],
-      finished: STATES_ARRAY[FINISHED_STATE],
+      ongoing: STATES_ARRAY[ONGOING_STATE],
+      rateAble: false,
 
       errorOccur: false
     }
   },
   mounted () {
     this.errorOccur = false;
+    this.rateAble = false;
+
+    // 取得 spot
+    const onGetSpotFail = (fai) => {
+      this.dError("取得spot失败", fai);
+      this.errorOccur = true;
+    }
 
     commonApi.querySpotById(
       this.order.spotId,
       (res) => {
         this.spot = res;
         if (!this.spot) {
-          this.dError("取得spot失败", res);
+          onGetSpotFail(res);
         }
       },
-      (err) => {
-          this.dError("取得spot失败", err);
-      }
+      onGetSpotFail
     )
+
+    // 取得导游
+    const onGetGuideFail = (fai) => {
+      this.dError("取得guide失败", fai);
+      this.errorOccur = true;
+    }
+
     commonApi.queryGuideById(
       this.order.guideId,
       (res) => {
         this.guide = res;
         if (!this.guide) {
-          this.dError("取得guide失败", res);
+          onGetGuideFail(res);
         }
       },
-      (err) => {
-          this.dError("取得guide失败", err);
-      }
+      onGetGuideFail
     )
+
+    if (this.order.state === this.ongoing) {
+      const today = new Date().toLocaleDateString();
+      this.rateAble = today > this.order.travelDate;
+    }
+    
+    this.order.generatedDate = new Date(this.order.generatedDate).toLocaleDateString()
+    this.order.travelDate = new Date(this.order.travelDate).toLocaleDateString()
   },
   methods: {
     dLog(message, ...optionalParams) {
         console.log(this.componentName, message, optionalParams);
     },
     dError(message, ...optionalParams) {
-        this.errorOccur = true;
         console.error(this.componentName, message, optionalParams);
     },
     onSpotNameClicled(event) {
@@ -145,7 +163,7 @@ export default {
     },
     handleCancel (event) {
       wx.showModal({
-        title: '你确定要撤回这个邀请么？',
+        title: '确定要撤回这个邀请么？',
         success: (res) => {
           console.log(res)
           if (res.confirm) {

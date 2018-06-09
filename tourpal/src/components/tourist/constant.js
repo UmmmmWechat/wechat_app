@@ -1,4 +1,4 @@
-import { WAITING, ONGOING, REJECTED, CANCELED, FINISHED, TIMEOUT } from "../../api/const/orderConst";
+import OrderState from '../../utils/OrderState'
 
 const GUIDE_MAX_NUM = 10;
 const GET_ALL_TAG = -1;
@@ -12,13 +12,22 @@ const FINISHED_STATE = 2;
 const INVALID_STATE = 3;
 const STATE_SIZE = 4;
 const STATE_MENU = ['等待中', '进行中', '已完成', '失效'];
-const STATES_ARRAY = [WAITING, ONGOING, FINISHED, 'INVALID'];
+const STATES_ARRAY = [
+    OrderState.WAITING,
+    OrderState.ONGOING,
+    OrderState.FINISHED,
+    'INVALID'
+];
 const CANCELED_STATE = 0;
 const REJECTED_STATE = 1;
 const TIMEOUT_STATE = 2;
 const INVALID_STATE_SIZE = 3;
 const INVALID_STATE_MENU = ['取消', '拒绝', '超时'];
-const INVALID_STATE_ARRAY = [CANCELED, REJECTED, TIMEOUT];
+const INVALID_STATE_ARRAY = [
+    OrderState.CANCELED,
+    OrderState.REJECTED,
+    OrderState.TIMEOUT
+];
 const ORDER_MAX_NUM = 10;
 
 // 查看订单详情

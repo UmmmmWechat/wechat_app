@@ -4,6 +4,9 @@
     <div id="timeline-wrapper">
       <d-timeline :events="events"/>
     </div>
+    <d-loading :loading="loading"/>
+    <d-no-more :has-more="hasMore" />
+    <d-no-more :has-more="!hasMore || events.length || loading"/>
   </div>
 </template>
 
@@ -12,6 +15,7 @@ import touristApi from '../../api/tourist'
 import commonApi from '../../api/common'
 
 import DLoading from '../../components/common/DLoading'
+import DNoMore from '../../components/common/DNoMore';
 import DTimeline from '../../components/common/DTimeline'
 import {TOURIST_ID} from "../../components/tourist/constant";
 import OrderState from  '../../utils/OrderState'
@@ -19,13 +23,14 @@ import OrderState from  '../../utils/OrderState'
 export default {
   components: {
     DLoading,
+    DNoMore,
     DTimeline
   },
   data () {
     return {
       events: [],
       touristId: '',
-      isLoading: false,
+      loading: false,
       hasMore: true,
       pageName: "tourist_travel_record"
     }
@@ -45,18 +50,6 @@ export default {
 
     // 获取 events
     this.getEvents();
-  },
-  computed: {
-    // events () {
-    //   return this.orders.map(
-    //     item => {
-    //       return {
-    //         date: item.travelDate,
-    //         content: ``
-    //       }
-    //     }
-    //   )
-    // }
   },
   methods: {
     dLog (message, ...optionalParams) {

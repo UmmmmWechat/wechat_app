@@ -53,17 +53,10 @@ import DNoMore from '../../components/common/DNoMore';
 import DLoading from '../../components/common/DLoading';
 import OrderListTourist from '../../components/order/OrderList';
 
-import { INVALID_STATE_MENU, CANCELED_STATE, INVALID_STATE_ARRAY } from '../../components/tourist/constant';
+import { INVALID_STATE_MENU, CANCELED_STATE, INVALID_STATE_ARRAY, TOURIST_ID } from '../../components/tourist/constant';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
 
 export default {
-  props: {
-      touristId: {
-          type: String,
-          default:MOCK_TOURIST_ID,
-          required: true
-      }
-  },
   components: {
     DNavigatorBar,
     OrderListTourist,
@@ -72,7 +65,7 @@ export default {
   },
   data () {
     return {
-
+      touristId: MOCK_TOURIST_ID,
       menus: INVALID_STATE_MENU,
       current: CANCELED_STATE,
 
@@ -90,6 +83,8 @@ export default {
     }
   },
   mounted() {
+    this.touristId = wx.getStorageSync(TOURIST_ID);
+
     this.queryOrders();
   },
   methods: {
