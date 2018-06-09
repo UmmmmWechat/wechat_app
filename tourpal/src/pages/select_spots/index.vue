@@ -123,6 +123,7 @@ export default {
     // 初始化数据
     this.firstSearch = true
     this.spots = []
+    this.selectedSpots = []
     this.searchWord = ''
     this.loading = false
     this.hasMore = true
@@ -147,12 +148,12 @@ export default {
     },
     refreshFavorSpots() {
       this.dLog("refreshFavorSpots 方法响应");
-      this.spots.splice(0, this.spots.length);// 清空原 spot 数组
+      this.selectedSpots.splice(0, this.selectedSpots.length);// 清空原 spot 数组
 
-      this.spots = wx.getStorageSync(SELECTED_SPOTS);
-      if (!this.spots) {
+      this.selectedSpots = wx.getStorageSync(SELECTED_SPOTS);
+      if (!this.selectedSpots) {
         this.dLog("没找到 favorSpots");
-        this.spots = [];
+        this.selectedSpots = [];
       }
     },
     handleScrollToSearch(event) {
@@ -241,6 +242,15 @@ export default {
     handleSelectSpot (spot) {
       this.dLog("handleSelectSpot 方法响应", spot);
 
+      if (this.selectedSpots.findIndex(
+        item => item.id === spot.id
+      ) !== -1) {
+        // 已经选过了
+        const errMsg = '这个景点已经被你承包啦！'
+        this.showErrorRoast(errMsg)
+        return
+      }
+
       this.selectedSpots.push(spot);
       this.spots.splice(
         this.spots.findIndex(
@@ -277,12 +287,6 @@ export default {
           this.dLog(sucMsg, this.selectedSpots);
 
           wx.navigateBack();
-
-          // 输出提示信息 
-          wx.showToast({
-              icon: 'none',
-              title: sucMsg
-          });
 
           // 回滚
           this.scrollToTop();

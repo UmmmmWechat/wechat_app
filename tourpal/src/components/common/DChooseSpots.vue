@@ -1,7 +1,7 @@
 /* 事件有 */
 <template>
   <div id="wrapper">
-      <div class="label" v-if="!label">
+      <div class="label" v-if="label">
           {{label}}
       </div>
       <div id="input-wrapper">
@@ -45,7 +45,7 @@ export default {
   methods: {
       handleChooseSpots (event) {
         const url = `/${SELECT_SPOTS}`;
-        this.dLog('跳转', url);
+        console.log('DchooseSpots 跳转', url);
         wx.navigateTo({ url });
       }
   }

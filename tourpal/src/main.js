@@ -35,7 +35,7 @@ export default {
             'pages/guide_calendar/main',
             'pages/guide_center/main',
             'pages/guide_center_info/main',
-            '^pages/guide_center_experience/main',
+            'pages/guide_center_experience/main',
 
             'pages/select_spots/main',
 

@@ -6,6 +6,7 @@ import * as returnMessage from './returnMessage'
 import * as httpRequest from './httpRequestApi'
 
 import guideStub from './guideStub'
+import commonApi from './common'
 import { MOCK_ORDERS } from './mock/order_mock_data'
 
 const apiName = 'guideApi'
@@ -162,6 +163,9 @@ export default {
                 resolve()
             }
         }
+
+        // 将spot换为spot
+        guide.favorSpots = this.transSpotToSpotID(guide.favorSpots)
 
         httpRequest.dRequest(
             serverUrl.GUIDE_SIGN_UP, {
@@ -327,7 +331,7 @@ export default {
                 httpRequest.GET,
                 (res) => {
                     this.dLog('query user info 请求成功', res)
-                    resolve(res)
+                    this.transSpotIDToSpot(res, resolve, reject)
                 },
                 (err) => {
                     this.dError('query user info 请求失败', err)
@@ -381,5 +385,58 @@ export default {
                 }
             )
         }
+    },
+
+    /**
+     * 将spot数组转换为spotid数组
+     * @param {*} favorSpots 
+     */
+    transSpotToSpotID(favorSpots) {
+        this.dLog("transSpotToSpotID 方法调用", favorSpots)
+        const favorSpotsID = []
+        for (let key in favorSpots) {
+            favorSpotsID.push(favorSpots[key].id)
+        }
+        this.dLog("transSpotToSpotID 转换后", favorSpotsID)
+        return favorSpotsID
+    },
+
+    /**
+     * 将spotid数组转换为spot数组
+     * @param {*} guide 
+     * @param {*} resolve 
+     * @param {*} reject 
+     */
+    transSpotIDToSpot(guide, resolve, reject) {
+        this.dLog("transSpotIDToSpot 方法调用", guide)
+
+        let count = 0
+        const length = guide.favorSpots.length
+        let favorSpots = []
+
+        let transSingleID = (id) => {
+            commonApi.querySpotById(
+                id,
+                (res) => {
+                    this.dLog(`count ${count} length ${length}`)
+                    favorSpots.push(res)
+                    count++
+
+                    if (count < length) {
+                        transSingleID(guide.favorSpots[count])
+                    } else {
+                        guide.favorSpots = favorSpots
+                        this.dLog("transSpotIDToSpot 转换后", guide)
+                        resolve(guide)
+                    }
+                },
+                (rej) => {
+                    // 取得景点信息出错
+                    reject()
+                }
+            )
+        }
+
+        transSingleID(guide.favorSpots[count])
     }
 }
