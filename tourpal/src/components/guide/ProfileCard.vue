@@ -15,14 +15,14 @@
 <script>
 import GuideApi from "../../api/guide"
 
-import { mockUserAvatorUrl } from '../../assets/image/imgMock';
 import { GUIDE_ID, GUIDE_INFO } from '../../api/const/guideConst';
 import { ROLE_SELECT } from '../../pages/pages_url';
+import { MOCK_USER_AVATOR_URL } from '../../api/const/imgConst';
 
 export default {
     data() {
         return {
-            avatar: mockUserAvatorUrl,
+            avatar: MOCK_USER_AVATOR_URL,
             realName: "体验向导",
             guideId: "",
             componentName: 'ProfileCard'

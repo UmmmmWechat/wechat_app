@@ -121,7 +121,6 @@ import spotApi from '../../api/spot';
 import { TOURIST_ID } from '../../api/const/touristConst';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
 import { TOURIST_CENTER, ROLE_SELECT } from '../pages_url';
-import { mockUserAvatorUrl } from '../../assets/image/imgMock';
 
 const SHOW_TOP_SCROLLTOP = 700;
 

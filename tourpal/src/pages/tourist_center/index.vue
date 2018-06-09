@@ -20,7 +20,6 @@
 import touristApi from '../../api/tourist';
 import TouristProfileCard from '../../components/tourist/ProfileCard';
 
-import { mockUserAvatorUrl } from '../../assets/image/imgMock';
 import { TOURIST_TRAVEL_RECORDS, TOURIST_ORDERS } from '../pages_url';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
 import { TOURIST_ID } from '../../api/const/touristConst';

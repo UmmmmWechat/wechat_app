@@ -105,9 +105,9 @@ import DTextArea from '../../components/common/DTextarea'
 import DChooseSpots from '../../components/common/DChooseSpots'
 
 import guideApi from '../../api/guide'
-import { mockUserAvatorUrl } from '../../assets/image/imgMock';
 import { GUIDE_INFO, SELECTED_SPOTS } from '../../api/const/guideConst';
 import { mockGuide } from '../../api/mock/guide_mock_data';
+import { MOCK_USER_AVATOR_URL } from '../../api/const/imgConst';
 
 export default {
     components: {
@@ -148,7 +148,7 @@ export default {
 
         this.editmode = false
         this.modifyGuide = this.guide
-        this.hasOfferedInfo = this.guide.avatar !== mockUserAvatorUrl;
+        this.hasOfferedInfo = this.guide.avatar !== MOCK_USER_AVATOR_URL;
 
         // 保存景点信息
         wx.setStorageSync(SELECTED_SPOTS, this.guide.favorSpots)

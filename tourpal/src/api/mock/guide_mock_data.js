@@ -1,10 +1,10 @@
-import { mockUserAvatorUrl } from "../../assets/image/imgMock";
 import { mockSpotList } from "./spot_mock_data";
+import { MOCK_USER_AVATOR_URL } from "../const/imgConst";
 
 var createMockGuide = function(i) {
     return {
         id: "testGuideID" + i,
-        avatar: mockUserAvatorUrl,
+        avatar: MOCK_USER_AVATOR_URL,
         realName: '体验导游' + i,
         idCard: "000000199001010001",
         age: 18 + i,
