@@ -118,7 +118,7 @@ import DNoMore from '../../components/common/DNoMore';
 import touristApi from '../../api/tourist';
 import spotApi from '../../api/spot';
 
-import { TOURIST_ID } from '../../components/tourist/constant';
+import { TOURIST_ID } from '../../api/const/touristConst';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
 import { TOURIST_CENTER, ROLE_SELECT } from '../pages_url';
 import { mockUserAvatorUrl } from '../../assets/image/imgMock';

@@ -17,7 +17,7 @@ import commonApi from '../../api/common'
 import DLoading from '../../components/common/DLoading'
 import DNoMore from '../../components/common/DNoMore';
 import DTimeline from '../../components/common/DTimeline'
-import {TOURIST_ID} from "../../components/tourist/constant";
+import {TOURIST_ID} from "../../api/const/touristConst";
 import OrderState from  '../../utils/OrderState'
 
 export default {

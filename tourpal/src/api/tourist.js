@@ -1,4 +1,4 @@
-import * as constant from "./../components/tourist/constant";
+import * as constant from "./../api/const/touristConst";
 import * as serverUrl from "./apiUrl";
 import * as httpRequest from "./httpRequestApi";
 import * as returnMessage from "./returnMessage";

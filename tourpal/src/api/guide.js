@@ -1,6 +1,6 @@
 import * as mockData from './mock/guide_mock_data'
 
-import * as constant from './../components/guide/constant'
+import * as constant from './../api/const/guideConst'
 import * as serverUrl from './apiUrl'
 import * as returnMessage from './returnMessage'
 import * as httpRequest from './httpRequestApi'

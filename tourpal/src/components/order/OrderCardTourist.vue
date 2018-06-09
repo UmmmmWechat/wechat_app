@@ -10,14 +10,14 @@
     </div>
 
     <div id="body">
-      <div>
+      <div v-if="order.spot">
         <span class="title-span">景点：</span>
-        <span class="link" @click="onSpotNameClicled">{{ spot.name }}</span>
+        <span class="link" @click="onSpotNameClicled">{{ order.spot.name }}</span>
       </div>
 
-      <div>
+      <div v-if="order.guide">
         <span class="title-span">向导：</span>
-        <span class="link" @click="onGuideNameClicled">{{ guide.realName }}</span>
+        <span class="link" @click="onGuideNameClicled">{{ order.guide.realName }}</span>
       </div>
 
       <div><span class="title-span">邀请日期：</span>{{ order.generatedDate }}</div>
@@ -55,8 +55,8 @@ import commonApi from '../../api/common';
 import touristApi from '../../api/tourist';
 import * as ResultMessage from '../../api/returnMessage'
 import orderApi from '../../api/order'
-import { STATES_ARRAY, WAITING_STATE, CHECK_GUIDE_ID, CHECK_SPOT_ID, ONGOING_STATE } from '../tourist/constant';
-import { SHOW_SPOT_PAGE, SHOW_GUIDE_PAGE } from '../../pages/pages_url';
+import { STATES_ARRAY, WAITING_STATE, CHECK_GUIDE, CHECK_SPOT, ONGOING_STATE, RATE_ORDER } from '../../api/const/touristConst';
+import { SHOW_SPOT_PAGE, SHOW_GUIDE_PAGE, TOURIST_RATE_ORDER } from '../../pages/pages_url';
 import { mockSpot } from '../../api/mock/spot_mock_data';
 import { mockGuide } from '../../api/mock/guide_mock_data';
 
@@ -72,8 +72,6 @@ export default {
   },
   data () {
     return {
-      spot: mockSpot,
-      guide: mockGuide,
       componentName: 'OrderCardTourist',
       waiting: STATES_ARRAY[WAITING_STATE],
       ongoing: STATES_ARRAY[ONGOING_STATE],
@@ -95,8 +93,8 @@ export default {
     commonApi.querySpotById(
       this.order.spotId,
       (res) => {
-        this.spot = res;
-        if (!this.spot) {
+        this.order.spot = res;
+        if (!this.order.spot) {
           onGetSpotFail(res);
         }
       },
@@ -112,8 +110,8 @@ export default {
     commonApi.queryGuideById(
       this.order.guideId,
       (res) => {
-        this.guide = res;
-        if (!this.guide) {
+        this.order.guide = res;
+        if (!this.order.guide) {
           onGetGuideFail(res);
         }
       },
@@ -138,10 +136,11 @@ export default {
     onSpotNameClicled(event) {
       this.dLog("onSpotNameClicled 方法响应", event);
       wx.setStorage({
-        key: CHECK_SPOT_ID,
-        data: this.order.spotId,
+        key: CHECK_SPOT,
+        data: this.order.spot,
         success: (suc) => {
-          this.dLog("guide 保存成功", suc);
+          this.dLog("spot 保存成功", suc);
+
           const url = `/${SHOW_SPOT_PAGE}`;
           this.dLog('跳转', url);
           wx.navigateTo({ url });
@@ -151,8 +150,8 @@ export default {
     onGuideNameClicled(event) {
       this.dLog("onGuideNameClicled 方法响应", event);
       wx.setStorage({
-        key: CHECK_GUIDE_ID,
-        data: this.order.guideId,
+        key: CHECK_GUIDE,
+        data: this.order.guide,
         success: (suc) => {
           this.dLog("guide 保存成功", suc);
           const url = `/${SHOW_GUIDE_PAGE}`;
@@ -194,12 +193,12 @@ export default {
     },
     handleRate (event) {
       wx.setStorage({
-        key: 'order',
+        key: RATE_ORDER,
         data: this.order,
         success: () => {
-          wx.navigateTo({
-            url: '/pages/tourist_rate_order/main'
-          })
+          const url = `/${TOURIST_RATE_ORDER}`;
+          this.dLog('跳转', url);
+          wx.redirectTo({ url });
         }
       })
     }

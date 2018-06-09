@@ -2,7 +2,7 @@
   <div id="out">
     <div id="rate-spot" class="rate-item">
       <spot-card 
-      :spot="spot" 
+      :spot="order.spot" 
       :noAction="true"/>
       <div class="form-item">
         <span class="label">给景点评分</span>
@@ -11,7 +11,7 @@
     </div>
     <div id="rate-guide" class="rate-item">
       <guide-card 
-      :guide="guide"
+      :guide="order.guide"
       :invitable="false"/>
       <div class="form-item">
         <span class="label">给向导评分</span>
@@ -33,6 +33,7 @@ import touristApi from '../../api/tourist'
 import SpotCard from '../../components/spot/SpotCard'
 import GuideCard from '../../components/guide/GuideProfileCard'
 import DTextarea from '../../components/common/DTextarea'
+import { RATE_ORDER } from '../../api/const/touristConst';
 export default {
   components: {
     SpotCard,
@@ -41,30 +42,22 @@ export default {
   },
   data () {
     return {
-      spot: {},
-      guide: {},
       order: {},
       rateSpot: 1,
       rateGuide: 1
     }
   },
   mounted () {
-    wx.getStorage({
-      key: 'order',
-      success: (order) => {
-        this.order = order;
-        touristApi.querySpotById(
-          order.spotId,
-          (spot) => this.spot = spot,
-          (err) => {}
-        );
-        touristApi.queryGuideById(
-          order.guideId,
-          (guide) => this.guide = guide,
-          (err) => {}
-        );
-      }
-    })
+    // 取得 order
+    this.order = wx.getStorageSync(RATE_ORDER);
+    if (!this.order) {
+      // 跳回
+      wx.navigateBack();
+
+      // 未找到向导ID
+      this.showErrorRoast("粗错啦QWQ没有找到你的邀请");
+      return;
+    }
   },
   methods: {
     handleSumitRating (event) {

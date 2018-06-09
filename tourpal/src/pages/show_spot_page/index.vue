@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { CHECK_SPOT_ID } from '../../components/tourist/constant'
+import { CHECK_SPOT } from '../../api/const/touristConst'
 import SpotCard from '../../components/spot/SpotCard'
 import commonApi from '../../api/common'
 import spot from '../../api/spot'
@@ -19,26 +19,22 @@ export default {
   },
   data () {
     return {
-      spotId: undefined,
       pageName: 'show_spot_page',
       spot: {}
     }
   },
   mounted () {
-    this.spotId = wx.getStorageSync(CHECK_SPOT_ID)
-    // this.spotId = 1 // 测试的时候 我写死是 1
-    if (!this.spotId) {
+    // 取得 Spot
+    this.spot = wx.getStorageSync(CHECK_SPOT)
+    if (!this.spot) {
       // 跳回
       wx.navigateBack()
 
-      // 未找到景点ID
-      this.showErrorRoast('粗错啦QWQ');
+      // 未找到景点
+      this.showErrorRoast('粗错啦QWQ没找到你要的景点');
 
       return
     }
-
-    // TODO 取得 Spot
-    this.querySpot()
   },
   methods: {
     onShareAppMessage () {
@@ -58,23 +54,6 @@ export default {
         icon: 'none',
         title: errMsg
       })
-    },
-    querySpot () {
-      this.dLog(`querySpot 方法调用 spotId: ${this.spotId}`)
-      commonApi.querySpotById(
-        this.spotId,
-        res => {
-          this.dLog("取得景点信息成功", res);
-          this.spot = res;
-        },
-        err => {
-          // 跳回
-          wx.navigateBack();
-
-          const errMsg = "没找到景点信息QWQ";
-          this.showErrorRoast(errMsg, err);
-        }
-      )
     }
   }
 }

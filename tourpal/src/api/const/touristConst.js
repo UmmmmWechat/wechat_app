@@ -31,8 +31,11 @@ const INVALID_STATE_ARRAY = [
 const ORDER_MAX_NUM = 10;
 
 // 查看订单详情
-const CHECK_SPOT_ID = "dCheckSpotID";
-const CHECK_GUIDE_ID = "dCheckGuideID";
+const CHECK_SPOT = "dCheckSpot";
+const CHECK_GUIDE = "dCheckGuide";
+
+// 订单操作
+const RATE_ORDER = "dRateOrder";
 
 export {
     TOURIST_ID,
@@ -55,6 +58,7 @@ export {
     INVALID_STATE_ARRAY,
 
     ORDER_MAX_NUM,
-    CHECK_SPOT_ID,
-    CHECK_GUIDE_ID
+    CHECK_SPOT,
+    CHECK_GUIDE,
+    RATE_ORDER
 }

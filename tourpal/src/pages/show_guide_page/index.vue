@@ -36,12 +36,11 @@
 </template>
 
 <script>
-import { CHECK_GUIDE_ID } from '../../components/tourist/constant'
+import { CHECK_GUIDE } from '../../api/const/touristConst'
 import commonApi from '../../api/common'
 export default {
   data() {
     return {
-      guideId: undefined,
       pageName: "show_guide_page",
       guide: {},
       phoneActionSheetItemList: ['拨打电话', '保存到联系人'],
@@ -49,19 +48,16 @@ export default {
     }
   },
   mounted() {
-    this.guideId = wx.getStorageSync(CHECK_GUIDE_ID);
-    // this.guideId = 1
-    if (!this.guideId) {
+    // 取得 Guide
+    this.guide = wx.getStorageSync(CHECK_GUIDE);
+    if (!this.guide) {
       // 跳回
       wx.navigateBack();
 
       // 未找到向导ID
-      this.showErrorRoast("粗错啦QWQ");
+      this.showErrorRoast("粗错啦QWQ没有找到你要的向导");
       return;
     }
-
-    // TODO 取得 Guide
-    this.queryGuide();
   },
   methods: {
     handleClickPhone () {
@@ -124,23 +120,6 @@ export default {
           icon: 'none',
           title: errMsg
       });
-    },
-    queryGuide () {
-      this.dLog(`queryGuide 方法调用 guideId: ${this.guideId}`);
-      commonApi.queryGuideById(
-        this.guideId,
-        res => {
-          this.dLog("取得向导信息成功", res);
-          this.guide = res;
-        },
-        err => {
-          // 跳回
-          wx.navigateBack();
-
-          const errMsg = "没找到向导信息QWQ";
-          this.showErrorRoast(errMsg, err);
-        }
-      )
     }
   }
 }

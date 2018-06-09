@@ -105,7 +105,7 @@ import DLoading from '../../components/common/DLoading';
 import OrderListTourist from '../../components/order/OrderList';
 import InvalidTouristOrderPage from '../../components/tourist/InvalidTouristOrderPage';
 
-import { STATE_MENU, STATES_ARRAY, TOURIST_ID, WAITING_STATE, INVALID_STATE } from '../../components/tourist/constant';
+import { STATE_MENU, STATES_ARRAY, TOURIST_ID, WAITING_STATE, INVALID_STATE } from '../../api/const/touristConst';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
 import { ROLE_SELECT } from '../pages_url';
 

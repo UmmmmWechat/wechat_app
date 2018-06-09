@@ -1,5 +1,5 @@
 import * as mockData from "./mock/tourist_mock_data";
-import * as constant from "./../components/tourist/constant";
+import * as constant from "./../api/const/touristConst";
 import { createMockGuide } from "./mock/guide_mock_data";
 import { createMockOrder } from "./mock/order_mock_data";
 

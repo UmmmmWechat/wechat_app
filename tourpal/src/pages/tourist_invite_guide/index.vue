@@ -47,10 +47,10 @@ import DDatePicker from '../../components/common/DDatePicker';
 import touristApi from '../../api/tourist';
 
 import { mockGuide } from '../../api/mock/guide_mock_data';
-import { INVITE_GUIDE_INFO } from '../../components/guide/constant';
+import { INVITE_GUIDE_INFO } from '../../api/const/guideConst';
 import { formatDate } from '../../utils/dUtils';
 import { D_SPOT_ID, D_SPOT_NAME } from '../../api/const/spotConst';
-import { TOURIST_ID } from '../../components/tourist/constant';
+import { TOURIST_ID } from '../../api/const/touristConst';
 
 export default {
   components: {

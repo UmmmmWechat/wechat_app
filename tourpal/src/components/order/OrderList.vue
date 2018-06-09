@@ -24,6 +24,9 @@
         :color="color"
         :key="order.id"
         :order="order"/>
+        <d-loading :loading="loading" :color="color" />
+        <d-no-more :has-more="hasMore" :color="color"/>
+        <d-no-more :has-more="!hasMore || orders.length || loading || firstSearch" :color="color"/>
     </div>
 
     <section class="to-top-wrapper" v-if="show_gotop">
