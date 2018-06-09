@@ -18,6 +18,7 @@ import DLoading from '../../components/common/DLoading'
 import guideApi from '../../api/guide'
 import commonApi from '../../api/common'
 import {GUIDE_ID, FINISHED_STATE} from '../../api/const/guideConst'
+import { ROLE_SELECT } from '../pages_url';
 export default {
   components: {DLoading, DNoMore, DTimeline},
   data () {
@@ -27,7 +28,8 @@ export default {
       guideId: '',
       loading: false,
       hasMore: true,
-      scrollHeight: 600
+      scrollHeight: 600,
+      pageName: 'guide_center_experience'
     }
   },
   computed: {
@@ -36,22 +38,43 @@ export default {
     }
   },
   mounted () {
-    // this.guideId = wx.getStorageSync(GUIDE_ID)
-    let sysInfo = wx.getSystemInfoSync()
-    console.log(sysInfo)
-    this.scrollHeight = sysInfo.windowHeight
-    console.log(`${this.scrollHeight}px`)
-    this.guideId = 1
+    this.guideId = wx.getStorageSync(GUIDE_ID)
     if (!this.guideId) {
+      // 登录失效
+      const url = `/${ROLE_SELECT}`;
+      this.dLog('跳转', url);
+      wx.redirectTo({ url });
+
       wx.showToast({
-        title: '获取用户信息失败',
+        title: '获取用户信息失败，请重新登录',
         icon: 'none'
       })
       return
     }
+
+    let sysInfo = wx.getSystemInfoSync()
+    this.dLog(sysInfo)
+    this.scrollHeight = sysInfo.windowHeight
+    this.dLog(`${this.scrollHeight}px`)
+    
     this.getMoreOrders()
   },
   methods: {
+    dLog(message, ...optionalParams) {
+        console.log(this.pageName, message, optionalParams);
+    },
+    dError(message, ...optionalParams) {
+        console.error(this.pageName, message, optionalParams);
+    },
+    showErrorToast(errMsg, ...fai) {
+      this.dError(errMsg, fai);
+      
+      // 输出提示信息 
+      wx.showToast({
+          icon: 'none',
+          title: errMsg
+      });
+    },
     getMoreOrders () {
       this.loading = true
       let lastIndex = this.events.length
@@ -60,27 +83,26 @@ export default {
         FINISHED_STATE,
         lastIndex,
         res => {
-          this.loading = false
+          this.dLog('取得邀请列表成功', res)
           let that = this
-          res.forEach(
+
+          res.orderList.forEach(
             that.translateToEvent
           )
-          if (this.events.length === lastIndex) {
-            this.hasMore = false
-          }
+
+          this.hasMore = res.hasMoreOrder
+
+          this.loading = false
         },
         err => {
-          console.log(err)
-          wx.showToast({
-            title: '时间轴更新失败',
-            icon: 'none'
-          })
+          const errMsg = '粗错啦QWQ时间轴更新布鸟辣'
           this.loading = false
+          this.showErrorToast(errMsg, err)
         }
       )
     },
     handleScrollToLower (event) {
-      console.log(event)
+      this.dLog(event)
       if (this.loading || !this.hasMore) {
         return
       }
@@ -125,7 +147,7 @@ export default {
             event.content = content
           },
           (err) => {
-            console.log(err)
+            this.dError(err)
           }
         )
     }
