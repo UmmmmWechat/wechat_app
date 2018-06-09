@@ -11,14 +11,14 @@
     </div>
 
     <div id="body">
-      <div v-if="order.spot">
+      <div v-if="spotName">
         <span class="title-span">景点：</span>
-        <span class="link" @click="onSpotNameClicled">{{ order.spot.name }}</span>
+        <span class="link" @click="onSpotNameClicled">{{ spotName }}</span>
       </div>
 
-      <div v-if="order.guide">
+      <div v-if="guideName">
         <span class="title-span">向导：</span>
-        <span class="link" @click="onGuideNameClicled">{{ order.guide.realName }}</span>
+        <span class="link" @click="onGuideNameClicled">{{ guideName }}</span>
       </div>
 
       <div><span class="title-span">邀请日期：</span>{{ order.generatedDate }}</div>
@@ -78,7 +78,9 @@ export default {
       ongoing: STATES_ARRAY[ONGOING_STATE],
       rateAble: false,
 
-      errorOccur: false
+      errorOccur: false,
+      guideName: '',
+      spotName: ''
     }
   },
   mounted () {
@@ -94,6 +96,7 @@ export default {
     commonApi.querySpotById(
       this.order.spotId,
       (res) => {
+        this.spotName = res.name
         this.order.spot = res
         if (!this.order.spot) {
           onGetSpotFail(res)
@@ -111,6 +114,7 @@ export default {
     commonApi.queryGuideById(
       this.order.guideId,
       (res) => {
+        this.guideName = res.realName
         this.order.guide = res
         if (!this.order.guide) {
           onGetGuideFail(res)
