@@ -16,19 +16,19 @@
             <div  v-if="!editmode">
                 <div class="info-item">
                     <span class="title-span">微信号：</span>
-                    <span class="link">{{ guide.wechat }}</span>
+                    <span class="info-span">{{ guide.wechat }}</span>
                 </div>
                 <div class="info-item">
                     <span class="title-span">手机号：</span>
-                    <span class="link">{{ guide.phone }}</span>
+                    <span class="info-span">{{ guide.phone }}</span>
                 </div>
                 <div class="info-item">
                     <span class="title-span">个人简介：</span>
-                    <span class="link">{{ guide.introduction }}</span>
+                    <span class="info-span">{{ guide.introduction }}</span>
                 </div>
                 <div class="info-item">
                     <span class="title-span">负责景点：</span>
-                    <span class="link">{{ getSpotList }}</span>
+                    <span class="info-span">{{ getSpotList }}</span>
                 </div>
                 <div class="info-item">
                     <span class="title-span">好评度：</span>
@@ -52,6 +52,7 @@
             <div class="item-wrapper">
                 <d-input
                     label="微信号"
+                    :value="guide.wechat"
                     placeholder="用于游客联系"
                     confirm-type="search"
                     @input="form.wechat = $event"/>
@@ -60,6 +61,7 @@
             <div class="item-wrapper">
                 <d-input
                     label="手机号"
+                    :value="guide.phone"
                     placeholder="用于游客联系"
                     confirm-type="search"
                     @input="form.phone = $event"/>
@@ -68,6 +70,7 @@
             <div class="item-wrapper">
                 <d-input
                     label="个人简介"
+                    :value="guide.introduction"
                     placeholder="请简短地介绍自己"
                     confirm-type="search"
                     @input="form.introduction = $event"/>
@@ -195,6 +198,7 @@ export default {
         },
         handleStartModify(event) {
             this.dLog("修改信息", event)
+            this.form.favorSpots = wx.getStorageSync(SELECTED_SPOTS)
             this.editmode = true
         },
         handleSubmit(event, ...hasChecked) {
@@ -256,7 +260,7 @@ export default {
                 const errMsg = "请简短地介绍下自己"
                 this.showErrorToast(errMsg);
                 return false;
-            } else if (!this.form.favorSpots) {
+            } else if (!this.form.favorSpots || !this.form.favorSpots.length) {
                 const errMsg = "请输入你想负责的景点"
                 this.showErrorToast(errMsg);
                 return false;
@@ -317,11 +321,7 @@ export default {
   width: 190rpx;
 }
 
-.link {
-  text-decoration: underline;
-}
-
-.link, progress {
+.info-span, progress {
   width: 500rpx;
 }
 </style>

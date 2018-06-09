@@ -142,7 +142,7 @@ export default {
         const errMsg = "请输入你的性别"
         this.showErrorToast(errMsg);
         return;
-      } else if (!this.form.favorSpots) {
+      } else if (!this.form.favorSpots || !this.form.favorSpots.length) {
         const errMsg = "请输入你想负责的景点"
         this.showErrorToast(errMsg);
         return;

@@ -145,6 +145,8 @@ export default {
     }
   },
   mounted () {
+    this.loadingArray[this.current] = true
+
     this.touristId = wx.getStorageSync(TOURIST_ID)
     if (!this.touristId) {
       // 未找到游客ID 需要先去登录
@@ -163,8 +165,6 @@ export default {
     this.searchWord = ''
     this.searchOrders.splice(0, this.searchOrders.length)// 清空原 searchOrders 数组
 
-    this.current = WAITING_STATE
-
     this.hasMoreArray = [
       true, true, true, true
     ]
@@ -172,6 +172,9 @@ export default {
     this.ordersArray = [
       [], [], [], []
     ]
+
+    this.loadingArray[this.current] = false
+    this.current = WAITING_STATE
 
     this.queryOrders()
   },
@@ -194,12 +197,12 @@ export default {
     queryOrders (...event) {
       this.dLog('queryOrders 方法响应', event)
 
-      if (this.loading) {
+      const index = this.current
+
+      if (this.loadingArray[index]) {
         this.dLog('加载中 return')
         return
       }
-
-      const index = this.current
 
       if (!this.hasMoreArray[index]) {
         this.dLog('已经加载全部 return')
@@ -222,7 +225,7 @@ export default {
         STATES_ARRAY[index],
         lastIndex,
         (res) => {
-          this.dLog('取得邀请列表成功', res)
+          this.dLog('取得邀请列表成功', res, index)
 
           this.hasMoreArray[index] = res.hasMoreOrder
 
@@ -233,7 +236,7 @@ export default {
           this.loadingArray[index] = false
         },
         (rej) => {
-          this.showErrorRoast('取得邀请列表失败')
+          this.showErrorRoast('取得邀请列表失败', rej, index)
 
           this.loadingArray[index] = false
         }

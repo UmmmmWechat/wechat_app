@@ -5,31 +5,31 @@
     <section id="info-section">
       <section class="info-item">
         <span class="title-span">邀请编号：</span>
-        <span class="link">{{ order.id }}</span>
+        <span class="value-span">{{ order.id }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">邀请状态：</span>
-        <span class="link">{{ order.state }}</span>
+        <span class="value-span">{{ order.state }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">游客编号：</span>
-        <span class="link">{{ order.touristId }}</span>
+        <span class="value-span">{{ order.touristId }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">景点名称：</span>
-        <span class="link">{{ order.spotName }}</span>
+        <span class="value-span">{{ order.spotName }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">提交日期：</span>
-        <span class="link">{{ computedCreatedDate }}</span>
+        <span class="value-span">{{ computedCreatedDate }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">旅行日期：</span>
-        <span class="link">{{ computedTravelDate }}</span>
+        <span class="value-span">{{ computedTravelDate }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">邀请留言：</span>
-        <span class="link">{{ order.message }}</span>
+        <span class="value-span">{{ order.message }}</span>
       </section>
     </section>
 
@@ -229,8 +229,7 @@ export default {
   width: 190rpx;
 }
 
-.link {
-  text-decoration: underline;
+.value-span {
   width: 460rpx;
 }
 

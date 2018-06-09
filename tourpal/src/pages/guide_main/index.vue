@@ -33,7 +33,7 @@ import { GUIDE_ID, GUIDE_INFO } from '../../api/const/guideConst';
 import { STATES_ARRAY, WAITING_STATE } from '../../api/const/guideConst';
 import { GUIDE_TYPE } from '../../api/const/orderConst';
 import { mockGuide } from '../../api/mock/guide_mock_data';
-import { GUIDE_CENTER, ROLE_SELECT } from '../pages_url';
+import { GUIDE_CENTER, ROLE_SELECT, GUIDE_SIGN_UP } from '../pages_url';
 
 export default {
   components: {
@@ -106,8 +106,13 @@ export default {
           })
         },
         (rej) => {
-          const errMsg = "粗错啦QWQ没有找到你的向导信息";
+          const errMsg = "粗错啦QWQ没有找到你的向导信息\n请重新注册";
           this.loading = false
+          
+          const url = `/${GUIDE_SIGN_UP}`;
+          this.dLog('跳转', url);
+          wx.redirectTo({ url });
+
           this.showErrorRoast(errMsg, rej);
           return;
         }

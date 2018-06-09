@@ -14,12 +14,12 @@
       <div id="body">
         <div>
           <span class="title-span">景点：</span>
-          <span class="link">{{ spotName }}</span>
+          <span>{{ spotName }}</span>
         </div>
 
         <div>
           <span class="title-span">游客编号：</span>
-          <span class="link">{{ order.touristId }}</span>
+          <span>{{ order.touristId }}</span>
         </div>
 
         <div><span class="title-span">邀请日期：</span>{{ computedCreatedDate }}</div>
@@ -224,9 +224,6 @@ export default {
 }
 .title-span {
   font-weight: bold;
-}
-.link {
-  text-decoration: underline;
 }
 
 .op-btn {

@@ -4,8 +4,8 @@
 <template>
   <div class="d-card">
       <div id="body" @click="checkOrderDetail">
-        <div><span class="title-span">景点：</span><span class="link">{{ spotName }}</span></div>
-        <div><span class="title-span">游客：</span><span class="link">{{ touristName }}</span></div>
+        <div><span class="title-span">景点：</span><span>{{ spotName }}</span></div>
+        <div><span class="title-span">游客：</span><span>{{ touristName }}</span></div>
       </div>
   </div>
 </template>
@@ -68,9 +68,6 @@ export default {
 
 .title-span {
   font-weight: bold;
-}
-.link {
-  text-decoration: underline;
 }
 
 </style>
