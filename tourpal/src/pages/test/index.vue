@@ -5,20 +5,20 @@
 </template>
 
 <script>
+import guide from '../../api/guide'
+
 export default {
   methods: {
     handleClick () {
-      wx.request({
-        url: 'https://www.wenxiangdong.cn/spots/by-keyword',
-        method: 'GET',
-        data: {
-          keyword: '夫',
-          lastIndex: 0
-        },
-        success: res => {
+      guide.queryFinishedOrdersGroupByDate(
+        1,
+        (res) => {
           console.log(res)
+        },
+        err => {
+          console.log(err)
         }
-      })
+      )
     }
   }
 }
