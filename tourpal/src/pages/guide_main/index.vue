@@ -11,25 +11,25 @@
     </div>
 
     <div id="body">
-      <order-list
-      :type="orderType"
-      :orders="orders">
-      </order-list>
+      <order-list-guide
+        :type="guideType"
+        :orders="orders"/>
     </div>
   </div>
 </template>
 
 <script>
-import OrderList from "../../components/order/OrderList"
+import OrderListGuide from "../../components/order/OrderList"
 import GuideApi from "../../api/guide"
 
 export default {
   components: {
-    OrderList
+    OrderListGuide
   },
   data() {
     return {
       guideName: '体验向导',
+      guideType: 'guide',
       orders: [],
       orderType: 'guide'
     }

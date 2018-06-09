@@ -23,7 +23,7 @@ export default {
         this.dLog('logIn 方法请求');
 
         // 是否是 新的导游
-        const isNewGuide = true;
+        const isNewGuide = false;
         // const isNewGuide = false;
         if (isNewGuide) {
             this.dLog('新导游，需要进行注册');
