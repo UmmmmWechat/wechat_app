@@ -3,8 +3,8 @@
 <template>
 <div id="wrapper">
     <label
-    for="d-input" 
-    class="label" 
+    for="d-input"
+    class="label"
     v-if="label !== '' ">
         {{label}}
     </label>
@@ -16,7 +16,7 @@
             placeholder-style="color:rgba(0,0,0,0.3);"
             @confirm="handleEnter"
             @input="handleInput"
-            @focus="handleFocus"/>
+            @focus="handleFocus"></textarea>
     </div>
 </div>
 </template>
@@ -24,30 +24,30 @@
 
 <script>
 export default {
-    props: {
-        placeholder: {
-            type: String,
-            default: ''
-        },
-        value: {
-            type: [String,Number]
-        },
-        label: {
-            type: String,
-            default: ''
-        }
+  props: {
+    placeholder: {
+      type: String,
+      default: ''
     },
-    methods: {
-        handleEnter (event) {
-            this.$emit('on-enter', event);
-        },
-        handleInput (event) {
-            this.$emit('input', event.target.value);
-        },
-        handleFocus (event) {
-            this.$emit('on-focus', event);
-        }
+    value: {
+      type: [String, Number]
+    },
+    label: {
+      type: String,
+      default: ''
     }
+  },
+  methods: {
+    handleEnter (event) {
+      this.$emit('on-enter', event)
+    },
+    handleInput (event) {
+      this.$emit('input', event.target.value)
+    },
+    handleFocus (event) {
+      this.$emit('on-focus', event)
+    }
+  }
 }
 </script>
 

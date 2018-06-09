@@ -22,6 +22,7 @@ const GUIDE_GET_ORDER_BY_KEYWORD = "/orders/for-guide/by-keyword";
 
 /* other API */
 const GET_SPOTS_BY_ID = "/spots/by-id";
+const GET_SPOTS_BY_KEYWORD = "/spots/by-keyword";
 const GET_SPOTS_BY_KEYWORD_AND_CITY = "/spots/by-keyword-and-city";
 const GET_SPOTS_BY_LOCATION = "/spots/by-location";
 const GET_GUIDES_BY_ID = "/guides/by-id";
@@ -46,6 +47,7 @@ export {
     GUIDE_GET_ORDER_BY_STATE,
     GUIDE_GET_ORDER_BY_KEYWORD,
     GET_SPOTS_BY_ID,
+    GET_SPOTS_BY_KEYWORD,
     GET_SPOTS_BY_KEYWORD_AND_CITY,
     GET_SPOTS_BY_LOCATION,
     GET_GUIDES_BY_ID,

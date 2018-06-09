@@ -43,7 +43,7 @@ export default {
             'pages/show_spot_page/main',
             'pages/show_guide_page/main',
 
-            'pages/test/main',
+            '^pages/test/main',
             'pages/z_test/main',
         ],
         window: {
@@ -51,6 +51,7 @@ export default {
             navigationBarBackgroundColor: '#42b970',
             navigationBarTitleText: 'WeChat',
             navigationBarTextStyle: 'white'
+            // enablePullDownRefresh: true
         },
         "tabBar": {
             backgroundColor: '#ffffff',
