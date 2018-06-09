@@ -149,7 +149,7 @@ export default {
       this.dLog("refreshFavorSpots 方法响应");
       this.spots.splice(0, this.spots.length);// 清空原 spot 数组
 
-      this.spots = wx.getStorageSync(SELECT_SPOTS);
+      this.spots = wx.getStorageSync(SELECTED_SPOTS);
       if (!this.spots) {
         this.dLog("没找到 favorSpots");
         this.spots = [];

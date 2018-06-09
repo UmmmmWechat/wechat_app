@@ -1,12 +1,7 @@
 <template>
 <section id="page">
-
-  <section id="isLoading" v-if="!order">
-    {{ prompt }}
-  </section>
-
-  <section v-else>
-
+  <d-loading :loading="loading"/>
+  <section v-if="order && !loading">
     <section id="info-section">
       <section class="info-item">
         <span class="title-span">邀请编号：</span>
@@ -17,14 +12,12 @@
         <span class="link">{{ order.state }}</span>
       </section>
       <section class="info-item">
-        <span class="title-span">游客姓名：</span>
-        <span class="link" v-if="touristName">{{ touristName }}</span>
-        <span class="link" v-else>{{ prompt }}</span>
+        <span class="title-span">游客编号：</span>
+        <span class="link">{{ order.touristId }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">景点名称：</span>
-        <span class="link" v-if="spotName">{{ spotName }}</span>
-        <span class="link" v-else>{{ prompt }}</span>
+        <span class="link">{{ order.spotName }}</span>
       </section>
       <section class="info-item">
         <span class="title-span">提交日期：</span>
@@ -40,70 +33,158 @@
       </section>
     </section>
     
-    <footer v-if="order.state === 'waiting'">
-
-      <button class="op-btn">
+    <footer v-if="order.state === waiting">
+      <button
+      class="op-btn"
+      size="mini"
+      @click="handleReject">
         婉拒
       </button>
-
-      <button class="d-a op-btn">
+      
+      <button
+      class="d-a op-btn" 
+      size="mini"
+      @click="handleAccept">
         同意
       </button>
-
     </footer>
-
   </section>
 </section>
 </template>
 
 <script>
-import orderApi from '../../api/order'
-import * as constant from './constant'
+import DLoading from '../../components/common/DLoading';
+
+import guideApi from '../../api/guide'
+
+import { SELECTED_ORDER_INFO, STATES_ARRAY, WAITING_STATE } from '../../api/const/guideConst';
 
 export default {
+  components: {
+    DLoading
+  },
   data() {
     return {
-      prompt: 'Loading...',
-      order: null,
-      touristName: null,
-      spotName: null,
+      order: undefined,
+      loading: false,
+      waiting: STATES_ARRAY[WAITING_STATE],
+      pageName: 'guide_check_order'
     }
   },
   mounted() {
-    this.prompt = 'Loading...',
-    this.getOrder();
+    // 取得order
+    this.loading = true
+
+    this.order = wx.getStorageSync(SELECTED_ORDER_INFO)
+    if (!this.order) {
+      // 取得order信息失败
+      const errMsg = "粗错啦QWQ没找到这条邀请"
+      // 跳回
+      wx.navigateBack()
+      // 显示提示信息
+      this.showErrorRoast(errMsg)
+
+      return
+    }
+
+    this.dLog("取得order信息成功", this.order)
+    this.loading = false
   },
   methods: {
-    getOrder() {
-      var that = this;
-      this.order = this.mockOrder;
-      wx.getStorage({
-        key: constant.SELECTED_ORDER_KEY,
-        success: function(res) {
-          that.order = res.data;
-          that.setOrderInfo();
-          console.log(res);
-        },
-        fail: function(res) {
-          that.prompt = res.errMsg;
-          console.log(res);
-        }
+    dLog(message, ...optionalParams) {
+        console.log(this.pageName, message, optionalParams);
+    },
+    dError(message, ...optionalParams) {
+        console.error(this.pageName, message, optionalParams);
+    },
+    showErrorRoast(errMsg, ...fai) {
+      this.dError(errMsg, fai);
+
+      // 输出提示信息
+      wx.showToast({
+          icon: 'none',
+          title: errMsg
       });
     },
-    setOrderInfo() {
-      orderApi.querySpotById(
-        this.order.spotId,
-        (res) => {this.spotName = res.name;},
-        (err) => {}
-      );
-      orderApi.queryTouristById(
-        this.order.touristId,
-        (res) => {this.touristName = res.name;},
-        (err) => {}
-      );
+    handleReject(event) {
+      this.dLog("handleReject 方法调用", event)
+
+      wx.showModal({
+        title: '确定要拒绝这个邀请么？',
+        success: (res) => {
+          if (res.confirm) {
+            this.dLog("确认拒绝", res)
+            // api
+            guideApi.rejectOrder(
+              this.order.id,
+              (res) => {
+                // 跳回
+                wx.navigateBack()
+
+                wx.showToast({
+                  title: '邀请拒绝成功',
+                  icon: 'none'
+                })
+              },
+              (err) => {
+                let title = ''
+                if (err === ResultMessage.ALREADY_CANCELED) {
+                  title = '邀请已经被撤回'
+                } else {
+                  title = '拒绝失败，请重试'
+                }
+                // 跳回
+                wx.navigateBack()
+                
+                wx.showToast({
+                  title: title,
+                  icon: 'none'
+                })
+              }
+            )
+          }
+        }
+      })
     },
-    createDate() {
-      return new Date().toLocaleDateString()
+    handleAccept(event) {
+      this.dLog("handleAccept 方法调用", event)
+
+      wx.showModal({
+        title: '确定要接受这个邀请么？',
+        success: (res) => {
+          if (res.confirm) {
+            this.dLog("确认接受", res)
+            // api
+            guideApi.acceptOrder(
+              this.order.id,
+              (res) => {
+                // 跳回
+                wx.navigateBack()
+                
+                wx.showToast({
+                  title: '接受成功 请耐心等待',
+                  icon: 'none'
+                })
+              },
+              (err) => {
+                let title = ''
+                if (err === ResultMessage.ALREADY_CANCELED) {
+                  title = '邀请已经被撤回'
+                } else {
+                  title = '接受失败，请重试'
+                }
+                // 跳回
+                wx.navigateBack()
+                
+                wx.showToast({
+                  title: title,
+                  icon: 'none'
+                })
+              }
+            )
+          }
+        }
+      })
     }
   }
 }

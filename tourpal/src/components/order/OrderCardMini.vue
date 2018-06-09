@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import * as constant from '../../pages/guide_check_order/constant'
 import * as urlList from '../../pages/pages_url'
 
 import orderApi from '../../api/order'
+import { SELECTED_ORDER_INFO } from '../../api/const/guideConst';
 
 export default {
   props: {
@@ -44,7 +44,7 @@ export default {
   methods: {
     checkOrderDetail() {
       wx.setStorage({
-        key: constant.SELECTED_ORDER_KEY,
+        key: SELECTED_ORDER_INFO,
         data: this.order,
         success: function(res) {
           console.log(res);

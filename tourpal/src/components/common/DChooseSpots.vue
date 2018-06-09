@@ -1,7 +1,7 @@
 /* 事件有 */
 <template>
   <div id="wrapper">
-      <div class="label" v-if="label !== '' ">
+      <div class="label" v-if="!label">
           {{label}}
       </div>
       <div id="input-wrapper">
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { SELECT_SPOTS } from '../../pages/pages_url';
+
 export default {
   props: {
       label: {
@@ -26,16 +28,12 @@ export default {
           required: true
       }
   },
-  data () {
-      return {
-          
-      }
-  },
   computed: {
       info () {
-          if(this.spots.length === 0) return '未选择，点击选择景点';
-          else {  
-              var res =  this.spots.map(
+          if(this.spots.length === 0){
+              return '未选择，点击选择景点';
+          } else {  
+              var res = this.spots.map(
                   (spot) => spot.name
               ).reduce(
                   (x, y) => x + '，' + y
@@ -46,9 +44,9 @@ export default {
   },
   methods: {
       handleChooseSpots (event) {
-         wx.navigateTo({
-             url: '/pages/select_spots/main'
-         })
+        const url = `/${SELECT_SPOTS}`;
+        this.dLog('跳转', url);
+        wx.navigateTo({ url });
       }
   }
 }

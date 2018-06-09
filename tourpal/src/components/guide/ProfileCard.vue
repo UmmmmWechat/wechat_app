@@ -1,5 +1,4 @@
 /* guide 的个人信息卡片 */
-
 <template>
   <div class="wrapper">
       <div>
@@ -15,53 +14,96 @@
 
 <script>
 import GuideApi from "../../api/guide"
+
 import { mockUserAvatorUrl } from '../../assets/image/imgMock';
 import { GUIDE_ID, GUIDE_INFO } from '../../api/const/guideConst';
+import { ROLE_SELECT } from '../../pages/pages_url';
 
 export default {
     data() {
         return {
             avatar: mockUserAvatorUrl,
             realName: "体验向导",
-            userId: ""
+            guideId: "",
+            componentName: 'ProfileCard'
         }
     },
     mounted() {
-        wx.getStorage({
-            key: GUIDE_ID,
-            success: (res) => {
-                console.log("取得向导ID成功", res)
-                this.userId = res.data
-                this.setGuideInfo()
-            },
-            fail: (fai) => {
-                console.error("取得向导ID失败", fai)
+        // 取得向导信息
+        const guide = wx.getStorageSync(GUIDE_INFO)
+        this.guideId = wx.getStorageSync(GUIDE_ID)
+
+        if (!guide) {
+            // 取得本地缓存信息失败
+            if (!this.guideId) {
+                // 登录过期，重新登录
+                this.reLogin()
+            } else {
+                GuideApi.queryUserInfo(
+                    this.guideId,
+                    (res) => {
+                        this.dLog("取得向导信息成功")
+                        this.setGuideInfo(res)
+                    },
+                    (rej) => {
+                        const errMsg = "取得向导信息失败"
+                        this.showErrorRoast(errMsg)
+                    }
+                )
             }
-        })
+
+        } else {
+            if (this.guideId !== guide.id) {
+                // 登录过期，重新登录
+                this.reLogin()
+            } else {
+                // 设置信息
+                this.setGuideInfo(guide)
+            }
+        }
     },
     methods: {
-        setGuideInfo() {
-            GuideApi.queryUserInfo(
-                this.userId,
-                (guide) => {
-                    console.log("取得向导信息成功", guide)
-                    this.avatar = guide.avatar
-                    this.realName = guide.realName
-                    wx.setStorage({
-                        key: GUIDE_INFO,
-                        data: guide,
-                        success: (suc) => {
-                            console.log("存储导游信息成功", suc)
-                        },
-                        fail: (fai) => {
-                            console.log("存储导游信息失败", fai)
-                        }
-                    })
-                },
-                (rej) => {
-                    console.log("取得向导信息失败", rej)
-                }
-            )
+        dLog (message, ...optionalParams) {
+            console.log(this.componentName, message, optionalParams)
+        },
+        dError (message, ...optionalParams) {
+            console.error(this.componentName, message, optionalParams)
+        },
+        showErrorRoast(errMsg, ...fai) {
+            this.dError(errMsg, fai);
+            
+            // 输出提示信息 
+            wx.showToast({
+                icon: 'none',
+                title: errMsg
+            });
+        },
+        setGuideInfo(guide) {
+            this.dLog("setGuideInfo 方法调用", guide)
+
+            this.avatar = guide.avatar
+            this.realName = guide.realName
+            this.guideId = guide.id
+
+            // 存储更新向导信息
+            wx.setStorage({
+                key: GUIDE_INFO,
+                data: guide
+            })
+        },
+        reLogin() {
+            this.dLog("reLogin 方法调用")
+
+            // 取得向导ID失败
+            const url = `/${ROLE_SELECT}`;
+            this.dLog('跳转', url);
+            wx.navigateTo({ url });
+
+            // 输出提示信息 
+            wx.showToast({
+                icon: 'none',
+                title: "登录过期请重新登录w"
+            });
         }
     }
 }

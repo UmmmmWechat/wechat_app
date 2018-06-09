@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="wrapper">
+        <div class="wrapper" v-if="guide">
+
             <div class="head">
                 <div>
                     <img 
@@ -11,7 +12,7 @@
                 </div>
                 <div class="text">{{ guide.realName }}</div>
             </div>
-            <!--  -->
+            
             <div  v-if="!editmode">
                 <div class="info-item">
                     <span class="title-span">微信号：</span>
@@ -33,7 +34,7 @@
                     <span class="title-span">好评度：</span>
                     <span>
                         <progress 
-                        :percent="guide.goodFeedbackRate" 
+                        :percent="computedGoodRate" 
                         show-info/>
                     </span>
                 </div>
@@ -91,6 +92,7 @@ import DChooseSpots from '../../components/common/DChooseSpots'
 
 import guideApi from '../../api/guide'
 import { mockUserAvatorUrl } from '../../assets/image/imgMock';
+import { GUIDE_INFO } from '../../api/const/guideConst';
 
 export default {
     components: {
@@ -101,38 +103,52 @@ export default {
     data() {
         return {
             editmode: false,
-            guide: {
-                avatar: mockUserAvatorUrl,
-                realName: "体验向导",
-                wechat: "youbanwechat",
-                phone: "000-0000-0000",
-                introduction: "请简短地介绍自己",
-                goodFeedbackRate: 10,
-                favorSpots: ["spot1", "spot2", "spot3"]
-            },
+            guide: undefined,
             form: {
                 guideId:"",
                 wechat: "",
                 phone: "",
                 introduction: "",
                 favorSpots: []
-            }
+            },
+            pageName: 'guide_center_info'
         }
     },
     mounted() {
-        wx.getStorage({
-            key: 'guideInfo',
-            success: (res) => {
-                console.log("取得向导信息成功", res)
-                this.guide = res.data
-                this.refreshForm()
-            },
-            fail: (fai) => {
-                console.error("取得向导信息失败", fai)
-            }
-        })
+        // 取得向导信息
+        this.guide = wx.getStorageSync(GUIDE_INFO)
+        if (!this.guide) {
+            // 未取得向导信息
+            const errMsg = "粗错啦QWQ没找到你的向导信息"
+
+            // 跳回
+            wx.navigateBack()
+
+            // 显示错误信息
+            this.showErrorRoast(errMsg)
+        }
+    },
+    computed: {
+        computedGoodRate () {
+            return this.guide ? Math.round(this.guide.goodFeedbackRate) : 0
+        }
     },
     methods: {
+        dLog(message, ...optionalParams) {
+            console.log(this.pageName, message, optionalParams);
+        },
+        dError(message, ...optionalParams) {
+            console.error(this.pageName, message, optionalParams);
+        },
+        showErrorRoast(errMsg, ...fai) {
+            this.dError(errMsg, fai);
+            
+            // 输出提示信息 
+            wx.showToast({
+                icon: 'none',
+                title: errMsg
+            });
+        },
         refreshForm() {
             // 更新form
             this.form.guideId = this.guide.guideId
@@ -142,21 +158,21 @@ export default {
             this.form.favorSpots = this.guide.favorSpots
         },
         handleStartModify(event) {
-            console.log("修改信息", event)
+            this.dLog("修改信息", event)
             this.editmode = true
         },
         handleSubmit(event) {
-            console.log("修改提交", event)
+            this.dLog("修改提交", event)
             guideApi.modifyUserInfo(
                 this.form,
                 (res) => {
-                    console.log("修改成功", res)
+                    this.dLog("修改成功", res)
                     this.guide = res.guide
                     this.refreshForm()
                     this.editmode = false
                 },
                 (rej) => {
-                    console.log("修改失败", rej)
+                    this.dLog("修改失败", rej)
                 }
             )
             this.editmode = false

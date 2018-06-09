@@ -30,7 +30,10 @@
         v-for="order in orders"
         :color="color"
         :key="order.id"
-        :order="order"/>
+        :order="order"
+        @on-accept="handleOnAccept"
+        @on-reject="handleOnReject"
+        @on-cancel="handleOnCancel"/>
         <d-loading :loading="loading" :color="color" />
         <d-no-more :has-more="hasMore" :color="color"/>
         <d-no-more :has-more="!hasMore || orders.length || loading || firstSearch" :color="color"/>
@@ -141,6 +144,12 @@ export default {
     },
     handleOnCancel (orderId) {
       this.$emit('on-cancel', orderId)
+    },
+    handleOnReject (orderId) {
+      this.$emit('on-reject', orderId)
+    },
+    handleOnAccept (orderId) {
+      this.$emit('on-accept', orderId)
     }
   }
 }
