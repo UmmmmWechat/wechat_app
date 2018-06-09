@@ -22,7 +22,7 @@
                 <span class="title-span">好评度：</span>
                 <progress
                 style="width:400rpx;"
-                :percent="guide.goodFeedbackRate"
+                :percent="computedRate"
                 show-info/>
             </div>
         </div>
@@ -31,7 +31,7 @@
   <div
   v-if="invitable"
   id="btn-wrapper"
-  style="text-align:right;padding: 0  40rpx 40rpx 0;">
+  style="text-align:right;padding: 0 40rpx 40rpx 0;">
     <a
     class="d-a"
     @click="handleInvite">
@@ -42,51 +42,56 @@
 </template>
 
 <script>
-import { TOURIST_INVITE_GUIDE } from '../../pages/pages_url';
-import { mockGuide } from '../../api/mock/guide_mock_data';
-import { INVITE_GUIDE_INFO } from '../../api/const/guideConst';
+import { TOURIST_INVITE_GUIDE } from '../../pages/pages_url'
+import { mockGuide } from '../../api/mock/guide_mock_data'
+import { INVITE_GUIDE_INFO } from '../../api/const/guideConst'
 
 export default {
-    props: {
-        contactable: {
-            type: Boolean,
-            default: false
-        },
-        invitable: {
-            type: Boolean,
-            default: true
-        },
-        guide: {
-            type: Object,
-            default: mockGuide
-        },
-        color: {
-            type: String
-        }
+  props: {
+    contactable: {
+      type: Boolean,
+      default: false
     },
-    data() {
-        return {
-            componentName: "GuideProfileCard"
-        }
+    invitable: {
+      type: Boolean,
+      default: true
     },
-    methods: {
-        dLog(message, ...optionalParams) {
-            console.log(this.componentName, message, optionalParams);
-        },
-        handleInvite (event) {
-            wx.setStorage({
-                key: INVITE_GUIDE_INFO,
-                data: this.guide,
-                success: (suc) => {
-                    this.dLog("设置邀请目标导游完成", suc);
-
-                    const url = `/${TOURIST_INVITE_GUIDE}`;
-                    this.dLog('跳转', url);
-                    wx.navigateTo({ url });
-                }
-            })
-        }
+    guide: {
+      type: Object,
+      default: mockGuide
+    },
+    color: {
+      type: String
     }
+  },
+  data () {
+    return {
+      componentName: 'GuideProfileCard'
+    }
+  },
+  computed: {
+    computedRate () {
+      return Math.round(this.guide.goodFeedbackRate)
+    }
+  },
+  methods: {
+    dLog (message, ...optionalParams) {
+      console.log(this.componentName, message, optionalParams)
+    },
+    handleInvite (event) {
+      wx.setStorage({
+        key: INVITE_GUIDE_INFO,
+        data: this.guide,
+        success: (suc) => {
+          this.dLog('设置邀请目标导游完成', suc)
+
+          const url = `/${TOURIST_INVITE_GUIDE}`
+          this.dLog('跳转', url)
+          wx.navigateTo({ url })
+        }
+      })
+    }
+  }
 }
 </script>
 

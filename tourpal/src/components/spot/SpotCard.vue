@@ -21,7 +21,7 @@
       </div>
       <div class="text-item-wrapper">
         <span class="title-span">推荐指数：</span>
-        <span>{{ spot.recommendLevel }}</span>
+        <span>{{ computedLevel }}</span>
       </div>
     </div>
     <div
@@ -49,6 +49,11 @@ export default {
     noAction: {
       type: Boolean,
       default: false
+    }
+  },
+  computed: {
+    computedLevel () {
+      return Math.round(this.spot.recommendLevel)
     }
   },
   methods: {

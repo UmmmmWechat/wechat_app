@@ -58,16 +58,16 @@ export default {
                     if (res.code) {
                         // 发起网络请求
                         var onFail = (fai) => {
-                            const errMsg = "服务器端登录失败";
+                            const errMsg = '服务器端登录失败'
                             this.dError(errMsg, fai)
-                            reject({ errMsg, fai });
+                            reject({ errMsg, fai })
                         }
 
                         var onSuccess = (suc) => {
                             // 成功的返回信息中包含 guideId 和 message [NOT_REGISTER, SUCCESS]
                             this.dLog('服务器端登录成功', suc)
 
-                            const message = suc.message;
+                            const message = suc.message
 
                             // 保存向导ID
                             wx.setStorageSync(constant.GUIDE_ID, suc.guideId)
@@ -82,7 +82,7 @@ export default {
                                     isNewGuide: isNewGuide
                                 })
                             } else if (message !== returnMessage.SUCCESS) {
-                                onFail(suc);
+                                onFail(suc)
                             } else {
                                 // 找到了这个导游 保存 guideId 取得信息并保存
                                 this.dLog('老导游，不需要进行注册')
@@ -102,9 +102,9 @@ export default {
                     }
                 },
                 fail: (fai) => {
-                    const errMsg = "登录失败！";
+                    const errMsg = '登录失败！'
                     this.dError(errMsg, fai)
-                    reject({ errMsg, fai });
+                    reject({ errMsg, fai })
                 }
             })
         }
@@ -121,17 +121,17 @@ export default {
         if (httpRequest.isTestMode) {
             guideStub.signUp(guide, resolve, reject)
         } else {
-            guide.id = wx.getStorageSync(constant.GUIDE_ID);
+            guide.id = wx.getStorageSync(constant.GUIDE_ID)
             if (!guide.id) {
-                this.dError("未取得 guideId")
+                this.dError('未取得 guideId')
                 const onSuccess = (suc) => {
-                    guide.id = wx.getStorageSync(constant.GUIDE_ID);
+                    guide.id = wx.getStorageSync(constant.GUIDE_ID)
                     this.requestSignUp(guide, resolve, reject)
                 }
                 const onFail = (fai) => {
-                    const errMsg = "sign up 请求失败";
+                    const errMsg = 'sign up 请求失败'
                     this.dError(errMsg, fai)
-                    reject({ errMsg, fai });
+                    reject({ errMsg, fai })
                 }
                 this.logIn(onSuccess, onFail)
             } else {
@@ -142,23 +142,23 @@ export default {
 
     /**
      * 发起注册请求的方法
-     * @param {*} guide 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} guide
+     * @param {*} resolve
+     * @param {*} reject
      */
     requestSignUp(guide, resolve, reject) {
         this.dLog('requestSignUp方法')
 
         var onFail = (fai) => {
-            const errMsg = "sign up 请求失败";
+            const errMsg = 'sign up 请求失败'
             this.dError(errMsg, fai)
-            reject({ errMsg, fai });
+            reject({ errMsg, fai })
         }
 
         var onSuccess = (suc) => {
             this.dLog('sign up 请求成功', suc)
             if (suc !== returnMessage.SUCCESS) {
-                onFail(suc);
+                onFail(suc)
             } else {
                 resolve()
             }
@@ -175,16 +175,15 @@ export default {
             onSuccess,
             onFail
         )
-
     },
 
     /**
      * 导游取得邀请列表的方法
-     * @param {*} guideId 
-     * @param {*} state 
-     * @param {*} lastIndex 
-     * @param {*} resolve 
-     * @param {*} reject 
+     * @param {*} guideId
+     * @param {*} state
+     * @param {*} lastIndex
+     * @param {*} resolve
+     * @param {*} reject
      */
     queryOrders(guideId, state, lastIndex, resolve, reject) {
         this.dLog(`query orders by state 方法

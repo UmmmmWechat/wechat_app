@@ -5,12 +5,11 @@ import 'animate.css'
 // import 'iview/dist/styles/iview.css';
 import './assets/style/index.css'
 
-Vue.config.productionTip = false;
-App.mpType = 'app';
+Vue.config.productionTip = false
+App.mpType = 'app'
 
-
-const app = new Vue(App);
-app.$mount();
+const app = new Vue(App)
+app.$mount()
 
 export default {
     // 这个字段走 app.json
@@ -44,7 +43,7 @@ export default {
             'pages/show_guide_page/main',
 
             'pages/test/main',
-            'pages/z_test/main',
+            'pages/z_test/main'
         ],
         window: {
             backgroundTextStyle: 'light',
@@ -53,26 +52,26 @@ export default {
             navigationBarTextStyle: 'white'
                 // enablePullDownRefresh: true
         },
-        "tabBar": {
+        'tabBar': {
             backgroundColor: '#ffffff',
             color: '#aaaaaa',
             selectedColor: '#42b970',
             borderStyle: 'white',
-            "list": [{
-                "pagePath": "pages/guide_main/main",
-                "text": "邀请",
-                "iconPath": './static/image/invitation.png',
-                "selectedIconPath": './static/image/invitation_selected.png'
+            'list': [{
+                'pagePath': 'pages/guide_main/main',
+                'text': '邀请',
+                'iconPath': './static/image/invitation.png',
+                'selectedIconPath': './static/image/invitation_selected.png'
             }, {
-                "pagePath": "pages/guide_calendar/main",
-                "text": "日程",
-                "iconPath": './static/image/calendar.png',
-                "selectedIconPath": './static/image/calendar_selected.png'
+                'pagePath': 'pages/guide_calendar/main',
+                'text': '日程',
+                'iconPath': './static/image/calendar.png',
+                'selectedIconPath': './static/image/calendar_selected.png'
             }, {
-                "pagePath": "pages/guide_center/main",
-                "text": "个人中心",
-                "iconPath": './static/image/user_center.png',
-                "selectedIconPath": './static/image/user_center_selected.png',
+                'pagePath': 'pages/guide_center/main',
+                'text': '个人中心',
+                'iconPath': './static/image/user_center.png',
+                'selectedIconPath': './static/image/user_center_selected.png'
             }]
         }
     }
