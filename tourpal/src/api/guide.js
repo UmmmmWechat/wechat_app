@@ -278,35 +278,44 @@ export default {
     },
 
     /**
-     *
-     * @param {Object} info
+     * 修改向导信息的方法
+     * @param {Object} guide
      * @param {*} resolve
      * @param {*} reject
      */
-    modifyUserInfo(info, resolve, reject) {
-        this.dLog('modify user info 方法')
+    modifyUserInfo(guide, resolve, reject) {
+        this.dLog('modify user info 方法', guide)
         if (httpRequest.isTestMode) {
-            console.log('guide.js', '修改向导信息', info)
-            var guide = mockData.mockGuide[0]
-            guide.wechat = info.wechat
-            guide.phone = info.phone
-            guide.introduction = info.introduction
-            guide.favorSpots = info.favorSpots
+            console.log('mock 修改向导信息', guide)
+            mockData.mockGuide[0].wechat = guide.wechat
+            mockData.mockGuide[0].phone = guide.phone
+            mockData.mockGuide[0].introduction = guide.introduction
+            mockData.mockGuide[0].favorSpots = guide.favorSpots
             resolve('SUCCESS')
         } else {
+
+            const onFail = (fai) => {
+                this.dError('modify user info 请求失败', fai)
+                reject(fai)
+            }
+
+            // 将spot换为spot
+            guide.favorSpots = this.transSpotToSpotID(guide.favorSpots)
+
             httpRequest.dRequest(
                 serverUrl.MODIFY_GUIDE_INFO, {
-                    guide: info
+                    guide
                 },
                 httpRequest.POST,
                 (res) => {
-                    this.dLog('modify user info 请求成功', res)
-                    resolve(res)
+                    if (res === returnMessage.SUCCESS) {
+                        this.dLog('modify user info 请求成功', res)
+                        resolve(res)
+                    } else {
+                        onFail(res)
+                    }
                 },
-                (err) => {
-                    this.dError('modify user info 请求失败', err)
-                    reject(err)
-                }
+                onFail
             )
         }
     },

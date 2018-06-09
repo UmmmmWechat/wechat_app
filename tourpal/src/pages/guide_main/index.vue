@@ -50,7 +50,7 @@ export default {
     }
   },
   onShow() {
-    this.loading = false
+    this.loading = true
     this.hasMore = true
 
     // 取得 向导ID
@@ -100,12 +100,14 @@ export default {
             success: (suc) => {
               // 存储向导信息成功
               this.dLog("存储向导信息成功", suc)
+              this.loading = false
               this.getOrders()
             }
           })
         },
         (rej) => {
           const errMsg = "粗错啦QWQ没有找到你的向导信息";
+          this.loading = false
           this.showErrorRoast(errMsg, rej);
           return;
         }

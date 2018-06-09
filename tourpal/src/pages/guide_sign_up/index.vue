@@ -131,27 +131,27 @@ export default {
 
       // 检查表单项
       if (!this.form.realName) {
-        const errMsg = "请输请输入你的真实姓名"
+        const errMsg = "请输入你的真实姓名"
         this.showErrorToast(errMsg);
         return;
       } else if (!this.form.idCard) {
-        const errMsg = "请输请输入你的身份证号"
+        const errMsg = "请输入你的身份证号"
         this.showErrorToast(errMsg);
         return;
       } else if (!this.form.gender) {
-        const errMsg = "请输请输入你的性别"
+        const errMsg = "请输入你的性别"
         this.showErrorToast(errMsg);
         return;
       } else if (!this.form.favorSpots) {
-        const errMsg = "请输请输入你想负责的景点"
+        const errMsg = "请输入你想负责的景点"
         this.showErrorToast(errMsg);
         return;
       } else if (!this.form.wechat) {
-        const errMsg = "请输请输入你的微信号"
+        const errMsg = "请输入你的微信号"
         this.showErrorToast(errMsg);
         return;
       } else if (!this.form.phone) {
-        const errMsg = "请输请输入你的手机号"
+        const errMsg = "请输入你的手机号"
         this.showErrorToast(errMsg);
         return;
       } else if (!this.form.introduction) {
