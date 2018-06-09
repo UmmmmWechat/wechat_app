@@ -175,6 +175,11 @@ export default {
               icon: 'none',
               title: sucMsg
           });
+
+          // 清空选中的景点
+          wx.removeStorage({
+            key: SELECT_SPOTS
+          })
         },
         (err) => {
           this.showErrorToast(err);

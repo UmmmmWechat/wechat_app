@@ -12,7 +12,7 @@ var dRequest = (url, data, method, onSuccess, onFail) => {
         data: data,
         method: method,
         success: (res) => {
-          console.log('httpRequest接受到回应',res)
+            console.log('httpRequest接受到回应', res)
             if (res) {
                 if (res.statusCode !== 200) {
                     onFail(res.data);
@@ -27,7 +27,7 @@ var dRequest = (url, data, method, onSuccess, onFail) => {
     })
 }
 
-const isTestMode = true;
+const isTestMode = false;
 
 export {
     dRequest,

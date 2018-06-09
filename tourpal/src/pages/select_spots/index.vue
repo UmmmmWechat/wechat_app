@@ -44,7 +44,7 @@
           enable-back-to-top
           scroll-y
           :scroll-top="scrollTop"
-          @scrolltolower="handleScrolltolower">
+          @scrolltolower="handleScrollToSearch">
           <div>
               <div 
               v-for="spot in spots"
@@ -76,19 +76,17 @@
 
     <div id="btn-div">
       <button 
-      class="d-back-btn-white"
-      style="margin:10rpx;" 
-      size="mini"
-      plain
-      @click="handleClearSearch">
-        清空
+        style="margin:10rpx;" 
+        size="mini"
+        @click="handleClearSearch">
+          清空
       </button>
       <button 
-      size="mini" 
-      style="margin:10rpx;" 
-      type="primary"
-      @click="handleSubmit">
-        确定
+        size="mini" 
+        style="margin:10rpx;" 
+        type="primary"
+        @click="handleSubmit">
+          确定
       </button>
     </div>
   </div>
@@ -177,9 +175,8 @@ export default {
       let lastIndex = this.spots.length;
 
       // 按照关键词搜索景点
-      spotApi.querySpotsByKeywordAndCity(
+      spotApi.querySpotsByKeyword(
         this.searchWord,
-        this.location,
         lastIndex,
         (res) => {
           this.dLog("搜索景点列表成功", res);
@@ -221,9 +218,8 @@ export default {
       this.scrollToTop();
 
       // 按照关键词搜索景点
-      spotApi.querySpotsByKeywordAndCity(
+      spotApi.querySpotsByKeyword(
         this.searchWord,
-        this.location,
         0,
         (res) => {
           this.dLog("搜索景点列表成功", res);
