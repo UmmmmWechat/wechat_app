@@ -46,4 +46,19 @@ export default {
             })
         }
     },
+
+    /**
+     * 新向导注册的方法
+     * @param {*} guide
+     * @param {*} resolve
+     * @param {*} reject
+     */
+    signUp(guide, resolve, reject) {
+        this.dLog('sign up方法 guide: ', guide)
+        setTimeout(
+            () => {
+                resolve()
+            }, 500
+        )
+    }
 }

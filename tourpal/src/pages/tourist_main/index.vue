@@ -487,7 +487,7 @@ export default {
       // 按照关键词搜索景点
       spotApi.querySpotsByKeywordAndCity(
         this.searchWord,
-        this.location,
+        this.location.city,
         lastIndex,
         (res) => {
           this.dLog("搜索景点列表成功", res);

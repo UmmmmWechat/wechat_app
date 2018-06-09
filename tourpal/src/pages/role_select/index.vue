@@ -44,6 +44,15 @@ export default {
     dError(message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams);
     },
+    showErrorToast(errMsg, ...fai) {
+      this.dError(errMsg, fai);
+      
+      // 输出提示信息 
+      wx.showToast({
+          icon: 'none',
+          title: errMsg
+      });
+    },
     handleChooseTourist() {
       // 选择游客
       this.dLog('选择了游客');
@@ -58,14 +67,7 @@ export default {
           wx.redirectTo({ url });
         },
         (fai) => {
-            const errMsg = "游客登录失败";
-            this.dError(errMsg, fai);
-            
-            // 输出提示信息 
-            wx.showToast({
-              icon: 'none',
-              title: errMsg
-            });
+            this.showErrorToast("游客登录失败", fai);
         }
       );
     },
@@ -89,14 +91,7 @@ export default {
           }
         },
         (fai) => {
-          const errMsg = "向导登录失败";
-          this.dError(errMsg, fai);
-          
-          // 输出提示信息 
-          wx.showToast({
-            icon: 'none',
-            title: errMsg
-          });
+          this.showErrorToast("向导登录失败", fai);
         }
       )
     }
