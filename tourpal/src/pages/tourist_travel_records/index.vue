@@ -127,7 +127,7 @@ export default {
         }
 
         let event = {
-          date: new Date(order.travelDate).toLocaleDateString(),
+          date: new Date(order.travelDate).toLocaleString(),
           content: ''
         }
 
@@ -151,7 +151,7 @@ export default {
           this.showErrorRoast("邀请记录粗错啦QWQ")
           this.loading = false;
         }
-        
+
         // 查询向导姓名
         commonApi.queryBasicGuideById(
           order.guideId,
