@@ -1,5 +1,6 @@
 <template>
 <scroll-view
+  v-if="finishedLoading"
   class="scroll"
   scroll-y
   enable-back-to-top
@@ -31,6 +32,7 @@ export default {
       loading: false,
       hasMore: true,
       scrollHeight: 600,
+      finishedLoading: false,
       pageName: 'guide_center_experience'
     }
   },
@@ -40,6 +42,7 @@ export default {
     }
   },
   mounted () {
+    this.finishedLoading = false
     this.guideId = wx.getStorageSync(GUIDE_ID)
     if (!this.guideId) {
       // 登录失效
@@ -56,6 +59,9 @@ export default {
 
     this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
     this.dLog(`${this.scrollHeight}px`)
+    this.loading = false
+    this.finishedLoading = true
+    
     this.getMoreOrders()
   },
   methods: {
@@ -75,6 +81,14 @@ export default {
       })
     },
     getMoreOrders () {
+      this.dLog('getMoreOrders 方法响应')
+
+      if (this.loading) {
+        this.dLog('加载中 沉默方法')
+        return
+      }
+
+      this.hasMore = true
       this.loading = true
       let lastIndex = this.events.length
       guideApi.queryOrders(
@@ -102,9 +116,6 @@ export default {
     },
     handleScrollToLower (event) {
       this.dLog(event)
-      if (this.loading || !this.hasMore) {
-        return
-      }
       this.getMoreOrders()
     },
     translateToEvent (order) {

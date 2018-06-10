@@ -53,9 +53,11 @@
     :key="spot.id"
     :spot="spot"
     />
-    <d-loading :loading="loading"/>
-    <d-no-more :has-more="hasMore" />
-    <d-no-more :has-more="!hasMore || spots.length || loading"/>
+    <div v-if="finishedLoading">
+      <d-loading :loading="loading"/>
+      <d-no-more :has-more="hasMore" />
+      <d-no-more :has-more="!hasMore || spots.length || loading"/>
+    </div>
   </scroll-view>
 
   <section
@@ -93,9 +95,11 @@
       v-for="spot in searchSpots"
       :key="spot.id"
       :spot="spot"/>
-      <d-loading :loading="loading" :color="'white'"/>
-      <d-no-more :has-more="searchHasMore" :color="'white'"/>
-      <d-no-more :has-more="!searchHasMore || searchSpots.length || loading || firstSearch" :color="'white'"/>
+      <div v-if="finishedLoading">
+        <d-loading :loading="loading" :color="'white'"/>
+        <d-no-more :has-more="searchHasMore" :color="'white'"/>
+        <d-no-more :has-more="!searchHasMore || searchSpots.length || loading || firstSearch" :color="'white'"/>
+      </div>
     </scroll-view>
   </section>
 </div>
@@ -146,6 +150,7 @@ export default {
       searchSpots: [],
       firstSearch: true,
 
+      finishedLoading: false,
       pageName: 'tourist_main',
 
       scrollTop: undefined,
@@ -162,6 +167,8 @@ export default {
     }
   },
   mounted () {
+    this.finishedLoading = false
+
     this.touristId = wx.getStorageSync(TOURIST_ID);
     if (!this.touristId) {
       // 未找到游客ID 需要先去登录
@@ -189,6 +196,8 @@ export default {
     this.searchHasMore = true
     this.searchWord = '';
     this.searchSpots.splice(0, this.searchSpots.length);// 清空原 searchSpots 数组
+
+    this.finishedLoading = true
 
     this.getSpots();
   },
@@ -243,12 +252,9 @@ export default {
         this.dLog("加载中 return");
         return;
       }
-      if (!this.hasMore) {
-        this.dLog("已经加载全部 return");
-        return;
-      }
 
       // 加载
+      this.hasMore = true;
       this.loading = true;
 
       // 保留下上次最后的index
@@ -435,12 +441,9 @@ export default {
         this.dLog("加载中 return");
         return;
       }
-      if (!this.searchHasMore) {
-        this.dLog("已经加载全部 return");
-        return;
-      }
 
       // 加载
+      this.searchHasMore = true;
       this.loading = true;
 
       // 保留下上次最后的index

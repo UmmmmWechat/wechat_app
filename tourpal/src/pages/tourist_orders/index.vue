@@ -44,7 +44,7 @@
       @scrolltolower="handleScrollToSearch"/>
   </div>
 
-  <div v-if="!isSearch">
+  <div v-else>
     <div id="navigator-bar">
       <d-navigator-bar
       :menus="menus"
@@ -119,8 +119,8 @@ export default {
   },
   data () {
     return {
+      touristId: undefined,
       windowHeight: 500,
-      touristId: MOCK_TOURIST_ID,
 
       loading: false,
 
@@ -135,13 +135,13 @@ export default {
       current: WAITING_STATE,
 
       hasMoreArray: [
-        true, true, true, true
+        true, true, true
       ],
       ordersArray: [
         [], [], [], []
       ],
       loadingArray: [
-        false, false, false, false
+        false, false, false
       ],
 
       pageName: 'tourist_orders'
@@ -155,8 +155,6 @@ export default {
   mounted () {
     this.windowHeight = wx.getStorageSync(WINDOW_HEIGHT)
     console.log(this.windowHeight)
-
-    this.loadingArray[this.current] = true
 
     this.touristId = wx.getStorageSync(TOURIST_ID)
     if (!this.touristId) {
@@ -177,17 +175,28 @@ export default {
     this.searchOrders.splice(0, this.searchOrders.length)// 清空原 searchOrders 数组
 
     this.hasMoreArray = [
-      true, true, true, true
+      true, true, true
     ]
 
     this.ordersArray = [
-      [], [], [], []
+      [], [], []
     ]
 
-    this.loadingArray[this.current] = false
     this.current = WAITING_STATE
 
     this.queryOrders()
+  },
+  onShow() {
+    if (this.touristId) {
+      this.ordersArray = [
+        [], [], []
+      ]
+
+      const index = this.current
+      this.loadingArray[index] = false
+
+      this.queryOrders()
+    }
   },
   methods: {
     dLog (message, ...optionalParams) {
@@ -206,7 +215,7 @@ export default {
       })
     },
     queryOrders (...event) {
-      this.dLog('queryOrders 方法响应', event)
+      this.dLog('queryOrders 方法响应', event, this.loadingArray)
 
       const index = this.current
 
@@ -215,21 +224,19 @@ export default {
         return
       }
 
-      if (!this.hasMoreArray[index]) {
-        this.dLog('已经加载全部 return')
-        return
-      }
-
       if (index == INVALID_STATE) {
         this.dLog('invalid!')
         return
       }
+      
 
       // 加载
+      this.hasMoreArray[index] = true
       this.loadingArray[index] = true
 
       // 保留下上次最后的index
       let lastIndex = this.ordersArray[index].length
+      this.dLog(this.touristId)
 
       touristApi.queryOrders(
         this.touristId,
@@ -254,13 +261,12 @@ export default {
       )
     },
     onNavigatorChange (index) {
-      this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
       this.current = index
+      this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
     },
     handleSwiperChange (event) {
-      this.dLog('handleSwiperChange 方法响应', event)
       this.current = event.target.current
-      this.queryOrders()
+      this.dLog('handleSwiperChange 方法响应', event)
     },
     handleSearchFocus (event) {
       this.dLog('handleSearchFocus 方法调用', event)

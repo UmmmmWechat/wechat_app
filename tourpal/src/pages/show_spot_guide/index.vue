@@ -30,9 +30,11 @@
       v-for="guide in guides"
       :key="guide.id"
       :guide="guide"/>
-    <d-loading :loading="loading" />
-    <d-no-more :has-more="hasMore" />
-    <d-no-more :has-more="!hasMore || guides.length || loading"/>
+    <div v-if="finishedLoading">
+      <d-loading :loading="loading" />
+      <d-no-more :has-more="hasMore" />
+      <d-no-more :has-more="!hasMore || guides.length || loading"/>
+    </div>
   </scroll-view>
 
   <section
@@ -72,9 +74,11 @@
       :color="'white'"
       :key="guide.id"
       :guide="guide"/>
-      <d-loading :loading="loading" :color="'white'"/>
-      <d-no-more :has-more="searchHasMore" :color="'white'"/>
-      <d-no-more :has-more="!searchHasMore || searchGuides.length || loading || firstSearch" :color="'white'"/>
+      <div v-if="finishedLoading">
+        <d-loading :loading="loading" :color="'white'"/>
+        <d-no-more :has-more="searchHasMore" :color="'white'"/>
+        <d-no-more :has-more="!searchHasMore || searchGuides.length || loading || firstSearch" :color="'white'"/>
+      </div>
     </scroll-view>
   </section>
 </div>
@@ -117,6 +121,7 @@ export default {
       searchGuides: [],
       firstSearch: true,
 
+      finishedLoading: false,
       pageName: 'show_spot_guide',
 
       scrollTop: undefined,
@@ -125,66 +130,49 @@ export default {
       scrollHeight: 500
     }
   },
+  mounted() {
+    this.finishedLoading = false
+    // 取得景点ID
+    this.spotID = wx.getStorageSync(D_SPOT_ID)
+    if (!this.spotID) {
+      wx.navigateBack();
+      const errMsg = "取得景点ID失败";
+      this.showErrorRoast(errMsg, fai);
+      return
+    }
+    this.dLog("取得景点ID完成")
+
+    // 取得景点名称
+    this.spotName = wx.getStorageSync(D_SPOT_NAME)
+    if (!this.spotName) {
+      wx.navigateBack();
+      const errMsg = "取得景点名称失败";
+      this.showErrorRoast(errMsg, fai);
+      return
+    }
+    this.dLog("取得景点名称完成")
+
+    // 初始化数据
+    this.hasMore = true;
+    this.guides.splice(0, this.guides.length);// 清空原 guides 数组
+    
+    this.isSearch = false
+    this.firstSearch = true
+    this.searchHasMore = true
+    this.searchWord = '';
+    this.searchGuides.splice(0, this.searchGuides.length);// 清空原 searchGuides 数组
+    
+    // 屏幕高度
+    this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
+    
+    this.finishedLoading = true
+
+    this.getGuides();
+  },
   computed: {
     heigthStyle () {
       return `height: ${this.scrollHeight}px`
     }
-  },
-  mounted () {
-    // 取得景点ID
-    wx.getStorage({
-      key: D_SPOT_ID,
-      success: (res) => {
-        this.dLog('取得景点ID完成', res)
-        this.spotID = res.data
-
-        // 取得景点名称
-        wx.getStorage({
-          key: D_SPOT_NAME,
-          success: (res) => {
-            this.dLog('取得景点名称完成', res)
-            this.spotName = res.data
-
-            this.hasMore = true
-            this.guides.splice(0, this.guides.length)// 清空原 guides 数组
-
-            this.isSearch = false
-            this.firstSearch = true
-            this.searchHasMore = true
-            this.searchWord = ''
-            this.searchGuides.splice(0, this.searchGuides.length)// 清空原 searchGuides 数组
-
-            this.getGuides()
-          },
-          fail: (fai) => {
-            const errMsg = '取得景点名称失败'
-            this.dError(errMsg, fai)
-
-            wx.navigateBack()
-
-              // 输出提示信息
-            wx.showToast({
-              icon: 'none',
-              title: errMsg
-            })
-          }
-        })
-      },
-      fail: (fai) => {
-        const errMsg = '取得景点ID失败'
-        this.dError(errMsg, fai)
-
-        wx.navigateBack()
-
-          // 输出提示信息
-        wx.showToast({
-          icon: 'none',
-          title: errMsg
-        })
-      }
-    })
-    // 屏幕高度
-    this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
   },
   methods: {
     dLog (message, ...optionalParams) {
@@ -231,13 +219,10 @@ export default {
         this.dLog('加载中 return')
         return
       }
-      if (!this.hasMore) {
-        this.dLog('已经加载全部 return')
-        return
-      }
 
       // 加载
-      this.loading = true
+      this.hasMore = true;
+      this.loading = true;
 
       // 保留下上次最后的index
       let lastIndex = this.guides.length
@@ -299,7 +284,7 @@ export default {
         (res) => {
           this.dLog('搜索向导列表成功', res)
 
-          this.searchHasMore = res.hasMoreSpot
+          this.searchHasMore = res.hasMoreGuide;
 
           for (let key in res.guideList) {
             this.searchGuides.push(res.guideList[key])
@@ -321,13 +306,10 @@ export default {
         this.dLog('加载中 return')
         return
       }
-      if (!this.searchHasMore) {
-        this.dLog('已经加载全部 return')
-        return
-      }
 
       // 加载
-      this.loading = true
+      this.searchHasMore = true;
+      this.loading = true;
 
       // 保留下上次最后的index
       let lastIndex = this.searchGuides.length

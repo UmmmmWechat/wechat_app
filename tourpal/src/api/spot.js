@@ -61,12 +61,12 @@ export default {
      * @param {*} resolve
      * @param {*} reject
      */
-    querySpotsByKeyword: function(keyword, lastIndex, resolve, reject) {
+    querySpotsByKeyword(keyword, lastIndex, resolve, reject) {
         this.dLog('querySpotsByKeyword 方法请求',
             'keyword', keyword, `lastIndes: ${lastIndex}`)
 
         if (httpRequest.isTestMode) {
-            // spotStub.querySpotsByKeywordAndCity(keyword, lastIndex, resolve, reject)
+            spotStub.querySpotsByKeywordAndCity(keyword, lastIndex, resolve, reject)
         } else {
             // 发起网络请求
             var onSuccess = (suc) => {

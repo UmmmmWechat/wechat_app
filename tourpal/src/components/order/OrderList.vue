@@ -6,6 +6,7 @@
  */
 <template>
 <scroll-view
+    v-if="finishedLoading"
     class="scroll"
     scroll-with-animation
     enable-back-to-top
@@ -91,6 +92,9 @@ export default {
   data () {
     return {
       scrollTop: undefined,
+
+      
+      finishedLoading: false,
       componentName: 'OrderList',
       scrollHeight: 500
     }
@@ -101,9 +105,13 @@ export default {
     }
   },
   mounted () {
+    this.finishedLoading = false
     this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
     console.log(this.scrollHeight)
+    
+    
     this.scrollToTop()
+    this.finishedLoading = true
   },
   methods: {
     dLog (message, ...optionalParams) {

@@ -9,9 +9,11 @@
     <div id="timeline-wrapper">
       <d-timeline :events="events"/>
     </div>
-    <d-loading :loading="loading"/>
-    <d-no-more :has-more="hasMore" />
-    <d-no-more :has-more="!hasMore || events.length || loading"/>
+    <div v-if="finishedLoading">
+      <d-loading :loading="loading"/>
+      <d-no-more :has-more="hasMore" />
+      <d-no-more :has-more="!hasMore || events.length || loading"/>
+    </div>
   </scroll-view>
 </template>
 
@@ -38,6 +40,7 @@ export default {
       touristId: '',
       loading: false,
       hasMore: true,
+      finishedLoading: false,
       pageName: "tourist_travel_record",
       scrollHeight: 500
     }
@@ -48,6 +51,8 @@ export default {
     }
   },
   mounted () {
+    this.finishedLoading = false
+
     this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
     console.log('height', this.scrollHeight)
     // 获取touristId参数
@@ -65,6 +70,8 @@ export default {
 
     // 初始化数据
     this.hasMore = true;
+
+    this.finishedLoading = true
 
     // 获取 events
     this.getEvents();
@@ -91,10 +98,8 @@ export default {
       if(this.loading) {
         return;
       }
-      if(!this.hasMore) {
-        return;
-      }
 
+      this.hasMore = true;
       this.loading = true;
 
       const lastIndex = this.events.length;
@@ -199,9 +204,6 @@ export default {
 
     },
     handleScrollToLower (event) {
-      if (this.loading || !this.hasMore) {
-        return
-      }
       this.getEvents()
     }
   }
