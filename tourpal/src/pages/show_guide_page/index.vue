@@ -1,6 +1,6 @@
 <template>
 <section>
-  <div style="text-align: center">
+  <div style="text-align: center; margin: 20px;">
     <img :src="guide.avatar"/>
   </div>
   <div class="name-wrapper">

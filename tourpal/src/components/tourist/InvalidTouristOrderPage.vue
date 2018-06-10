@@ -11,6 +11,7 @@
   id="swiper-wrapper">
     <swiper
       class="swiper"
+      :style="heightStyle"
       :current="current"
       @change="handleSwiperChange">
 
@@ -55,6 +56,7 @@ import OrderListTourist from '../../components/order/OrderList';
 
 import { INVALID_STATE_MENU, CANCELED_STATE, INVALID_STATE_ARRAY, TOURIST_ID } from '../../api/const/touristConst';
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data';
+import { WINDOW_HEIGHT } from '../../api/const/commonConst';
 
 export default {
   components: {
@@ -65,6 +67,7 @@ export default {
   },
   data () {
     return {
+      scrollHeight: 400,
       touristId: MOCK_TOURIST_ID,
       menus: INVALID_STATE_MENU,
       current: CANCELED_STATE,
@@ -80,6 +83,11 @@ export default {
       ],
 
       pageName: 'invalid_tourist_order_page'
+    }
+  },
+  computed: {
+    heightStyle () {
+      return `height: ${this.scrollHeight - 50}px`
     }
   },
   mounted() {
@@ -99,6 +107,8 @@ export default {
     ]
 
     this.queryOrders();
+
+    this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
   },
   methods: {
     dLog(message, ...optionalParams) {
@@ -119,16 +129,22 @@ export default {
     queryOrders(...event) {
       this.dLog("queryOrders 方法响应", event);
 
-      if (this.loading){
+      
+
+      const index = this.current;
+
+      if (this.loadingArray[index]){
         this.dLog("加载中 return");
         return;
       }
 
-      const index = this.current;
+      if (!this.hasMoreArray[index]) {
+        this.dLog("没有了 return");
+        return
+      }
 
 
       // 加载
-      this.hasMoreArray[index] = true
       this.loadingArray[index] = true;
 
       // 保留下上次最后的index
@@ -143,26 +159,32 @@ export default {
           this.dLog("取得邀请列表成功", res);
 
           this.hasMoreArray[index] = res.hasMoreOrder;
+          this.loadingArray[index] = false;
 
           for (let key in res.orderList) {
             this.ordersArray[index].push(res.orderList[key]);
           }
 
-          this.loadingArray[index] = false;
+          
         },
         (rej) => {
           this.showErrorRoast("取得邀请列表失败");
-
           this.loadingArray[index] = false;
         }
       )
     },
     onNavigatorChange (index) {
       this.current = index
+      if (!this.ordersArray[index].length) {
+        this.queryOrders()
+      }
       this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
     },
     handleSwiperChange (event) {
       this.current = event.target.current
+      if (!this.ordersArray[this.current].length) {
+        this.queryOrders()
+      }
       this.dLog('handleSwiperChange 方法响应', event)
     }
   }
@@ -171,10 +193,10 @@ export default {
 
 <style scoped>
 #swiper-wrapper {
-  height: 900rpx
+  /* height: 100%; */
 }
 .swiper {
-  height: 100%;
+  /* height: 100%; */
 }
 .swiper-item {
   height: 100%;

@@ -192,6 +192,7 @@ export default {
         [], [], []
       ]
 
+      this.current = 0
       const index = this.current
       this.loadingArray[index] = false
 
@@ -221,6 +222,10 @@ export default {
 
       if (this.loadingArray[index]) {
         this.dLog('加载中 return')
+        return
+      }
+
+      if (!this.hasMoreArray[index]) {
         return
       }
 
@@ -261,11 +266,18 @@ export default {
       )
     },
     onNavigatorChange (index) {
+      if (this.ordersArray[index] && !this.ordersArray[index].length) {
+        this.queryOrders()
+      }
       this.current = index
+      
       this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
     },
     handleSwiperChange (event) {
       this.current = event.target.current
+      if (this.ordersArray[this.current] && !this.ordersArray[this.current].length) {
+        this.queryOrders()
+      }
       this.dLog('handleSwiperChange 方法响应', event)
     },
     handleSearchFocus (event) {
