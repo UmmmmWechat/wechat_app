@@ -17,7 +17,7 @@ import DNoMore from '../../components/common/DNoMore'
 import DLoading from '../../components/common/DLoading'
 import guideApi from '../../api/guide'
 import commonApi from '../../api/common'
-import {GUIDE_ID, FINISHED_STATE} from '../../api/const/guideConst'
+import {GUIDE_ID, FINISHED_STATE, STATES_ARRAY} from '../../api/const/guideConst'
 import { ROLE_SELECT } from '../pages_url';
 export default {
   components: {DLoading, DNoMore, DTimeline},
@@ -80,14 +80,14 @@ export default {
       let lastIndex = this.events.length
       guideApi.queryOrders(
         this.guideId,
-        FINISHED_STATE,
+        STATES_ARRAY[FINISHED_STATE],
         lastIndex,
         res => {
           this.dLog('取得邀请列表成功', res)
           let that = this
 
           res.orderList.forEach(
-            that.translateToEvent
+            order => this.translateToEvent(order)
           )
 
           this.hasMore = res.hasMoreOrder
@@ -121,7 +121,7 @@ export default {
           order.spotId,
           (spot) => {
             content += `景点${spot.name}，`
-            let feedback = spot.feedback
+            let feedback = order.feedback
             if (!feedback) {
               event.content = content
               return
