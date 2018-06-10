@@ -7,8 +7,15 @@
       v-on:changeMonth="changeDate"/>
     </section>
     <section>
-      <order-list-mini
-      :orders="orders"/>
+      <div
+        style="text-align: center; color: gray; padding: 20px;"
+        v-if="!orders.length">
+        当日没有安排
+      </div>
+      <div v-else>
+        <order-list-mini
+          :orders="orders"/>
+      </div>
     </section>
   </section>
 </template>
@@ -24,7 +31,7 @@ export default {
     Calendar,
     OrderListMini
   },
-  data() {
+  data () {
     return {
       orders: [],
       ordersGroupByDate: {},
@@ -32,7 +39,7 @@ export default {
       guideId: ''
     }
   },
-  mounted() {
+  onShow () {
     this.getOrders()
   },
   methods: {
