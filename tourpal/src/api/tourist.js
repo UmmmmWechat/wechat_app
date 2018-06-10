@@ -319,7 +319,7 @@ export default {
               }
      */
     commendOrder(orderId, feedback, resolve, reject) {
-        this.dLog('commend order 方法')
+        this.dLog('commend order 方法', orderId, feedback)
         if (httpRequest.isTestMode) {
             resolve('SUCCESS')
         } else {
