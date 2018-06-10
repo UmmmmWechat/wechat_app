@@ -44,7 +44,7 @@
       @scrolltolower="handleScrollToSearch"/>
   </div>
 
-  <div v-if="!isSearch">
+  <div v-else>
     <div id="navigator-bar">
       <d-navigator-bar
       :menus="menus"
@@ -130,23 +130,22 @@ export default {
 
       menus: STATE_MENU,
       current: WAITING_STATE,
+      current: WAITING_STATE,
 
       hasMoreArray: [
-        true, true, true, true
+        true, true, true
       ],
       ordersArray: [
         [], [], [], []
       ],
       loadingArray: [
-        false, false, false, false
+        false, false, false
       ],
 
       pageName: 'tourist_orders'
     }
   },
   mounted () {
-    this.loadingArray[this.current] = true
-
     this.touristId = wx.getStorageSync(TOURIST_ID)
     if (!this.touristId) {
       // 未找到游客ID 需要先去登录
@@ -166,14 +165,14 @@ export default {
     this.searchOrders.splice(0, this.searchOrders.length)// 清空原 searchOrders 数组
 
     this.hasMoreArray = [
-      true, true, true, true
+      true, true, true
     ]
 
     this.ordersArray = [
-      [], [], [], []
+      [], [], []
     ]
 
-    this.loadingArray[this.current] = false
+    this.current = WAITING_STATE
     this.current = WAITING_STATE
 
     this.queryOrders()
@@ -195,7 +194,7 @@ export default {
       })
     },
     queryOrders (...event) {
-      this.dLog('queryOrders 方法响应', event)
+      this.dLog('queryOrders 方法响应', event, this.loadingArray)
 
       const index = this.current
 
@@ -204,17 +203,14 @@ export default {
         return
       }
 
-      if (!this.hasMoreArray[index]) {
-        this.dLog('已经加载全部 return')
-        return
-      }
-
       if (index == INVALID_STATE) {
         this.dLog('invalid!')
         return
       }
+      
 
       // 加载
+      this.hasMoreArray[index] = true
       this.loadingArray[index] = true
 
       // 保留下上次最后的index
@@ -243,13 +239,12 @@ export default {
       )
     },
     onNavigatorChange (index) {
-      this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
       this.current = index
+      this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
     },
     handleSwiperChange (event) {
+      this.current = index
       this.dLog('handleSwiperChange 方法响应', event)
-      this.current = event.target.current
-      this.queryOrders()
     },
     handleSearchFocus (event) {
       this.dLog('handleSearchFocus 方法调用', event)

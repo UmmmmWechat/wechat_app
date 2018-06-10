@@ -113,12 +113,9 @@ export default {
 
       const index = this.current;
 
-      if (!this.hasMoreArray[index]) {
-        this.dLog("已经加载全部 return");
-        return;
-      }
 
       // 加载
+      this.hasMoreArray[index] = true
       this.loadingArray[index] = true;
 
       // 保留下上次最后的index
@@ -146,14 +143,13 @@ export default {
         }
       )
     },
-    onNavigatorChange(index) {
-      this.dLog(`onNavigatorChange 方法响应 index: ${index}`);
-      this.current = index;
+    onNavigatorChange (index) {
+      this.current = index
+      this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
     },
     handleSwiperChange (event) {
-      this.dLog("handleSwiperChange 方法响应", event);
-      this.current = event.target.current;
-      this.queryOrders();
+      this.current = index
+      this.dLog('handleSwiperChange 方法响应', event)
     }
   }
 }
