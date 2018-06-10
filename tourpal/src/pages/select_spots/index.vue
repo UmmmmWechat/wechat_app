@@ -132,8 +132,8 @@ export default {
     this.spots = []
     this.selectedSpots = []
     this.searchWord = ''
-    this.loading = false
     this.hasMore = true
+    this.loading = false
 
     this.finishedLoading = true
 
@@ -172,12 +172,9 @@ export default {
         this.dLog("加载中 return");
         return;
       }
-      if (!this.hasMore) {
-        this.dLog("已经加载全部 return");
-        return;
-      }
 
       // 加载
+      this.hasMore = true
       this.loading = true;
 
       // 保留下上次最后的index

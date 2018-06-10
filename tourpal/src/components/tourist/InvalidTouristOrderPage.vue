@@ -133,6 +133,7 @@ export default {
 
       // 保留下上次最后的index
       let lastIndex = this.ordersArray[index].length;
+      this.dLog(this.touristId)
 
       touristApi.queryOrders(
         this.touristId,

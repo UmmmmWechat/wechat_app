@@ -59,6 +59,7 @@ export default {
     this.dLog(sysInfo)
     this.scrollHeight = sysInfo.windowHeight
     this.dLog(`${this.scrollHeight}px`)
+    this.loading = false
     this.finishedLoading = true
     
     this.getMoreOrders()
@@ -80,6 +81,14 @@ export default {
       });
     },
     getMoreOrders () {
+      this.dLog('getMoreOrders 方法响应')
+
+      if (this.loading) {
+        this.dLog('加载中 沉默方法')
+        return
+      }
+
+      this.hasMore = true
       this.loading = true
       let lastIndex = this.events.length
       guideApi.queryOrders(
@@ -107,9 +116,6 @@ export default {
     },
     handleScrollToLower (event) {
       this.dLog(event)
-      if (this.loading || !this.hasMore) {
-        return
-      }
       this.getMoreOrders()
     },
     translateToEvent (order) {

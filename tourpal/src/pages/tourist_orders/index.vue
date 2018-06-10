@@ -117,7 +117,7 @@ export default {
   },
   data () {
     return {
-      touristId: MOCK_TOURIST_ID,
+      touristId: undefined,
 
       loading: false,
 
@@ -175,6 +175,18 @@ export default {
 
     this.queryOrders()
   },
+  onShow() {
+    if (this.touristId) {
+      this.ordersArray = [
+        [], [], []
+      ]
+
+      const index = this.current
+      this.loadingArray[index] = false
+
+      this.queryOrders()
+    }
+  },
   methods: {
     dLog (message, ...optionalParams) {
       console.log(this.pageName, message, optionalParams)
@@ -213,6 +225,7 @@ export default {
 
       // 保留下上次最后的index
       let lastIndex = this.ordersArray[index].length
+      this.dLog(this.touristId)
 
       touristApi.queryOrders(
         this.touristId,

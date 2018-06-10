@@ -51,7 +51,6 @@ export default {
                     }
                 )
             }
-
         } else {
             if (this.guideId !== guide.id) {
                 // 登录过期，重新登录
@@ -61,6 +60,11 @@ export default {
                 this.setGuideInfo(guide)
             }
         }
+    },
+    onShow() {
+        this.dLog('onshow')
+        const guide = wx.getStorageSync(GUIDE_INFO)
+        this.setGuideInfo(guide)
     },
     methods: {
         dLog (message, ...optionalParams) {

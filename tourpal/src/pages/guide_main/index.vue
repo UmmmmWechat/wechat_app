@@ -50,8 +50,8 @@ export default {
     }
   },
   onShow() {
-    this.loading = true
     this.hasMore = true
+    this.loading = true
 
     // 取得 向导ID
     this.guide.id = wx.getStorageSync(GUIDE_ID);

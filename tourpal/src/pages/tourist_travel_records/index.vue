@@ -95,10 +95,8 @@ export default {
       if(this.loading) {
         return;
       }
-      if(!this.hasMore) {
-        return;
-      }
 
+      this.hasMore = true;
       this.loading = true;
 
       const lastIndex = this.events.length;
@@ -203,9 +201,6 @@ export default {
 
     },
     handleScrollToLower (event) {
-      if (this.loading || !this.hasMore) {
-        return
-      }
       this.getEvents()
     }
   }

@@ -137,7 +137,7 @@ export default {
       this.showErrorRoast(errMsg, fai);
       return
     }
-    this.dLog("取得景点ID完成", res);
+    this.dLog("取得景点ID完成")
 
     // 取得景点名称
     this.spotName = wx.getStorageSync(D_SPOT_NAME)
@@ -147,11 +147,9 @@ export default {
       this.showErrorRoast(errMsg, fai);
       return
     }
-    this.dLog("取得景点名称完成", res);
+    this.dLog("取得景点名称完成")
 
     // 初始化数据
-    this.spotName = res.data;
-
     this.hasMore = true;
     this.guides.splice(0, this.guides.length);// 清空原 guides 数组
     
@@ -210,12 +208,9 @@ export default {
         this.dLog("加载中 return");
         return;
       }
-      if (!this.hasMore) {
-        this.dLog("已经加载全部 return")
-        return;
-      }
 
       // 加载
+      this.hasMore = true;
       this.loading = true;
 
       // 保留下上次最后的index
@@ -278,7 +273,7 @@ export default {
         (res) => {
           this.dLog("搜索向导列表成功", res);
 
-          this.searchHasMore = res.hasMoreSpot;
+          this.searchHasMore = res.hasMoreGuide;
 
           for (let key in res.guideList) {
             this.searchGuides.push(res.guideList[key]);
@@ -300,12 +295,9 @@ export default {
         this.dLog("加载中 return");
         return;
       }
-      if (!this.searchHasMore) {
-        this.dLog("已经加载全部 return")
-        return;
-      }
 
       // 加载
+      this.searchHasMore = true;
       this.loading = true;
 
       // 保留下上次最后的index
