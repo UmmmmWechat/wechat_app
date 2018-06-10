@@ -41,7 +41,8 @@
       :loading="loading"
       :has-more="searchHasMore"
       :first-search="firstSearch"
-      @scrolltolower="handleScrollToSearch"/>
+      @scrolltolower="handleScrollToSearch"
+      @on-cancel="handleResetSearch"/>
   </div>
 
   <div v-else>
@@ -174,28 +175,28 @@ export default {
     this.searchWord = ''
     this.searchOrders.splice(0, this.searchOrders.length)// 清空原 searchOrders 数组
 
-    this.hasMoreArray = [
-      true, true, true
-    ]
-
-    this.ordersArray = [
-      [], [], []
-    ]
-
-    this.current = WAITING_STATE
-
+    // this.hasMoreArray = [
+    //   true, true, true
+    // ]
+    //
+    // this.ordersArray = [
+    //   [], [], []
+    // ]
+    //
+    // this.current = WAITING_STATE
+    //
     this.queryOrders()
   },
-  onShow() {
-    if (this.touristId) {
-      this.ordersArray = [
+  onShow () {
+    this.ordersArray = [
         [], [], []
-      ]
+    ]
 
-      this.current = 0
-      const index = this.current
-      this.loadingArray[index] = false
+    this.current = 0
+    const index = this.current
+    this.loadingArray[index] = false
 
+    if (this.touristId) {
       this.queryOrders()
     }
   },
@@ -225,15 +226,10 @@ export default {
         return
       }
 
-      if (!this.hasMoreArray[index]) {
-        return
-      }
-
-      if (index == INVALID_STATE) {
+      if (index === INVALID_STATE) {
         this.dLog('invalid!')
         return
       }
-      
 
       // 加载
       this.hasMoreArray[index] = true
@@ -266,11 +262,11 @@ export default {
       )
     },
     onNavigatorChange (index) {
+      this.current = index
       if (this.ordersArray[index] && !this.ordersArray[index].length) {
         this.queryOrders()
       }
-      this.current = index
-      
+
       this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
     },
     handleSwiperChange (event) {

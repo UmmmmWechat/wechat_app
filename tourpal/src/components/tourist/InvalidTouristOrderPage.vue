@@ -1,57 +1,73 @@
 <template>
 <div class="page">
-  <div id="navigator-bar">
-    <d-navigator-bar 
-    :menus="menus"
-    :current="current"
-    @on-change="onNavigatorChange"/>
+  <div>
+    <picker
+      mode="selector"
+      :range="menus"
+      @change="handleChangeType">
+      <div id="selector_div">
+        <span style=" border: rgba(0,0,0,0.3) 1px solid; border-radius: 5px; padding: 2px 5px">
+          <span class="title-span">类型：</span>
+          {{ menus[current] }}
+        </span>
+      </div>
+    </picker>
   </div>
-
-  <div
-  id="swiper-wrapper">
-    <swiper
-      class="swiper"
-      :style="heightStyle"
-      :current="current"
-      @change="handleSwiperChange">
-
-      <swiper-item class="swiper-item">
-        <!-- REJECTED -->
-        <order-list-tourist :orders="ordersArray[0]"
-          :loading="loadingArray[0]"
-          :has-more="hasMoreArray[0]"
-          @scrolltolower="queryOrders"/>
-      </swiper-item>
-
-      <swiper-item class="swiper-item">
-        <!-- CANCELED -->
-        <order-list-tourist :orders="ordersArray[1]"
-          :loading="loadingArray[1]"
-          :has-more="hasMoreArray[1]"
-          @scrolltolower="queryOrders"/>
-      </swiper-item>
-
-      <swiper-item class="swiper-item">
-        <!-- TIMEOUT -->
-        <order-list-tourist :orders="ordersArray[2]"
-          :loading="loadingArray[2]"
-          :has-more="hasMoreArray[2]"
-          @scrolltolower="queryOrders"/>
-      </swiper-item>
-
-    </swiper>
+  <div>
+    <order-list-tourist
+      :orders="ordersArray[current]"
+    :loading="loadingArray[current]"
+    :has-more="hasMoreArray[current]"
+    @scrolltolower="queryOrders"/>
   </div>
+  <!--<div id="navigator-bar">-->
+    <!--<d-navigator-bar -->
+    <!--:menus="menus"-->
+    <!--:current="current"-->
+    <!--@on-change="onNavigatorChange"/>-->
+  <!--</div>-->
+
+  <!--<div-->
+  <!--id="swiper-wrapper">-->
+    <!--<swiper-->
+      <!--class="swiper"-->
+      <!--:style="heightStyle"-->
+      <!--:current="current"-->
+      <!--@change="handleSwiperChange">-->
+
+      <!--<swiper-item class="swiper-item">-->
+        <!--&lt;!&ndash; REJECTED &ndash;&gt;-->
+        <!--<order-list-tourist :orders="ordersArray[0]"-->
+          <!--:loading="loadingArray[0]"-->
+          <!--:has-more="hasMoreArray[0]"-->
+          <!--@scrolltolower="queryOrders"/>-->
+      <!--</swiper-item>-->
+
+      <!--<swiper-item class="swiper-item">-->
+        <!--&lt;!&ndash; CANCELED &ndash;&gt;-->
+        <!--<order-list-tourist :orders="ordersArray[1]"-->
+          <!--:loading="loadingArray[1]"-->
+          <!--:has-more="hasMoreArray[1]"-->
+          <!--@scrolltolower="queryOrders"/>-->
+      <!--</swiper-item>-->
+
+      <!--<swiper-item class="swiper-item">-->
+        <!--&lt;!&ndash; TIMEOUT &ndash;&gt;-->
+        <!--<order-list-tourist :orders="ordersArray[2]"-->
+          <!--:loading="loadingArray[2]"-->
+          <!--:has-more="hasMoreArray[2]"-->
+          <!--@scrolltolower="queryOrders"/>-->
+      <!--</swiper-item>-->
+
+    <!--</swiper>-->
+  <!--</div>-->
 </div>
 </template>
 
 <script>
-import touristApi from '../../api/tourist';
-import orderApi from '../../api/order';
+import touristApi from '../../api/tourist'
 
 import DNavigatorBar from '../../components/common/DNavigatorBar';
-import DInput from '../../components/common/DInput';
-import DNoMore from '../../components/common/DNoMore';
-import DLoading from '../../components/common/DLoading';
 import OrderListTourist from '../../components/order/OrderList';
 
 import { INVALID_STATE_MENU, CANCELED_STATE, INVALID_STATE_ARRAY, TOURIST_ID } from '../../api/const/touristConst';
@@ -62,15 +78,13 @@ export default {
   components: {
     DNavigatorBar,
     OrderListTourist,
-    DNoMore,
-    DLoading
   },
   data () {
     return {
       scrollHeight: 400,
       touristId: MOCK_TOURIST_ID,
       menus: INVALID_STATE_MENU,
-      current: CANCELED_STATE,
+      current: 0,
 
       hasMoreArray: [
         true, true, true
@@ -90,9 +104,9 @@ export default {
       return `height: ${this.scrollHeight - 50}px`
     }
   },
-  mounted() {
-    this.touristId = wx.getStorageSync(TOURIST_ID);
-    this.current = CANCELED_STATE
+  mounted () {
+    this.touristId = wx.getStorageSync(TOURIST_ID)
+    this.current = 0
 
     this.hasMoreArray = [
       true, true, true
@@ -102,13 +116,13 @@ export default {
       [], [], []
     ]
 
-    this.loadingArray=  [
+    this.loadingArray = [
       false, false, false
     ]
 
-    this.queryOrders();
-
     this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
+
+    this.queryOrders()
   },
   methods: {
     dLog(message, ...optionalParams) {
@@ -119,8 +133,8 @@ export default {
     },
     showErrorRoast(errMsg, ...fai) {
       this.dError(errMsg, fai);
-    
-      // 输出提示信息 
+
+      // 输出提示信息
       wx.showToast({
           icon: 'none',
           title: errMsg
@@ -128,9 +142,6 @@ export default {
     },
     queryOrders(...event) {
       this.dLog("queryOrders 方法响应", event);
-
-      
-
       const index = this.current;
 
       if (this.loadingArray[index]){
@@ -138,17 +149,12 @@ export default {
         return;
       }
 
-      if (!this.hasMoreArray[index]) {
-        this.dLog("没有了 return");
-        return
-      }
-
 
       // 加载
-      this.loadingArray[index] = true;
+      this.loadingArray[index] = true
 
       // 保留下上次最后的index
-      let lastIndex = this.ordersArray[index].length;
+      let lastIndex = this.ordersArray[index].length
       this.dLog(this.touristId)
 
       touristApi.queryOrders(
@@ -164,41 +170,29 @@ export default {
           for (let key in res.orderList) {
             this.ordersArray[index].push(res.orderList[key]);
           }
-
-          
         },
         (rej) => {
-          this.showErrorRoast("取得邀请列表失败");
+          this.showErrorRoast("取得邀请列表失败", rej);
           this.loadingArray[index] = false;
         }
       )
     },
-    onNavigatorChange (index) {
-      this.current = index
-      if (!this.ordersArray[index].length) {
-        this.queryOrders()
-      }
-      this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
-    },
-    handleSwiperChange (event) {
-      this.current = event.target.current
-      if (!this.ordersArray[this.current].length) {
-        this.queryOrders()
-      }
-      this.dLog('handleSwiperChange 方法响应', event)
+    handleChangeType (event) {
+      this.current = event.target.value
+      this.queryOrders()
     }
   }
 }
 </script>
 
 <style scoped>
-#swiper-wrapper {
-  /* height: 100%; */
+.title-span {
+  font-weight: bold;
+  color: gray;
 }
-.swiper {
-  /* height: 100%; */
-}
-.swiper-item {
-  height: 100%;
-}
+  #selector_div {
+    padding: 10rpx 40rpx;
+    text-align: right;
+    color: #42b970;
+  }
 </style>
