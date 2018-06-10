@@ -24,6 +24,11 @@
       <div><span class="title-span">邀请日期：</span>{{ computedCreatedDate }}</div>
 
       <div><span class="title-span">旅游日期：</span>{{ computedTravelDate }}</div>
+      
+      <div v-if="order.state === finished && order.feedback.comment">
+        <span class="title-span">旅行印象：</span>
+        <span>{{ order.feedback.comment }}</span>
+      </div>
     </div>
 
     <div
@@ -58,7 +63,7 @@ import orderApi from '../../api/order'
 
 import * as ResultMessage from '../../api/returnMessage'
 
-import { STATES_ARRAY, WAITING_STATE, CHECK_GUIDE, CHECK_SPOT, ONGOING_STATE, RATE_ORDER } from '../../api/const/touristConst'
+import { STATES_ARRAY, WAITING_STATE, CHECK_GUIDE, CHECK_SPOT, ONGOING_STATE, RATE_ORDER, FINISHED_STATE } from '../../api/const/touristConst'
 import { SHOW_SPOT_PAGE, SHOW_GUIDE_PAGE, TOURIST_RATE_ORDER } from '../../pages/pages_url'
 import { mockSpot } from '../../api/mock/spot_mock_data'
 import { mockGuide } from '../../api/mock/guide_mock_data'
@@ -78,6 +83,7 @@ export default {
       componentName: 'OrderCardTourist',
       waiting: STATES_ARRAY[WAITING_STATE],
       ongoing: STATES_ARRAY[ONGOING_STATE],
+      finished: STATES_ARRAY[FINISHED_STATE],
       rateAble: false,
 
       errorOccur: false,
