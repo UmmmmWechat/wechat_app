@@ -20,9 +20,10 @@ import touristApi from '../../api/tourist'
 import commonApi from '../../api/common'
 
 import DLoading from '../../components/common/DLoading'
-import DNoMore from '../../components/common/DNoMore';
+import DNoMore from '../../components/common/DNoMore'
 import DTimeline from '../../components/common/DTimeline'
-import {TOURIST_ID} from "../../api/const/touristConst";
+import {TOURIST_ID} from "../../api/const/touristConst"
+import {WINDOW_HEIGHT} from "../../api/const/commonConst"
 import OrderState from  '../../utils/OrderState'
 
 export default {
@@ -43,10 +44,12 @@ export default {
   },
   computed: {
     scrollViewStyle () {
-      return 'height:' + this.scrollHeight + 'px'
+      return `height: ${this.scrollHeight}px`
     }
   },
   mounted () {
+    this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
+    console.log('height', this.scrollHeight)
     // 获取touristId参数
     // this.touristId = wx.getStorageSync(TOURIST_ID)
     this.touristId = 1

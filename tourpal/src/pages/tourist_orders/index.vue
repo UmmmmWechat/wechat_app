@@ -57,6 +57,7 @@
       <swiper
         class="swiper"
         :current="current"
+        :style="heightStyle"
         @change="handleSwiperChange">
 
         <swiper-item class="swiper-item">
@@ -105,6 +106,7 @@ import OrderListTourist from '../../components/order/OrderList'
 import InvalidTouristOrderPage from '../../components/tourist/InvalidTouristOrderPage'
 
 import { STATE_MENU, STATES_ARRAY, TOURIST_ID, WAITING_STATE, INVALID_STATE } from '../../api/const/touristConst'
+import {WINDOW_HEIGHT} from '../../api/const/commonConst'
 import { MOCK_TOURIST_ID } from '../../api/mock/tourist_mock_data'
 import { ROLE_SELECT } from '../pages_url'
 
@@ -117,6 +119,7 @@ export default {
   },
   data () {
     return {
+      windowHeight: 500,
       touristId: MOCK_TOURIST_ID,
 
       loading: false,
@@ -144,7 +147,15 @@ export default {
       pageName: 'tourist_orders'
     }
   },
+  computed: {
+    heightStyle () {
+      return `height: ${this.windowHeight}px`
+    }
+  },
   mounted () {
+    this.windowHeight = wx.getStorageSync(WINDOW_HEIGHT)
+    console.log(this.windowHeight)
+
     this.loadingArray[this.current] = true
 
     this.touristId = wx.getStorageSync(TOURIST_ID)
@@ -361,11 +372,11 @@ export default {
 
 <style scoped>
 .swiper {
-  height: 1000rpx;
+  /*height: 1000rpx;*/
   padding: 40rpx 0;
 }
 .swiper-item {
-  height: 100%;
+  /*height: 100%;*/
 }
 </style>
 

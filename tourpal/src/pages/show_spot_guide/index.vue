@@ -13,14 +13,13 @@
         @input="handleSearchInput"
         @on-focus="handleSearchFocus"
         @on-enter="handleResetSearch"/>
-      </div>     
+      </div>
     </div>
   </div>
 
   <scroll-view
-  v-if="!isSearch" 
-  class="scroll" 
-  id="guide-list"
+  v-if="!isSearch"
+  class="scroll"
   :scroll-top="scrollTop"
   @scrolltolower="getGuides"
   scroll-y
@@ -41,14 +40,14 @@
   class="d-search-list">
     <header>
     <div style="text-align:center;padding:10rpx;">
-        <button 
+        <button
         class="d-back-btn-white"
         size="mini"
         plain
         @click="handleClickBack">
           返回
         </button>
-        <button 
+        <button
         class="d-back-btn-white"
         style="margin-left:33rpx;"
         size="mini"
@@ -60,11 +59,12 @@
 
     </header>
 
-    <scroll-view 
-      class="scroll" 
+    <scroll-view
+      class="scroll"
       scroll-y
       scroll-with-animation
       enable-back-to-top
+      :style="heigthStyle"
       :scroll-top="searchScrollTop"
       @scrolltolower="handleScrollToSearch">
       <guide-profile-card
@@ -81,16 +81,17 @@
 </template>
 
 <script>
-import touristApi from '../../api/tourist';
+import touristApi from '../../api/tourist'
 
-import GuideProfileCard from '../../components/guide/GuideProfileCard';
-import DLoading from '../../components/common/DLoading';
-import DInput from '../../components/common/DInput';
-import DNoMore from '../../components/common/DNoMore';
+import GuideProfileCard from '../../components/guide/GuideProfileCard'
+import DLoading from '../../components/common/DLoading'
+import DInput from '../../components/common/DInput'
+import DNoMore from '../../components/common/DNoMore'
 
-import { D_SPOT_ID, D_SPOT_NAME } from '../../api/const/spotConst';
+import { D_SPOT_ID, D_SPOT_NAME } from '../../api/const/spotConst'
+import {WINDOW_HEIGHT} from '../../api/const/commonConst'
 
-const SHOW_TOP_SCROLLTOP = 700;
+const SHOW_TOP_SCROLLTOP = 700
 
 export default {
   components: {
@@ -101,17 +102,17 @@ export default {
   },
   data () {
     return {
-      spotName: "spotName",
-      spotID: "spotID",
+      spotName: 'spotName',
+      spotID: 'spotID',
 
       loading: false,
-      
+
       hasMore: true,
       guides: [],
-      
+
       isSearch: false,
       searchHasMore: true,
-      searchWord: "",
+      searchWord: '',
       searchValue: undefined, // 用于清空搜索框
       searchGuides: [],
       firstSearch: true,
@@ -119,267 +120,273 @@ export default {
       pageName: 'show_spot_guide',
 
       scrollTop: undefined,
-      searchScrollTop: undefined
+      searchScrollTop: undefined,
+      // 滑动高度
+      scrollHeight: 500
     }
   },
-  mounted() {
+  computed: {
+    heigthStyle () {
+      return `height: ${this.scrollHeight}px`
+    }
+  },
+  mounted () {
     // 取得景点ID
     wx.getStorage({
       key: D_SPOT_ID,
       success: (res) => {
-        this.dLog("取得景点ID完成", res);
-        this.spotID = res.data;
+        this.dLog('取得景点ID完成', res)
+        this.spotID = res.data
 
         // 取得景点名称
         wx.getStorage({
           key: D_SPOT_NAME,
           success: (res) => {
-            this.dLog("取得景点名称完成", res);
-            this.spotName = res.data;
-      
-            this.hasMore = true;
-            this.guides.splice(0, this.guides.length);// 清空原 guides 数组
-            
+            this.dLog('取得景点名称完成', res)
+            this.spotName = res.data
+
+            this.hasMore = true
+            this.guides.splice(0, this.guides.length)// 清空原 guides 数组
+
             this.isSearch = false
             this.firstSearch = true
             this.searchHasMore = true
-            this.searchWord = '';
-            this.searchGuides.splice(0, this.searchGuides.length);// 清空原 searchGuides 数组
-            
-            this.getGuides();
+            this.searchWord = ''
+            this.searchGuides.splice(0, this.searchGuides.length)// 清空原 searchGuides 数组
+
+            this.getGuides()
           },
           fail: (fai) => {
-              const errMsg = "取得景点名称失败";
-              this.dError(errMsg, fai);
+            const errMsg = '取得景点名称失败'
+            this.dError(errMsg, fai)
 
-              wx.navigateBack();
-              
-              // 输出提示信息 
-              wx.showToast({
-                  icon: 'none',
-                  title: errMsg
-              });
-          }
-        });
-      },
-      fail: (fai) => {
-          const errMsg = "取得景点ID失败";
-          this.dError(errMsg, fai);
+            wx.navigateBack()
 
-          wx.navigateBack();
-          
-          // 输出提示信息 
-          wx.showToast({
+              // 输出提示信息
+            wx.showToast({
               icon: 'none',
               title: errMsg
-          });
-      }
-    })
-  },
-  methods: {
-    dLog(message, ...optionalParams) {
-        console.log(this.pageName, message, optionalParams);
-    },
-    dError(message, ...optionalParams) {
-        console.error(this.pageName, message, optionalParams);
-    },
-    showErrorRoast(errMsg, ...fai) {
-      this.dError(errMsg, fai);
-    
-      // 输出提示信息 
-      wx.showToast({
+            })
+          }
+        })
+      },
+      fail: (fai) => {
+        const errMsg = '取得景点ID失败'
+        this.dError(errMsg, fai)
+
+        wx.navigateBack()
+
+          // 输出提示信息
+        wx.showToast({
           icon: 'none',
           title: errMsg
-      });
+        })
+      }
+    })
+    // 屏幕高度
+    this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
+  },
+  methods: {
+    dLog (message, ...optionalParams) {
+      console.log(this.pageName, message, optionalParams)
     },
-    scrollToTop() {
-      this.dLog("scrollToTop 方法调用");
+    dError (message, ...optionalParams) {
+      console.error(this.pageName, message, optionalParams)
+    },
+    showErrorRoast (errMsg, ...fai) {
+      this.dError(errMsg, fai)
+
+      // 输出提示信息
+      wx.showToast({
+        icon: 'none',
+        title: errMsg
+      })
+    },
+    scrollToTop () {
+      this.dLog('scrollToTop 方法调用')
 
       if (this.isSearch) {
-          this.searchScrollTop = 0;
-          setTimeout(
+        this.searchScrollTop = 0
+        setTimeout(
             () => {
-              this.searchScrollTop = undefined;
-            }, 500);
+              this.searchScrollTop = undefined
+            }, 500)
       } else {
-          this.scrollTop = 0;
-          setTimeout(
+        this.scrollTop = 0
+        setTimeout(
             () => {
-              this.scrollTop = undefined;
-            }, 500);
+              this.scrollTop = undefined
+            }, 500)
       }
 
       wx.pageScrollTo({
         scrollTop: 0,
         duration: 300
-      });
+      })
     },
-    getGuides() {
-      this.dLog("getGuides 方法调用");
+    getGuides () {
+      this.dLog('getGuides 方法调用')
 
-      if (this.loading){
-        this.dLog("加载中 return");
-        return;
+      if (this.loading) {
+        this.dLog('加载中 return')
+        return
       }
       if (!this.hasMore) {
-        this.dLog("已经加载全部 return")
-        return;
+        this.dLog('已经加载全部 return')
+        return
       }
 
       // 加载
-      this.loading = true;
+      this.loading = true
 
       // 保留下上次最后的index
-      let lastIndex = this.guides.length;
+      let lastIndex = this.guides.length
 
       // 取得导游列表
       touristApi.queryGuideBySpot(
         this.spotID,
         lastIndex,
         (res) => {
-          this.dLog("通过景点取得导游列表成功", res);
+          this.dLog('通过景点取得导游列表成功', res)
 
-          this.hasMore = res.hasMoreGuide;
+          this.hasMore = res.hasMoreGuide
 
           for (let key in res.guideList) {
-            this.guides.push(res.guideList[key]);
+            this.guides.push(res.guideList[key])
           }
-          this.loading = false;
+          this.loading = false
         },
         (rej) => {
-          this.showErrorRoast("通过景点取得导游列表失败", rej);
-          this.loading = false;
+          this.showErrorRoast('通过景点取得导游列表失败', rej)
+          this.loading = false
         }
       )
     },
-    handleSearchFocus(event) {
-      this.dLog("handleSearchFocus 方法调用", event);
-      this.isSearch = true;
+    handleSearchFocus (event) {
+      this.dLog('handleSearchFocus 方法调用', event)
+      this.isSearch = true
     },
-    handleSearchInput(e) {
-      this.dLog("handleInput 方法调用", e);
-      this.searchWord = e;
-      this.dLog(`message 更新 ${this.message}`);
+    handleSearchInput (e) {
+      this.dLog('handleInput 方法调用', e)
+      this.searchWord = e
+      this.dLog(`message 更新 ${this.message}`)
     },
-    handleResetSearch(event) {
-      this.dLog("handleResetSearch 方法调用", event);
+    handleResetSearch (event) {
+      this.dLog('handleResetSearch 方法调用', event)
 
       // 非空检查
       if (!this.searchWord) {
-        this.showErrorRoast("请输入搜索关键词w");
-        return;
+        this.showErrorRoast('请输入搜索关键词w')
+        return
       }
 
-      this.searchHasMore = true;
+      this.searchHasMore = true
       this.firstSearch = false
-      this.searchGuides.splice(0, this.searchGuides.length);// 清空搜索的 spot 数组
+      this.searchGuides.splice(0, this.searchGuides.length)// 清空搜索的 spot 数组
 
       // 重新搜索
 
       // 加载
-      this.loading = true;
+      this.loading = true
 
       // 上滑到顶部
-      this.scrollToTop();
+      this.scrollToTop()
 
       // 按照关键词搜索向导
       touristApi.queryGuideByKeyword(
         this.searchWord,
         0,
         (res) => {
-          this.dLog("搜索向导列表成功", res);
+          this.dLog('搜索向导列表成功', res)
 
-          this.searchHasMore = res.hasMoreSpot;
+          this.searchHasMore = res.hasMoreSpot
 
           for (let key in res.guideList) {
-            this.searchGuides.push(res.guideList[key]);
+            this.searchGuides.push(res.guideList[key])
           }
 
-          this.loading = false;
+          this.loading = false
         },
         (fai) => {
-          this.showErrorRoast("搜索向导列表失败");
+          this.showErrorRoast('搜索向导列表失败')
 
-          this.loading = false;
+          this.loading = false
         }
-      );
+      )
     },
-    handleScrollToSearch(event) {
-      this.dLog("handleScrollToSearch 方法调用", event);
+    handleScrollToSearch (event) {
+      this.dLog('handleScrollToSearch 方法调用', event)
 
-      if (this.loading){
-        this.dLog("加载中 return");
-        return;
+      if (this.loading) {
+        this.dLog('加载中 return')
+        return
       }
       if (!this.searchHasMore) {
-        this.dLog("已经加载全部 return")
-        return;
+        this.dLog('已经加载全部 return')
+        return
       }
 
       // 加载
-      this.loading = true;
+      this.loading = true
 
       // 保留下上次最后的index
-      let lastIndex = this.searchGuides.length;
+      let lastIndex = this.searchGuides.length
 
       // 按照关键词搜索向导
       touristApi.queryGuideByKeyword(
         this.searchWord,
         lastIndex,
         (res) => {
-          this.dLog("通过关键词搜索导游列表成功", res);
+          this.dLog('通过关键词搜索导游列表成功', res)
 
-          this.searchHasMore = res.hasMoreGuide;
+          this.searchHasMore = res.hasMoreGuide
 
           for (let key in res.guideList) {
-            this.searchGuides.push(res.guideList[key]);
+            this.searchGuides.push(res.guideList[key])
           }
-          
-          this.loading = false;
+
+          this.loading = false
         },
         (rej) => {
-          this.showErrorRoast("通过关键词搜索导游列表失败", rej);
-          
-          this.loading = false;
+          this.showErrorRoast('通过关键词搜索导游列表失败', rej)
+
+          this.loading = false
         }
       )
     },
-    handleClickBack(event) {
-      this.dLog("handleClickBack 方法调用", event);
-      
-      // 清空
-      this.handleClearSearch(event);
+    handleClickBack (event) {
+      this.dLog('handleClickBack 方法调用', event)
 
-      this.isSearch = false;
+      // 清空
+      this.handleClearSearch(event)
+
+      this.isSearch = false
     },
-    handleClearSearch(event) {
-      this.dLog("handleClearSearch 方法调用", event);
-      
+    handleClearSearch (event) {
+      this.dLog('handleClearSearch 方法调用', event)
+
       // 清空搜索框
-      this.searchValue = "";
+      this.searchValue = ''
       setTimeout(
         () => {
-          this.searchValue = undefined;
+          this.searchValue = undefined
         }, 500
-      );
+      )
 
       // 重置属性
-      this.searchWord = "";
-      this.firstSearch = true;
-      this.searchHasMore = true;
-      this.searchGuides.splice(0, this.searchGuides.length);// 清空搜索的 spot 数组
+      this.searchWord = ''
+      this.firstSearch = true
+      this.searchHasMore = true
+      this.searchGuides.splice(0, this.searchGuides.length)// 清空搜索的 spot 数组
 
       // 回滚
-      this.scrollToTop();
+      this.scrollToTop()
     }
   }
 }
 </script>
 
 <style>
-#guide-list {
-  height: 1000rpx;
-}
 
 #title {
   text-align: left;
@@ -390,11 +397,11 @@ export default {
 
 #search {
   margin: 20rpx 0;
-  font-size: 0.8em; 
+  font-size: 0.8em;
 }
 
 .scroll {
-  height: 1000rpx;
+  /*height: 1000rpx;*/
 }
 </style>
 <style scoped src="../../assets/style/d-head.css"/>

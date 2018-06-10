@@ -1,8 +1,9 @@
 <script>
-import { isTestMode } from './api/httpRequestApi';
+import { isTestMode } from './api/httpRequestApi'
+import { WINDOW_HEIGHT } from './api/const/commonConst'
 export default {
   created () {
-    console.log('created');
+    console.log('created')
     // 调用API从本地缓存中获取数据
     // const logs = wx.getStorageSync('logs') || []
     // logs.unshift(Date.now())
@@ -16,11 +17,16 @@ export default {
   },
   // @Add 这是整个程序的开始钩子
   onLaunch () {
-    console.log('launch');
+    console.log('launch')
     if (!isTestMode) {
       try {
         // @Add 我在这里把所有的存储给删了，我们并不存在需要记住上次状态的情况，反而如果有上次情况会影响本次运行
         wx.clearStorageSync()
+        // 在这里获取了屏幕可用高度
+        let sysInfo = wx.getSystemInfoSync()
+        let windowHeight = sysInfo.windowHeight
+        wx.setStorageSync(WINDOW_HEIGHT, windowHeight)
+        console.log(windowHeight)
       } catch (error) {
         console.log(error)
       }

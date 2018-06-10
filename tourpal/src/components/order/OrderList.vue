@@ -10,6 +10,7 @@
     scroll-with-animation
     enable-back-to-top
     scroll-y
+    :style="scrollStyle"
     :scroll-top="scrollTop"
     @scrolltoupper="handleScrolltoUpper"
     @scrolltolower="handleScrolltolower">
@@ -46,6 +47,7 @@ import OrderCardGuide from './OrderCardGuide'
 import DNoMore from '../common/DNoMore'
 import DLoading from '../common/DLoading'
 import { TOURIST_TYPE, GUIDE_TYPE } from '../../api/const/orderConst'
+import {WINDOW_HEIGHT} from '../../api/const/commonConst'
 
 const SHOW_TOP_SCROLLTOP = 700
 
@@ -89,10 +91,18 @@ export default {
   data () {
     return {
       scrollTop: undefined,
-      componentName: 'OrderList'
+      componentName: 'OrderList',
+      scrollHeight: 500
+    }
+  },
+  computed: {
+    scrollStyle () {
+      return 'height: ' + this.scrollHeight + 'px;'
     }
   },
   mounted () {
+    this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
+    console.log(this.scrollHeight)
     this.scrollToTop()
   },
   methods: {
@@ -130,7 +140,7 @@ export default {
 
 <style scoped>
 .scroll {
-  height: 1000rpx;
+  /*height: 1000rpx;*/
 }
 
 .to-top-wrapper {
