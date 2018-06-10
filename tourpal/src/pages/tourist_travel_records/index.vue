@@ -9,9 +9,11 @@
     <div id="timeline-wrapper">
       <d-timeline :events="events"/>
     </div>
-    <d-loading :loading="loading"/>
-    <d-no-more :has-more="hasMore" />
-    <d-no-more :has-more="!hasMore || events.length || loading"/>
+    <div v-if="finishedLoading">
+      <d-loading :loading="loading"/>
+      <d-no-more :has-more="hasMore" />
+      <d-no-more :has-more="!hasMore || events.length || loading"/>
+    </div>
   </scroll-view>
 </template>
 
@@ -37,6 +39,7 @@ export default {
       touristId: '',
       loading: false,
       hasMore: true,
+      finishedLoading: false,
       pageName: "tourist_travel_record",
       scrollHeight: 500
     }
@@ -47,6 +50,8 @@ export default {
     }
   },
   mounted () {
+    this.finishedLoading = false
+
     // 获取touristId参数
     // this.touristId = wx.getStorageSync(TOURIST_ID)
     this.touristId = 1
@@ -62,6 +67,8 @@ export default {
 
     // 初始化数据
     this.hasMore = true;
+
+    this.finishedLoading = true
 
     // 获取 events
     this.getEvents();

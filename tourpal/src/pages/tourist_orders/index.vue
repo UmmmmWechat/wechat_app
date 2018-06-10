@@ -130,7 +130,6 @@ export default {
 
       menus: STATE_MENU,
       current: WAITING_STATE,
-      current: WAITING_STATE,
 
       hasMoreArray: [
         true, true, true
@@ -172,7 +171,6 @@ export default {
       [], [], []
     ]
 
-    this.current = WAITING_STATE
     this.current = WAITING_STATE
 
     this.queryOrders()
@@ -243,7 +241,7 @@ export default {
       this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
     },
     handleSwiperChange (event) {
-      this.current = index
+      this.current = event.target.current
       this.dLog('handleSwiperChange 方法响应', event)
     },
     handleSearchFocus (event) {

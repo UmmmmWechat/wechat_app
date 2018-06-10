@@ -74,7 +74,6 @@ export default {
       waiting: STATES_ARRAY[WAITING_STATE],
 
       errorOccur: false,
-      touristName: '',
       spotName: ''
     }
   },
@@ -230,6 +229,11 @@ export default {
     margin-left: 30rpx;
     display: inline-block;
     background-color: transparent;
+}
+
+.error-wrapper{
+  text-align: center;
+  padding: 20rpx;
 }
 
 </style>

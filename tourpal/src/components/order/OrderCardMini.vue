@@ -2,12 +2,19 @@
 /* mini 邀请卡片 用于日历页显示 */
 
 <template>
+<div>
   <div class="d-card">
-      <div id="body" @click="checkOrderDetail">
-        <div><span class="title-span">景点：</span><span>{{ spotName }}</span></div>
-        <div><span class="title-span">游客：</span><span>{{ touristName }}</span></div>
-      </div>
+    <div class="error-wrapper" v-if="errorOccur">
+      粗错啦 QWQ
+    </div>
+    <div v-else>
+        <div id="body" @click="checkOrderDetail">
+          <div><span class="title-span">景点：</span><span>{{ spotName }}</span></div>
+          <div><span class="title-span">游客编号：</span><span>{{ touristName }}</span></div>
+        </div>
+    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -28,13 +35,15 @@ export default {
     return {
       spotName: '',
       touristName: '',
+      errorOccur: false
     }
   },
   mounted () {
+    errorOccur = false
     commonApi.querySpotById(
       this.order.spotId,
       (res) => {this.spotName = res.name;},
-      (err) => {}
+      (err) => {this.errorOccur = true}
     );
     this.touristName = this.order.touristId
   },
@@ -68,6 +77,11 @@ export default {
 
 .title-span {
   font-weight: bold;
+}
+
+.error-wrapper{
+  text-align: center;
+  padding: 20rpx;
 }
 
 </style>

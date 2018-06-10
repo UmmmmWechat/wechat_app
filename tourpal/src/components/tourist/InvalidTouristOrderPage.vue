@@ -84,6 +84,19 @@ export default {
   },
   mounted() {
     this.touristId = wx.getStorageSync(TOURIST_ID);
+    this.current = CANCELED_STATE
+
+    this.hasMoreArray = [
+      true, true, true
+    ]
+
+    this.ordersArray = [
+      [], [], []
+    ]
+
+    this.loadingArray=  [
+      false, false, false
+    ]
 
     this.queryOrders();
   },
@@ -148,7 +161,7 @@ export default {
       this.dLog(`onNavigatorChange 方法响应 index: ${index}`)
     },
     handleSwiperChange (event) {
-      this.current = index
+      this.current = event.target.current
       this.dLog('handleSwiperChange 方法响应', event)
     }
   }

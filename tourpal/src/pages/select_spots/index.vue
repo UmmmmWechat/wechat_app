@@ -39,37 +39,40 @@
 
     <div id="result-list">
       <scroll-view
-          class="scroll" 
-          scroll-with-animation
-          enable-back-to-top
-          scroll-y
-          :scroll-top="scrollTop"
-          @scrolltolower="handleScrollToSearch">
-          <div>
-              <div 
-              v-for="spot in spots"
-              :key="spot.id"
-              class="spot-item d-card">
-                <div>
-                  <div>
-                    {{ spot.name }}
-                  </div>
-                  <div style="color: gray; font-size:0.8em;">
-                    {{ spot.location.province + '-' + spot.location.city + '-' +spot.location.region }}
-                  </div>
-                  <div style="text-align:right; font-size: 0.8em;">
-                    <a
-                    class="d-a"
-                    @click="handleSelectSpot(spot)">
-                        选择
-                    </a>
-                  </div>
-                </div>
+        class="scroll" 
+        scroll-with-animation
+        enable-back-to-top
+        scroll-y
+        :scroll-top="scrollTop"
+        @scrolltolower="handleScrollToSearch">
+        <div>
+          <div 
+            v-for="spot in spots"
+            :key="spot.id"
+            class="spot-item d-card">
+            <div>
+              <div>
+                {{ spot.name }}
               </div>
-              <d-loading :loading="loading"/>
-              <d-no-more :has-more="hasMore"/>
-              <d-no-more :has-more="!hasMore || spots.length || loading || firstSearch"/>
+              <div style="color: gray; font-size:0.8em;">
+                {{ spot.location.province + '-' + spot.location.city + '-' +spot.location.region }}
+              </div>
+              <div style="text-align:right; font-size: 0.8em;">
+                <a
+                class="d-a"
+                @click="handleSelectSpot(spot)">
+                    选择
+                </a>
+              </div>
+            </div>
           </div>
+          
+          <div v-if="finishedLoading">
+            <d-loading :loading="loading"/>
+            <d-no-more :has-more="hasMore"/>
+            <d-no-more :has-more="!hasMore || spots.length || loading || firstSearch"/>
+          </div>
+        </div>
       </scroll-view>
     </div>
 
@@ -116,10 +119,14 @@ export default {
       loading: false,
       hasMore: true,
       firstSearch: true,
+
+      finishedLoading: false,
       pageName: 'select_spots'
     }
   },
   mounted () {
+    this.finishedLoading = false
+    
     // 初始化数据
     this.firstSearch = true
     this.spots = []
@@ -127,6 +134,8 @@ export default {
     this.searchWord = ''
     this.loading = false
     this.hasMore = true
+
+    this.finishedLoading = true
 
     this.refreshFavorSpots();
   },

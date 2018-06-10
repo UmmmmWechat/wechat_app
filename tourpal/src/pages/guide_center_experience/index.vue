@@ -1,5 +1,6 @@
 <template>
 <scroll-view
+  v-if="finishedLoading"
   class="scroll"
   scroll-y
   enable-back-to-top
@@ -29,6 +30,7 @@ export default {
       loading: false,
       hasMore: true,
       scrollHeight: 600,
+      finishedLoading: false,
       pageName: 'guide_center_experience'
     }
   },
@@ -38,6 +40,7 @@ export default {
     }
   },
   mounted () {
+    this.finishedLoading = false
     this.guideId = wx.getStorageSync(GUIDE_ID)
     if (!this.guideId) {
       // 登录失效
@@ -56,6 +59,7 @@ export default {
     this.dLog(sysInfo)
     this.scrollHeight = sysInfo.windowHeight
     this.dLog(`${this.scrollHeight}px`)
+    this.finishedLoading = true
     
     this.getMoreOrders()
   },

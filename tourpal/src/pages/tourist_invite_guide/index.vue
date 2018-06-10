@@ -116,7 +116,6 @@ export default {
     this.start = formatDate(startDate);
     this.end = formatDate(endDate);
 
-    
   },
   methods: {
     dLog(message, ...optionalParams) {
