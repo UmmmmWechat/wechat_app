@@ -6,38 +6,39 @@
  */
 <template>
 <scroll-view
-  v-if="finishedLoading"
-  class="scroll"
-  scroll-with-animation
-  enable-back-to-top
-  scroll-y
-  :scroll-top="scrollTop"
-  @scrolltoupper="handleScrolltoUpper"
-  @scrolltolower="handleScrolltolower">
-  <div v-if="type === 'tourist' ">
-      <order-card-tourist
-      v-for="order in orders"
-      :color="color"
-      :key="order.id"
-      :order="order"
-      @on-cancel="handleOnCancel"/>
-      <d-loading :loading="loading" :color="color" />
-      <d-no-more :has-more="hasMore" :color="color"/>
-      <d-no-more :has-more="!hasMore || orders.length || loading || firstSearch" :color="color"/>
-  </div>
-  <div v-else>
-      <order-card-guide
-      v-for="order in orders"
-      :color="color"
-      :key="order.id"
-      :order="order"
-      @on-accept="handleOnAccept"
-      @on-reject="handleOnReject"
-      @on-cancel="handleOnCancel"/>
-      <d-loading :loading="loading" :color="color" />
-      <d-no-more :has-more="hasMore" :color="color"/>
-      <d-no-more :has-more="!hasMore || orders.length || loading || firstSearch" :color="color"/>
-  </div>
+    v-if="finishedLoading"
+    class="scroll"
+    scroll-with-animation
+    enable-back-to-top
+    scroll-y
+    :style="scrollStyle"
+    :scroll-top="scrollTop"
+    @scrolltoupper="handleScrolltoUpper"
+    @scrolltolower="handleScrolltolower">
+    <div v-if="type === 'tourist' ">
+        <order-card-tourist
+        v-for="order in orders"
+        :color="color"
+        :key="order.id"
+        :order="order"
+        @on-cancel="handleOnCancel"/>
+        <d-loading :loading="loading" :color="color" />
+        <d-no-more :has-more="hasMore" :color="color"/>
+        <d-no-more :has-more="!hasMore || orders.length || loading || firstSearch" :color="color"/>
+    </div>
+    <div v-else>
+        <order-card-guide
+        v-for="order in orders"
+        :color="color"
+        :key="order.id"
+        :order="order"
+        @on-accept="handleOnAccept"
+        @on-reject="handleOnReject"
+        @on-cancel="handleOnCancel"/>
+        <d-loading :loading="loading" :color="color" />
+        <d-no-more :has-more="hasMore" :color="color"/>
+        <d-no-more :has-more="!hasMore || orders.length || loading || firstSearch" :color="color"/>
+    </div>
 </scroll-view>
 </template>
 
@@ -47,6 +48,7 @@ import OrderCardGuide from './OrderCardGuide'
 import DNoMore from '../common/DNoMore'
 import DLoading from '../common/DLoading'
 import { TOURIST_TYPE, GUIDE_TYPE } from '../../api/const/orderConst'
+import {WINDOW_HEIGHT} from '../../api/const/commonConst'
 
 const SHOW_TOP_SCROLLTOP = 700
 
@@ -90,12 +92,24 @@ export default {
   data () {
     return {
       scrollTop: undefined,
+
+      
       finishedLoading: false,
-      componentName: 'OrderList'
+      componentName: 'OrderList',
+      scrollHeight: 500
+    }
+  },
+  computed: {
+    scrollStyle () {
+      return 'height: ' + this.scrollHeight + 'px;'
     }
   },
   mounted () {
     this.finishedLoading = false
+    this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
+    console.log(this.scrollHeight)
+    
+    
     this.scrollToTop()
     this.finishedLoading = true
   },
@@ -134,7 +148,7 @@ export default {
 
 <style scoped>
 .scroll {
-  height: 1000rpx;
+  /*height: 1000rpx;*/
 }
 
 .to-top-wrapper {

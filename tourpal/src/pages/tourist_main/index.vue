@@ -46,6 +46,7 @@
   scroll-with-animation
   enable-back-to-top
   :scroll-top="scrollTop"
+
   @scrolltolower="handleGetMoreSpots">
     <spot-card
     v-for="spot in spots"

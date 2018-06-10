@@ -18,8 +18,10 @@ import DNoMore from '../../components/common/DNoMore'
 import DLoading from '../../components/common/DLoading'
 import guideApi from '../../api/guide'
 import commonApi from '../../api/common'
-import {GUIDE_ID, FINISHED_STATE} from '../../api/const/guideConst'
-import { ROLE_SELECT } from '../pages_url';
+import {GUIDE_ID, FINISHED_STATE, STATES_ARRAY} from '../../api/const/guideConst'
+import { ROLE_SELECT } from '../pages_url'
+import {WINDOW_HEIGHT} from '../../api/const/commonConst'
+
 export default {
   components: {DLoading, DNoMore, DTimeline},
   data () {
@@ -36,7 +38,7 @@ export default {
   },
   computed: {
     scrollViewStyle () {
-      return 'height:' + this.scrollHeight + 'px'
+      return `height: ${this.scrollHeight}px`
     }
   },
   mounted () {
@@ -44,9 +46,9 @@ export default {
     this.guideId = wx.getStorageSync(GUIDE_ID)
     if (!this.guideId) {
       // 登录失效
-      const url = `/${ROLE_SELECT}`;
-      this.dLog('跳转', url);
-      wx.redirectTo({ url });
+      const url = `/${ROLE_SELECT}`
+      this.dLog('跳转', url)
+      wx.redirectTo({ url })
 
       wx.showToast({
         title: '获取用户信息失败，请重新登录',
@@ -55,9 +57,7 @@ export default {
       return
     }
 
-    let sysInfo = wx.getSystemInfoSync()
-    this.dLog(sysInfo)
-    this.scrollHeight = sysInfo.windowHeight
+    this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
     this.dLog(`${this.scrollHeight}px`)
     this.loading = false
     this.finishedLoading = true
@@ -65,20 +65,20 @@ export default {
     this.getMoreOrders()
   },
   methods: {
-    dLog(message, ...optionalParams) {
-        console.log(this.pageName, message, optionalParams);
+    dLog (message, ...optionalParams) {
+      console.log(this.pageName, message, optionalParams)
     },
-    dError(message, ...optionalParams) {
-        console.error(this.pageName, message, optionalParams);
+    dError (message, ...optionalParams) {
+      console.error(this.pageName, message, optionalParams)
     },
-    showErrorToast(errMsg, ...fai) {
-      this.dError(errMsg, fai);
-      
-      // 输出提示信息 
+    showErrorToast (errMsg, ...fai) {
+      this.dError(errMsg, fai)
+
+      // 输出提示信息
       wx.showToast({
-          icon: 'none',
-          title: errMsg
-      });
+        icon: 'none',
+        title: errMsg
+      })
     },
     getMoreOrders () {
       this.dLog('getMoreOrders 方法响应')
@@ -93,14 +93,14 @@ export default {
       let lastIndex = this.events.length
       guideApi.queryOrders(
         this.guideId,
-        FINISHED_STATE,
+        STATES_ARRAY[FINISHED_STATE],
         lastIndex,
         res => {
           this.dLog('取得邀请列表成功', res)
           let that = this
 
           res.orderList.forEach(
-            that.translateToEvent
+            order => this.translateToEvent(order)
           )
 
           this.hasMore = res.hasMoreOrder
@@ -131,7 +131,7 @@ export default {
           order.spotId,
           (spot) => {
             content += `景点${spot.name}，`
-            let feedback = spot.feedback
+            let feedback = order.feedback
             if (!feedback) {
               event.content = content
               return
