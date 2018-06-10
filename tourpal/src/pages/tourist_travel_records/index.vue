@@ -124,7 +124,7 @@ export default {
       let feedback = order.feedback
 
       let event = {
-        date: new Date(order.travelDate).toLocaleString(),
+        date: new Date(order.travelDate).toLocaleDateString(),
         content: ''
       }
       this.events.push(event)
