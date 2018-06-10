@@ -52,8 +52,7 @@
             <div class="item-wrapper">
                 <d-input
                     label="微信号"
-                    :value="guide.wechat"
-                    placeholder="用于游客联系"
+                    :placeholder="guide.wechat"
                     confirm-type="search"
                     @input="form.wechat = $event"/>
             </div>
@@ -61,8 +60,7 @@
             <div class="item-wrapper">
                 <d-input
                     label="手机号"
-                    :value="guide.phone"
-                    placeholder="用于游客联系"
+                    :placeholder="guide.phone"
                     confirm-type="search"
                     @input="form.phone = $event"/>
             </div>
@@ -70,8 +68,7 @@
             <div class="item-wrapper">
                 <d-input
                     label="个人简介"
-                    :value="guide.introduction"
-                    placeholder="请简短地介绍自己"
+                    :placeholder="guide.introduction"
                     confirm-type="search"
                     @input="form.introduction = $event"/>
             </div>
@@ -90,7 +87,7 @@
                 </button>
             </div>
 
-            <div class="item-wrapper button-wrapper" v-if="!hasOfferedInfo">
+            <div class="item-wrapper button-wrapper">
                 <button 
                 open-type="getUserInfo" 
                 @getuserinfo="handleGetUserInfo">
@@ -122,15 +119,14 @@ export default {
         return {
             editmode: false,
             guide: undefined,
-            modifyGuide: mockGuide,
             form: {
                 wechat: "",
                 phone: "",
                 introduction: "",
                 favorSpots: []
             },
-            hasOfferedInfo: false,
-            pageName: 'guide_center_info'
+            pageName: 'guide_center_info',
+            hasCheck: false
         }
     },
     mounted() {
@@ -149,16 +145,22 @@ export default {
             return
         }
 
+        // 初始化信息
         this.editmode = false
-        this.modifyGuide = this.guide
-        this.hasOfferedInfo = this.guide.avatar !== MOCK_USER_AVATOR_URL;
+        this.hasCheck = false
+        this.form =  {
+            wechat: "",
+            phone: "",
+            introduction: "",
+            favorSpots: []
+        }
 
         // 保存景点信息
         wx.setStorageSync(SELECTED_SPOTS, this.guide.favorSpots)
     },
     onShow() {
-        // 编辑模式更新负责景点
         if (this.editmode) {
+            // 编辑模式更新负责景点
             this.dLog("编辑模式更新景点信息")
             this.form.favorSpots = wx.getStorageSync(SELECTED_SPOTS)
         }
@@ -201,76 +203,81 @@ export default {
             this.form.favorSpots = wx.getStorageSync(SELECTED_SPOTS)
             this.editmode = true
         },
-        handleSubmit(event, ...hasChecked) {
+        handleSubmit(event) {
             this.dLog("修改提交", event)
-            if (hasChecked || this.checkModify()) {
-                guideApi.modifyUserInfo(
-                    this.modifyGuide,
-                    (res) => {
-                        const sucMsg = "修改成功"
-                        this.dLog("修改成功", res)
 
-                        this.guide = this.modifyGuide
-                        this.guide.favorSpots = this.form.favorSpots
-                        wx.setStorage({
-                            key: GUIDE_INFO,
-                            data: this.guide,
-                            success: (suc) => {
-                                this.editmode = false
-
-                                // 输出提示信息 
-                                wx.showToast({
-                                    icon: 'none',
-                                    title: sucMsg
-                                });
-                            }
-                        })
-                    },
-                    (rej) => {
-                        const errMsg = "修改失败"
-                        this.showErrorToast(errMsg, rej);
-                    }
-                )
+            if (!this.hasCheck) {
+                if (!this.checkModify()) {
+                    this.dLog('修改非法')
+                    return
+                }
             }
+
+            guideApi.modifyUserInfo(
+                this.guide,
+                (res) => {
+                    const sucMsg = "修改成功"
+                    this.dLog("修改成功", res)
+
+                    // 取得景点信息
+                    this.guide.favorSpots = wx.getStorageSync(SELECTED_SPOTS)
+
+                    wx.setStorage({
+                        key: GUIDE_INFO,
+                        data: this.guide,
+                        success: (suc) => {
+                            this.editmode = false
+
+                            // 输出提示信息 
+                            wx.showToast({
+                                icon: 'none',
+                                title: sucMsg
+                            });
+                        }
+                    })
+                },
+                (rej) => {
+                    const errMsg = "修改失败"
+                    this.showErrorToast(errMsg, rej);
+                }
+            )
         },
         handleGetUserInfo(event) {
             this.dLog("handleGetUserInfo 方法调用", event)
 
-            if (this.checkModify) {
+            if (this.checkModify()) {
                 // 修改合法
                 this.guide.avatar = event.target.userInfo.avatarUrl
 
-                this.hasOfferedInfo = true
-                this.handleSubmit(event, true)
+                this.handleSubmit(event)
             }
         },
         checkModify() {
-            this.dLog("checkModify 方法调用", this.form, this.modifyGuide)
+            this.hasCheck = false
+            this.dLog("checkModify 方法调用", this.form)
 
             // 检查修改合法性
-            if (!this.form.wechat) {
-                const errMsg = "请输入你的微信号"
-                this.showErrorToast(errMsg);
-                return false;
-            } else if (!this.form.phone) {
-                const errMsg = "请输入你的手机号"
-                this.showErrorToast(errMsg);
-                return false;
-            } else if (!this.form.introduction) {
-                const errMsg = "请简短地介绍下自己"
-                this.showErrorToast(errMsg);
-                return false;
-            } else if (!this.form.favorSpots || !this.form.favorSpots.length) {
+            if (!this.form.favorSpots || !this.form.favorSpots.length) {
                 const errMsg = "请输入你想负责的景点"
                 this.showErrorToast(errMsg);
                 return false;
             }
 
             // 保存修改信息
-            this.modifyGuide.wechat = this.form.wechat
-            this.modifyGuide.phone = this.form.phone
-            this.modifyGuide.introduction = this.form.introduction
-            this.modifyGuide.favorSpots = wx.getStorageSync(SELECTED_SPOTS)
+            this.guide.favorSpots = wx.getStorageSync(SELECTED_SPOTS)
+
+            if (this.form.wechat) {
+                this.guide.wechat = this.form.wechat
+            }
+
+            if (this.form.phone) {
+                this.guide.phone = this.form.phone
+            }
+            if (this.form.introduction) {
+                this.guide.introduction = this.form.introduction
+            } 
+
+            this.hasCheck = true
 
             return true
         }

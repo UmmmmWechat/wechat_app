@@ -41,8 +41,11 @@ export default {
                 let spotItem = {
                     id: `spotID${lastIndex + i}`,
                     name: mockSpot.name,
+                    location: mockData.mockLocation,
                     pictureUrl: mockSpot.pictureUrl,
-                    introduction: mockSpot.introduction
+                    introduction: mockSpot.introduction,
+                    recommendLevel: 1,
+                    popularity: 1
                 }
                 spotList.push(spotItem);
             }
@@ -86,8 +89,11 @@ export default {
                 let spotItem = {
                     id: `spotID${lastIndex + i}`,
                     name: `${keyword}:${mockSpot.name}`,
+                    location: mockData.mockLocation,
                     pictureUrl: mockSpot.pictureUrl,
-                    introduction: mockSpot.introduction
+                    introduction: mockSpot.introduction,
+                    recommendLevel: 1,
+                    popularity: 1
                 }
                 spotList.push(spotItem);
             }
