@@ -42,7 +42,10 @@ export default {
     this.errorOccur = false
     commonApi.querySpotById(
       this.order.spotId,
-      (res) => {this.spotName = res.name;},
+      (res) => {
+        this.spotName = res.name
+        this.order.spotName = this.spotName
+        },
       (err) => {this.errorOccur = true}
     );
     this.touristName = this.order.touristId
