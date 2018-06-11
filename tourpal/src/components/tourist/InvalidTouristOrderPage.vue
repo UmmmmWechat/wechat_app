@@ -151,7 +151,8 @@ export default {
 
 
       // 加载
-      this.loadingArray[index] = true
+      // this.loadingArray[index] = true
+      this.loadingArray.splice(index, 1, true)
 
       // 保留下上次最后的index
       let lastIndex = this.ordersArray[index].length
@@ -164,8 +165,10 @@ export default {
         (res) => {
           this.dLog("取得邀请列表成功", res);
 
-          this.hasMoreArray[index] = res.hasMoreOrder;
-          this.loadingArray[index] = false;
+          // this.hasMoreArray[index] = res.hasMoreOrder;
+          // this.loadingArray[index] = false;
+          this.hasMoreArray.splice(index, 1, res.hasMoreOrder)
+          this.loadingArray.splice(index, 1, false)
 
           for (let key in res.orderList) {
             this.ordersArray[index].push(res.orderList[key]);
@@ -173,7 +176,8 @@ export default {
         },
         (rej) => {
           this.showErrorRoast("取得邀请列表失败", rej);
-          this.loadingArray[index] = false;
+          // this.loadingArray[index] = false;
+          this.loadingArray.splice(index, 1, false)
         }
       )
     },

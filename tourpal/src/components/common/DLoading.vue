@@ -11,16 +11,16 @@
 
 <script>
 export default {
- props: {
-     loading: {
-         type: Boolean,
-         default: true
-     },
-     color: {
-         type: String,
-         default:'#42b970'
-     }
- }
+  props: {
+    loading: {
+      type: Boolean,
+      default: true
+    },
+    color: {
+      type: String,
+      default: '#42b970'
+    }
+  }
 }
 </script>
 

@@ -192,9 +192,10 @@ export default {
         [], [], []
     ]
 
-    this.current = 0
+    // this.current = 0
     const index = this.current
-    this.loadingArray[index] = false
+    // this.loadingArray[index] = false
+    this.loadingArray.splice(index, 1, false)
 
     if (this.touristId) {
       this.queryOrders()
@@ -232,8 +233,10 @@ export default {
       }
 
       // 加载
-      this.hasMoreArray[index] = true
-      this.loadingArray[index] = true
+      // this.hasMoreArray[index] = true
+      // this.loadingArray[index] = true
+      this.hasMoreArray.splice(index, 1, true)
+      this.loadingArray.splice(index, 1, true)
 
       // 保留下上次最后的index
       let lastIndex = this.ordersArray[index].length
@@ -252,12 +255,14 @@ export default {
             this.ordersArray[index].push(res.orderList[key])
           }
 
-          this.loadingArray[index] = false
+          // this.loadingArray[index] = false
+          this.loadingArray.splice(index, 1, false)
         },
         (rej) => {
           this.showErrorRoast('取得邀请列表失败', rej, index)
 
-          this.loadingArray[index] = false
+          // this.loadingArray[index] = false
+          this.loadingArray.splice(index, 1, false)
         }
       )
     },

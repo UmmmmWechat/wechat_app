@@ -93,7 +93,7 @@ export default {
     return {
       scrollTop: undefined,
 
-      
+
       finishedLoading: false,
       componentName: 'OrderList',
       scrollHeight: 500
@@ -108,8 +108,8 @@ export default {
     this.finishedLoading = false
     this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
     console.log(this.scrollHeight)
-    
-    
+
+
     this.scrollToTop()
     this.finishedLoading = true
   },
