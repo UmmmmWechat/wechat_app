@@ -67,17 +67,7 @@
               </div>
             </div>
           </div>
-          <div style="color: gray; font-size:0.8em;">
-            {{ spot.location.province + '-' + spot.location.city + '-' +spot.location.region }}
-          </div>
-          <div style="text-align:right; font-size: 0.8em;">
-            <a
-            class="d-a"
-            @click="handleSelectSpot(spot)">
-                选择
-            </a>
-          </div>
-          
+
           <div v-if="finishedLoading">
             <d-loading :loading="loading"/>
             <d-no-more :has-more="hasMore"/>
@@ -145,7 +135,7 @@ export default {
   },
   mounted () {
     this.finishedLoading = false
-    
+
     // 初始化数据
     this.firstSearch = true
     this.spots = []

@@ -39,7 +39,7 @@ export default {
     }
   },
   mounted () {
-    errorOccur = false
+    this.errorOccur = false
     commonApi.querySpotById(
       this.order.spotId,
       (res) => {this.spotName = res.name;},
