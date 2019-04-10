@@ -1,0 +1,39 @@
+@import "/static/css/vendor.wxss";
+
+.item-wrapper.data-v-1b82657d {
+  padding: 10rpx;
+}
+.title.data-v-1b82657d {
+  font-weight: bold;
+  text-align: left;
+}
+#wrapper.data-v-1a30b320 {
+  display: flex;
+  flex-direction: column;
+  padding: 20rpx;
+}
+.label.data-v-1a30b320 {
+  width: 100%;
+  color: gray;
+  font-weight: bold;
+}
+.info.data-v-1a30b320 {
+  text-align: left;
+  padding: 5rpx;
+  color: rgba(0,0,0,0.3);
+}
+#wrapper.data-v-d3a5d23a {
+  display: flex;
+  flex-direction: column;
+  padding: 20rpx;
+}
+.label.data-v-d3a5d23a {
+  width: 100%;
+  color: gray;
+  font-weight: bold;
+}
+.info.data-v-d3a5d23a {
+  text-align: left;
+  padding: 5rpx;
+  color: rgba(0,0,0,0.3);
+}

@@ -1,0 +1,5 @@
+<template name="DTextarea$d89fe634">
+  <view id="wrapper" class="_div data-v-75c3b4be"><label for="d-input" class="_label data-v-75c3b4be label" wx:if="{{label !== '' }}">
+      {{label}}
+    </label>
+    <view id="input-wrapper" class="_div data-v-75c3b4be"><textarea id="d-input" value="{{value}}" placeholder="{{placeholder}}" placeholder-style="color:rgba(0,0,0,0.3);" bindconfirm="handleProxy" bindinput="handleProxy" bindfocus="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_textarea data-v-75c3b4be" /></view></view></template>

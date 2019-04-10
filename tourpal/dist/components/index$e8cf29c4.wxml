@@ -1,0 +1,11 @@
+<import src="GuideProfileCard$7ce0d5f6" />
+<import src="DTitledText$7d177585" />
+<import src="DDatePicker$317f2cf0" />
+<import src="DTextarea$d89fe634" /><template name="index$e8cf29c4">
+  <view id="out" class="_div data-v-439e9fc6">
+    <view id="profile-wrapper" class="_div data-v-439e9fc6"><template data="{{...$root[$kk+'0'], $root}}" is="GuideProfileCard$7ce0d5f6"></template></view>
+    <view id="form-wrapper" class="_div data-v-439e9fc6">
+      <form report-submit bindsubmit="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" class="_form data-v-439e9fc6"><template title="旅游地点" data="{{...$root[$kk+'1'], $root}}" is="DTitledText$7d177585"></template> <template label="旅游日期" prompt="可预约四周内的时间" bindon-change="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'2'], $root}}" is="DDatePicker$317f2cf0"></template> <template label="留言" placeholder="请给向导留个言吧" bindinput="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'3'], $root}}" is="DTextarea$d89fe634"></template> <button formType="submit" type="primary" style="margin: 10rpx;" class="_button data-v-439e9fc6"> 确定 </button></form>
+    </view>
+  </view>
+</template>

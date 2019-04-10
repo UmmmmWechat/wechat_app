@@ -1,0 +1,15 @@
+@import "/static/css/vendor.wxss";
+
+#out.data-v-02fe1aa2 {
+  padding: 40rpx 10rpx;
+}
+.rate-item.data-v-02fe1aa2 {
+  margin: 40rpx 0;
+}
+.form-item.data-v-02fe1aa2 {
+  padding: 20rpx 10rpx;
+}
+.label.data-v-02fe1aa2 {
+  color: gray;
+  text-align: left;
+}

@@ -1,0 +1,46 @@
+@import "/static/css/vendor.wxss";
+
+#page.data-v-a0c05912 {
+  padding-top: 2em;
+  padding-bottom: 5em;
+}
+#info-section.data-v-a0c05912 {
+  border-radius: 40rpx;
+  border: solid #42b9704d;
+  margin: 0 20rpx 0 20rpx;
+  padding: 20rpx 0 20rpx 0;
+  box-shadow: #42b9704d 0 0 10rpx;
+}
+.info-item.data-v-a0c05912 {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 10rpx;
+}
+.title-span.data-v-a0c05912 {
+  font-weight: bold;
+  width: 190rpx;
+}
+.value-span.data-v-a0c05912 {
+  width: 460rpx;
+}
+._footer.data-v-a0c05912 {
+  text-align: right;
+  padding: 0 20rpx 20rpx 20rpx;
+  margin-top: 1em;
+}
+.op-btn.data-v-a0c05912 {
+  width: 200rpx;
+  margin-left: 30rpx;
+  display: inline-block;
+  background-color: transparent;
+  border-collapse: rgba(0, 0, 0, 0.7);
+}
+.d-a.data-v-a0c05912 {
+  color: #42b970;
+  background-color: transparent;
+  display: inline-block;
+}
+.d-a.data-v-a0c05912:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}

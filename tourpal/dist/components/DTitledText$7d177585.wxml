@@ -1,0 +1,10 @@
+<template name="DTitledText$7d177585">
+  <view id="wrapper" class="_div data-v-28e0875d">
+    <view class="_div data-v-28e0875d label">
+      {{ title }}
+    </view>
+    <view style="'text-align': left; padding: 5rpx;" class="_div data-v-28e0875d">
+      {{ text }}
+    </view>
+  </view>
+</template>

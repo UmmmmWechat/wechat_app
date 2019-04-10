@@ -1,0 +1,15 @@
+<import src="DInput$1d315dce" />
+<import src="DSelector$97cd21ea" />
+<import src="DChooseSpots$44971644" />
+<import src="DTextarea$d89fe634" /><template name="index$bd0f32aa">
+  <view class="_div data-v-1b82657d">
+    <view class="_div data-v-1b82657d item-wrapper"><template placeholder="请输入你的真实姓名" label="真实姓名" bindinput="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'0'], $root}}" is="DInput$1d315dce"></template></view>
+    <view class="_div data-v-1b82657d item-wrapper"><template placeholder="用于实名登记检验" label="身份证号" bindinput="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'1'], $root}}" is="DInput$1d315dce"></template></view>
+    <view class="_div data-v-1b82657d item-wrapper"><template label="性别" bindon-change="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'2'], $root}}" is="DSelector$97cd21ea"></template></view>
+    <view class="_div data-v-1b82657d item-wrapper"><template label="负责景点" data="{{...$root[$kk+'3'], $root}}" is="DChooseSpots$44971644"></template></view>
+    <view class="_div data-v-1b82657d item-wrapper"><template placeholder="用于游客联系" label="微信号" bindinput="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'4'], $root}}" is="DInput$1d315dce"></template></view>
+    <view class="_div data-v-1b82657d item-wrapper"><template placeholder="用于游客联系" label="手机号" bindinput="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'5'], $root}}" is="DInput$1d315dce"></template></view>
+    <view class="_div data-v-1b82657d item-wrapper"><template placeholder="请简短地介绍下自己" label="自我介绍" bindinput="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'6'], $root}}" is="DTextarea$d89fe634"></template></view>
+    <view class="_div data-v-1b82657d item-wrapper"><button type="primary" bindtap="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}" class="_button data-v-1b82657d"> 确定 </button></view>
+  </view>
+</template>

@@ -1,0 +1,41 @@
+<import src="DInput$1d315dce" />
+<import src="DLoading$4c9f1980" />
+<import src="DNoMore$70fc2162" /><template name="index$6d78eed9">
+  <view class="_div data-v-ce6d22fe">
+    <view id="search" class="_div data-v-ce6d22fe">
+      <icon type="search" size="10" color="black" class="_icon data-v-ce6d22fe"></icon>
+      <view style="margin-left:10rpx;display:inline-block;width:90%;color:black;" class="_div data-v-ce6d22fe"><template placeholder="搜索景点" confirm-type="search" bindinput="handleProxy" bindon-enter="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'0'], $root}}" is="DInput$1d315dce"></template></view>
+    </view>
+    <view id="selected-list" class="_div data-v-ce6d22fe">
+      <view wx:key="spot.id" key="{{spot.id}}" class="_div data-v-ce6d22fe selected-item" wx:for="{{selectedSpots}}" wx:for-index="index" wx:for-item="spot">
+        <view style="margin-right:4rpx;" class="_div data-v-ce6d22fe">
+          {{ spot.name }}
+        </view>
+        <view bindtap="handleProxy" data-eventid="{{'1-'+index}}" data-comkey="{{$k}}" class="_div data-v-ce6d22fe">
+          <icon type="cancel" size="20" color="red" class="_icon data-v-ce6d22fe"></icon>
+        </view>
+      </view>
+    </view>
+    <view id="result-list" class="_div data-v-ce6d22fe">
+      <scroll-view class="_scroll-view data-v-ce6d22fe scroll" scroll-with-animation enable-back-to-top scroll-y scroll-top="{{scrollTop}}" bindscrolltolower="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" style=" {{heightStyle}}">
+        <view class="_div data-v-ce6d22fe">
+          <view wx:key="spot.id" key="{{spot.id}}" class="_div data-v-ce6d22fe spot-item d-card" wx:for="{{spots}}" wx:for-index="index" wx:for-item="spot">
+            <view class="_div data-v-ce6d22fe">
+              <view class="_div data-v-ce6d22fe">
+                {{ spot.name }}
+              </view>
+              <view style="color: gray; font-size:0.8em;" class="_div data-v-ce6d22fe">
+                {{ spot.location.province + '-' + spot.location.city + '-' +spot.location.region }}
+              </view>
+              <view style="text-align:right; font-size: 0.8em;" class="_div data-v-ce6d22fe">
+                <view class="_a data-v-ce6d22fe d-a" bindtap="handleProxy" data-eventid="{{'2-'+index}}" data-comkey="{{$k}}"> 选择 </view>
+              </view>
+            </view>
+          </view>
+          <view wx:if="{{finishedLoading}}" class="_div data-v-ce6d22fe"><template data="{{...$root[$kk+'1'], $root}}" is="DLoading$4c9f1980"></template> <template data="{{...$root[$kk+'2'], $root}}" is="DNoMore$70fc2162"></template> <template data="{{...$root[$kk+'3'], $root}}" is="DNoMore$70fc2162"></template></view>
+        </view>
+      </scroll-view>
+    </view>
+    <view id="btn-div" class="_div data-v-ce6d22fe"><button style="margin:10rpx;" size="mini" bindtap="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_button data-v-ce6d22fe"> 清空 </button> <button size="mini" style="margin:10rpx;" type="primary" bindtap="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}" class="_button data-v-ce6d22fe"> 确定 </button></view>
+  </view>
+</template>

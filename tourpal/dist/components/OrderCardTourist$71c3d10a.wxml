@@ -1,0 +1,17 @@
+<template name="OrderCardTourist$71c3d10a">
+  <view class="_div data-v-3b2bf74e d-card" style=" {{('background-color:' + color + ';')}}">
+    <view class="_div data-v-3b2bf74e error-wrapper" wx:if="{{errorOccur}}"> 粗错啦 QWQ </view>
+    <view wx:else class="_div data-v-3b2bf74e">
+      <view id="head" class="_div data-v-3b2bf74e"><label class="_span data-v-3b2bf74e">{{order.state}}</label></view>
+      <view id="body" class="_div data-v-3b2bf74e">
+        <view class="_div data-v-3b2bf74e"><label class="_span data-v-3b2bf74e title-span">景点：</label> <label class="_span data-v-3b2bf74e link" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}">{{ spotName }}</label></view>
+        <view class="_div data-v-3b2bf74e"><label class="_span data-v-3b2bf74e title-span">向导：</label> <label class="_span data-v-3b2bf74e link" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}">{{ guideName }}</label></view>
+        <view class="_div data-v-3b2bf74e"><label class="_span data-v-3b2bf74e title-span">邀请日期：</label>{{ computedCreatedDate }}</view>
+        <view class="_div data-v-3b2bf74e"><label class="_span data-v-3b2bf74e title-span">旅游日期：</label>{{ computedTravelDate }}</view>
+        <view wx:if="{{order.state === finished && order.feedback.comment}}" class="_div data-v-3b2bf74e"><label class="_span data-v-3b2bf74e title-span">旅行印象：</label> <label class="_span data-v-3b2bf74e">{{ order.feedback.comment }}</label></view>
+      </view>
+      <view class="_div data-v-3b2bf74e foot" wx:if="{{order.state === waiting}}"><button class="_button data-v-3b2bf74e d-a" size="mini" bindtap="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}"> 撤回 </button></view>
+      <view class="_div data-v-3b2bf74e foot" wx:if="{{order.state === ongoing && rateAble}}"><button class="_button data-v-3b2bf74e d-a" size="mini" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}"> 评价 </button></view>
+    </view>
+  </view>
+</template>

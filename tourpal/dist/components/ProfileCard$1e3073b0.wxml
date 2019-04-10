@@ -1,0 +1,8 @@
+<template name="ProfileCard$1e3073b0">
+  <view class="_div data-v-b90117dc wrapper">
+    <view class="_div data-v-b90117dc">
+      <image class="_img data-v-b90117dc avatar" src="{{avatar}}" alt="头像加载失败"></image>
+    </view>
+    <view class="_div data-v-b90117dc text">{{ realName }}</view>
+  </view>
+</template>

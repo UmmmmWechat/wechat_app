@@ -1,0 +1,12 @@
+<import src="OrderList$2d4b5916" /><template name="InvalidTouristOrderPage$e8fcc062">
+  <view class="_div data-v-4a2b2bf1 page">
+    <view class="_div data-v-4a2b2bf1">
+      <picker mode="selector" range="{{menus}}" bindchange="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_picker data-v-4a2b2bf1">
+        <view id="selector_div" class="_div data-v-4a2b2bf1"><label style=" border: rgba(0,0,0,0.3) 1px solid; border-radius: 5px; padding: 2px 5px" class="_span data-v-4a2b2bf1"><label class="_span data-v-4a2b2bf1 title-span">类型：</label>
+            {{ menus[current] }}
+          </label></view>
+      </picker>
+    </view>
+    <view class="_div data-v-4a2b2bf1"><template bindscrolltolower="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'0'], $root}}" is="OrderList$2d4b5916"></template></view>
+  </view>
+</template>

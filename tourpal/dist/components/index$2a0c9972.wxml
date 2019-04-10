@@ -1,0 +1,17 @@
+<import src="SpotCard$66151f43" />
+<import src="GuideProfileCard$7ce0d5f6" />
+<import src="DTextarea$d89fe634" /><template name="index$2a0c9972">
+  <view id="out" class="_div data-v-02fe1aa2">
+    <view wx:if="{{order.spot}}" id="rate-spot" class="_div data-v-02fe1aa2 rate-item"><template data="{{...$root[$kk+'0'], $root}}" is="SpotCard$66151f43"></template></view>
+    <view wx:if="{{order.guide}}" id="rate-guide" class="_div data-v-02fe1aa2 rate-item"><template data="{{...$root[$kk+'1'], $root}}" is="GuideProfileCard$7ce0d5f6"></template></view>
+    <view class="_div data-v-02fe1aa2">
+      <view class="_div data-v-02fe1aa2 form-item"><label class="_span data-v-02fe1aa2 label">给景点评分</label>
+        <slider min="{{0}}" max="{{5}}" show-value value="5" bindchange="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_slider data-v-02fe1aa2" />
+      </view>
+      <view class="_div data-v-02fe1aa2 form-item"><label class="_span data-v-02fe1aa2 label">给向导评分</label>
+        <slider min="{{0}}" max="{{5}}" show-value value="5" bindchange="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_slider data-v-02fe1aa2" />
+      </view>
+    </view> <template label="留言" placeholder="请留下你对这次旅行的看法" bindinput="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'2'], $root}}" is="DTextarea$d89fe634"></template>
+    <view id="btn-wrapper" class="_div data-v-02fe1aa2"><button type="primary" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" class="_button data-v-02fe1aa2">确定</button></view>
+  </view>
+</template>

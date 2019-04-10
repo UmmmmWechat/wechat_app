@@ -1,0 +1,9 @@
+<template name="DLoading$4c9f1980">
+  <view id="out" class="_div data-v-651c7068" style=" {{('display:' + loading ? 'block' : 'none' + ';')}}">
+    <view class="_div data-v-651c7068 item" id="rect1" style=" {{('background-color:' + color + ';')}}"></view>
+    <view class="_div data-v-651c7068 item" id="rect2" style=" {{('background-color:' + color + ';')}}"></view>
+    <view class="_div data-v-651c7068 item" id="rect3" style=" {{('background-color:' + color + ';')}}"></view>
+    <view class="_div data-v-651c7068 item" id="rect4" style=" {{('background-color:' + color + ';')}}"></view>
+    <view class="_div data-v-651c7068 item" id="rect5" style=" {{('background-color:' + color + ';')}}"></view>
+  </view>
+</template>

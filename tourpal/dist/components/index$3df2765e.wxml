@@ -1,0 +1,34 @@
+<import src="DInput$1d315dce" />
+<import src="SpotCard$66151f43" />
+<import src="DLoading$4c9f1980" />
+<import src="DNoMore$70fc2162" /><template name="index$3df2765e">
+  <view class="_div data-v-0c574479">
+    <view id="head" class="_div data-v-0c574479 d-head">
+      <view id="user-info-div" class="_div data-v-0c574479"><label class="_span data-v-0c574479">欢迎：</label> <label class="_span data-v-0c574479 underline-span"><label class="_span data-v-0c574479 underline-span" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}">
+            <open-data type="userNickName" class="_open-data data-v-0c574479"></open-data>
+          </label></label></view>
+      <view class="_div data-v-0c574479"><label class="_span data-v-0c574479">旅游地点：</label>
+        <view style="display:inline-block;" class="_div data-v-0c574479">
+          <picker mode="region" bindchange="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_picker data-v-0c574479"><label class="_span data-v-0c574479 underline-span">
+              {{ city }}
+            </label></picker>
+        </view>
+      </view>
+      <view id="search" class="_div data-v-0c574479">
+        <icon type="search" size="10" color="white" class="_icon data-v-0c574479"></icon>
+        <view style="display:inline-block;width:90%;" class="_div data-v-0c574479"><template placeholder="搜索景点" confirm-type="search" bindinput="handleProxy" bindon-focus="handleProxy" bindon-enter="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" data="{{...$root[$kk+'1'], $root}}" is="DInput$1d315dce"></template></view>
+      </view>
+    </view>
+    <scroll-view wx:if="{{!isSearch}}" class="_scroll-view data-v-0c574479 scroll" scroll-y scroll-with-animation enable-back-to-top scroll-top="{{scrollTop}}" bindscrolltolower="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}"><template wx:key="spot.id" data="{{...$root[$kk+'2-'+index], $root}}" is="SpotCard$66151f43" wx:for="{{spots}}" wx:for-index="index" wx:for-item="spot"></template>
+      <view wx:if="{{finishedLoading}}" class="_div data-v-0c574479"><template data="{{...$root[$kk+'3'], $root}}" is="DLoading$4c9f1980"></template> <template data="{{...$root[$kk+'4'], $root}}" is="DNoMore$70fc2162"></template> <template data="{{...$root[$kk+'5'], $root}}" is="DNoMore$70fc2162"></template></view>
+    </scroll-view>
+    <view wx:else class="_section data-v-0c574479 d-search-list">
+      <view class="_header data-v-0c574479">
+        <view style="text-align:center;padding:10rpx;" class="_div data-v-0c574479"><button class="_button data-v-0c574479 d-back-btn-white" size="mini" plain bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}"> 返回 </button> <button class="_button data-v-0c574479 d-back-btn-white" style="margin-left:33rpx;" size="mini" plain bindtap="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}"> 清空 </button></view>
+      </view>
+      <scroll-view class="_scroll-view data-v-0c574479 scroll" scroll-y scroll-with-animation enable-back-to-top scroll-top="{{searchScrollTop}}" bindscrolltolower="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}"><template wx:key="spot.id" data="{{...$root[$kk+'6-'+index], $root}}" is="SpotCard$66151f43" wx:for="{{searchSpots}}" wx:for-index="index" wx:for-item="spot"></template>
+        <view wx:if="{{finishedLoading}}" class="_div data-v-0c574479"><template data="{{...$root[$kk+'7'], $root}}" is="DLoading$4c9f1980"></template> <template data="{{...$root[$kk+'8'], $root}}" is="DNoMore$70fc2162"></template> <template data="{{...$root[$kk+'9'], $root}}" is="DNoMore$70fc2162"></template></view>
+      </scroll-view>
+    </view>
+  </view>
+</template>

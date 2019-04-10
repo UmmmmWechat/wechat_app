@@ -1,0 +1,5 @@
+<import src="OrderCardMini$0f354b44" /><template name="OrderListMini$1d5a21ec">
+  <scroll-view id="scroll" scroll-with-animation enable-back-to-top scroll-y class="_scroll-view data-v-ea2adc64" style=" {{('height:' + orders.length > 4 ? '100%' : orders.length * 160 + 'rpx' + ';')}}">
+    <view class="_div data-v-ea2adc64"><template wx:key="order.id" data="{{...$root[$kk+'0-'+index], $root}}" is="OrderCardMini$0f354b44" wx:for="{{orders}}" wx:for-index="index" wx:for-item="order"></template></view>
+  </scroll-view>
+</template>

@@ -1,0 +1,12 @@
+<template name="DTimeline$62414e6d">
+  <view class="_div data-v-4454f645">
+    <view id="time-line" class="_ul data-v-4454f645">
+      <view class="_li data-v-4454f645 time-line-item" wx:key="event.date + index" key="{{event.date + index}}" wx:for="{{events}}" wx:for-index="index" wx:for-item="event">
+        <view class="_div data-v-4454f645">
+          <view class="_div data-v-4454f645 date-div">{{ event.date }}</view>
+          <view class="_div data-v-4454f645 item-content">{{ event.content }}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>

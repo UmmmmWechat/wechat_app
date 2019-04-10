@@ -1,0 +1,13 @@
+<template name="OrderCardMini$0f354b44">
+  <view class="_div data-v-65f5ca40">
+    <view class="_div data-v-65f5ca40 d-card">
+      <view class="_div data-v-65f5ca40 error-wrapper" wx:if="{{errorOccur}}"> 粗错啦 QWQ </view>
+      <view wx:else class="_div data-v-65f5ca40">
+        <view id="body" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_div data-v-65f5ca40">
+          <view class="_div data-v-65f5ca40"><label class="_span data-v-65f5ca40 title-span">景点：</label><label class="_span data-v-65f5ca40">{{ spotName }}</label></view>
+          <view class="_div data-v-65f5ca40"><label class="_span data-v-65f5ca40 title-span">游客编号：</label><label class="_span data-v-65f5ca40">{{ touristName }}</label></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>

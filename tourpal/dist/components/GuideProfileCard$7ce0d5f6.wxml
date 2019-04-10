@@ -1,0 +1,21 @@
+<template name="GuideProfileCard$7ce0d5f6">
+  <view class="_div data-v-cfa67a58 d-card" style=" {{('background-color:' + color + ';')}}">
+    <view id="out" class="_div data-v-cfa67a58">
+      <view id="avatar-wrapper" class="_div data-v-cfa67a58">
+        <image style="width: 200rpx; height:200rpx; border-radius:50%;" src="{{guide.avatar}}" alt="头像加载失败" class="_img data-v-cfa67a58"></image>
+      </view>
+      <view id="text-wrapper" class="_div data-v-cfa67a58">
+        <view class="_div data-v-cfa67a58 text-item"><label class="_span data-v-cfa67a58 title-span">姓名：</label><label class="_span data-v-cfa67a58">{{ guide.realName }}</label></view>
+        <view class="_div data-v-cfa67a58 text-item"><label class="_span data-v-cfa67a58 title-span">性别：</label><label class="_span data-v-cfa67a58">{{ guide.gender }}</label></view>
+        <block wx:if="{{contactable}}">
+          <view class="_div data-v-cfa67a58 text-item"><label class="_span data-v-cfa67a58 title-span">微信：</label><label class="_span data-v-cfa67a58">{{ guide.wechat }}</label></view>
+          <view class="_div data-v-cfa67a58 text-item"><label class="_span data-v-cfa67a58 title-span">手机：</label><label class="_span data-v-cfa67a58">{{ guide.phone }}</label></view>
+        </block>
+        <view class="_div data-v-cfa67a58 text-item"><label class="_span data-v-cfa67a58 title-span">好评度：</label> <progress style="width:400rpx;" percent="{{computedRate}}" show-info class="_progress data-v-cfa67a58" /></view>
+      </view>
+    </view>
+    <view wx:if="{{invitable}}" id="btn-wrapper" style="text-align:right;padding: 0 40rpx 40rpx 0;" class="_div data-v-cfa67a58">
+      <view class="_a data-v-cfa67a58 d-a" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}"> 发起邀请 </view>
+    </view>
+  </view>
+</template>

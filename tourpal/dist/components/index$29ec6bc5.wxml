@@ -1,0 +1,21 @@
+<template name="index$29ec6bc5">
+  <view class="_section data-v-9a79a552">
+    <view style="text-align: center; margin: 20px;" class="_div data-v-9a79a552">
+      <image src="{{guide.avatar}}" class="_img data-v-9a79a552"></image>
+    </view>
+    <view class="_div data-v-9a79a552 name-wrapper">
+      {{ guide.realName }}
+    </view>
+    <view class="_div data-v-9a79a552 content-wrapper">
+      <view class="_div data-v-9a79a552 item-wrapper"><label class="_span data-v-9a79a552 title-span">好评率：</label> <progress percent="{{guide.goodFeedbackRate}}" show-info class="_progress data-v-9a79a552" /></view>
+      <view class="_div data-v-9a79a552 item-wrapper"><label class="_span data-v-9a79a552 title-span">性别：</label>{{ guide.gender }}</view>
+      <view class="_div data-v-9a79a552 item-wrapper"><label class="_span data-v-9a79a552 title-span"> 微信： </label> <label style="text-decoration: underline" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_span data-v-9a79a552">
+          {{ guide.wechat }}
+        </label></view>
+      <view class="_div data-v-9a79a552 item-wrapper"><label class="_span data-v-9a79a552 title-span"> 电话： </label> <label style="text-decoration: underline" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_span data-v-9a79a552">
+          {{ guide.phone }}
+        </label></view>
+      <view class="_div data-v-9a79a552 item-wrapper"><label class="_span data-v-9a79a552 title-span">自我介绍：</label>{{ guide.introduction }}</view>
+    </view>
+  </view>
+</template>

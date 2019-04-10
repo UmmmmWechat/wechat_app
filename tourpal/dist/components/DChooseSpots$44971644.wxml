@@ -1,0 +1,12 @@
+<template name="DChooseSpots$44971644">
+  <view id="wrapper" class="_div data-v-a9e4c3f4">
+    <view class="_div data-v-a9e4c3f4 label" wx:if="{{label}}">
+      {{label}}
+    </view>
+    <view id="input-wrapper" class="_div data-v-a9e4c3f4">
+      <view class="_div data-v-a9e4c3f4 info" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}">
+        {{ info }}
+      </view>
+    </view>
+  </view>
+</template>

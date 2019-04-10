@@ -1,0 +1,28 @@
+@import "/static/css/vendor.wxss";
+
+#out.data-v-439e9fc6 {
+  animation: in-data-v-439e9fc6 0.5s ease-in-out;
+}
+@keyframes in-data-v-439e9fc6 {
+from {
+    transform: scaleY(0);
+}
+to {
+    transform: scaleY(1.0);
+}
+}
+#wrapper.data-v-28e0875d {
+  display: flex;
+  flex-direction: column;
+  padding: 20rpx;
+}
+.label.data-v-28e0875d {
+  width: 100%;
+  color: gray;
+  font-weight: bold;
+}
+.info.data-v-28e0875d {
+  text-align: left;
+  padding: 5rpx;
+  color: rgba(0,0,0,0.3);
+}
