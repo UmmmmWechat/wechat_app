@@ -1,9 +1,0 @@
-<import src="OrderCardTourist$71c3d10a" />
-<import src="DLoading$4c9f1980" />
-<import src="DNoMore$70fc2162" />
-<import src="OrderCardGuide$6b186685" /><template name="OrderList$2d4b5916">
-  <scroll-view wx:if="{{finishedLoading}}" class="_scroll-view data-v-a45bf752 scroll" scroll-with-animation enable-back-to-top scroll-y scroll-top="{{scrollTop}}" bindscrolltoupper="handleProxy" bindscrolltolower="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" style=" {{scrollStyle}}">
-    <view wx:if="{{type === 'tourist' }}" class="_div data-v-a45bf752"><template wx:key="order.id" bindon-cancel="handleProxy" data-eventid="{{'0-'+index}}" data-comkey="{{$k}}" data="{{...$root[$kk+'0-'+index], $root}}" is="OrderCardTourist$71c3d10a" wx:for="{{orders}}" wx:for-index="index" wx:for-item="order"></template> <template data="{{...$root[$kk+'1'], $root}}" is="DLoading$4c9f1980"></template> <template data="{{...$root[$kk+'2'], $root}}" is="DNoMore$70fc2162"></template> <template data="{{...$root[$kk+'3'], $root}}" is="DNoMore$70fc2162"></template></view>
-    <view wx:else class="_div data-v-a45bf752"><template wx:key="order.id" bindon-accept="handleProxy" bindon-reject="handleProxy" bindon-cancel="handleProxy" data-eventid="{{'1-'+index}}" data-comkey="{{$k}}" data="{{...$root[$kk+'4-'+index], $root}}" is="OrderCardGuide$6b186685" wx:for="{{orders}}" wx:for-index="index" wx:for-item="order"></template> <template data="{{...$root[$kk+'5'], $root}}" is="DLoading$4c9f1980"></template> <template data="{{...$root[$kk+'6'], $root}}" is="DNoMore$70fc2162"></template> <template data="{{...$root[$kk+'7'], $root}}" is="DNoMore$70fc2162"></template></view>
-  </scroll-view>
-</template>

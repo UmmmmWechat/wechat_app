@@ -1,9 +1,0 @@
-<import src="ProfileCard$1e3073b0" /><template name="index$6f93faba">
-  <view id="out" class="_div data-v-18f2fb6a">
-    <view id="profile" class="_div data-v-18f2fb6a"><template data="{{...$root[$kk+'0'], $root}}" is="ProfileCard$1e3073b0"></template></view>
-    <view id="operation" class="_div data-v-18f2fb6a">
-      <view class="_div data-v-18f2fb6a op-item" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}">个人信息</view>
-      <view class="_div data-v-18f2fb6a op-item" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}">向导履历</view>
-    </view>
-  </view>
-</template>

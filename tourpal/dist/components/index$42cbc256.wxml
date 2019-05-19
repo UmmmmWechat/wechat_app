@@ -1,5 +1,0 @@
-<import src="SpotCard$66151f43" /><template name="index$42cbc256">
-  <view class="_section data-v-3dcaf886"><template data="{{...$root[$kk+'0'], $root}}" is="SpotCard$66151f43"></template>
-    <view style="padding: 20rpx;" class="_div data-v-3dcaf886"><button open-type="share" type="primary" class="_button data-v-3dcaf886">分享给好友</button></view>
-  </view>
-</template>

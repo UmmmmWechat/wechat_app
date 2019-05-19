@@ -1,5 +1,0 @@
-@import "/static/css/vendor.wxss";
-
-#timeline-wrapper.data-v-bb83fcc6 {
-  margin: 40rpx 0;
-}

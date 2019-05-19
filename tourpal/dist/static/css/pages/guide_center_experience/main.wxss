@@ -1,5 +1,0 @@
-@import "/static/css/vendor.wxss";
-
-.scroll.data-v-705ba5b4 {
-  height: 1000rpx;
-}

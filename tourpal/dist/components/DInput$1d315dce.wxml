@@ -1,7 +1,0 @@
-<template name="DInput$1d315dce">
-  <view id="wrapper" class="_div data-v-eb6af614"><label for="d-input" class="_label data-v-eb6af614 label" wx:if="{{label !== '' }}">
-      {{label}}
-    </label>
-    <view id="input-wrapper" class="_div data-v-eb6af614"><input id="d-input" value="{{value}}" placeholder="{{placeholder}}" placeholder-style="color:rgba(0,0,0,0.3);" bindconfirm="handleProxy" bindinput="handleProxy" bindfocus="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_input data-v-eb6af614" /></view>
-  </view>
-</template>

@@ -1,3 +1,0 @@
-<template name="DNoMore$70fc2162">
-  <view id="no-more-item" class="_div data-v-b1f0418c" style=" {{('display:' + hasMore ? 'none' : 'block' + ';' + 'color:' + color + ';')}}"> 已经加载全部啦~ </view>
-</template>

@@ -1,7 +1,0 @@
-<template name="index$7354fe86">
-  <view class="_div data-v-25296936"><button bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_button data-v-25296936">测试</button>
-    <picker mode="region" bindchange="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_picker data-v-25296936">
-      <view class="_div data-v-25296936">选择城市</view>
-    </picker>
-  </view>
-</template>

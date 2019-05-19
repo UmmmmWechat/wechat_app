@@ -1,5 +1,0 @@
-<template name="DNavigatorBar$a807fe30">
-  <view id="out" class="_div data-v-ec700680"><label wx:key="index" key="{{index}}" class="_span data-v-ec700680 menu-item {{[current === index ? 'current-menu' : '']}}" bindtap="handleProxy" data-eventid="{{'0-'+index}}" data-comkey="{{$k}}" wx:for="{{menus}}" wx:for-index="index" wx:for-item="menu">
-      {{ menu }}
-    </label></view>
-</template>
