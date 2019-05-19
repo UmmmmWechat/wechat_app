@@ -13,3 +13,4 @@ yarn-error.log*
 
 # 修正
 dist/
+.vscode/
