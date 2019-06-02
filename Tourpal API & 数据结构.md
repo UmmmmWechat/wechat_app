@@ -1,4 +1,6 @@
-# TourPal API
+# Tourpal API & 数据结构
+
+## API
 
 ### tourist取消订单
 
@@ -150,21 +152,22 @@
 - /login/guide
 - POST
 - 参数
+
   - code (微信小程序临时凭证)
 - 返回
   - {
 
-    ​	message: 'NOT_REGISTER',
+    	message: 'NOT_REGISTER',
 
-    ​	guideId: guideId 
+    	guideId: guideId 
 
     }  // 未实名注册
 
   - {
 
-    ​	message: 'SUCCESS',
+    	message: 'SUCCESS',
 
-    ​	guideId: guideId 
+    	guideId: guideId 
 
     }
 
@@ -179,7 +182,7 @@
   - 'SUCCESS' 200  onSuccess
   - 非200 onFail
 
-## **
+## Common Service
 
 ### 根据ID获取 spot
 
@@ -247,3 +250,164 @@
   - orderId
 - 返回
   - order(数据结构见会议)
+
+## 数据结构
+
+### guide
+
+```javascript
+    {
+        id: int
+        openId: String
+        avatar: String,
+        realName: String,
+        idCard: String,
+        gender: ['男'，'女'],
+        wechat: String,
+        phone: String,
+        goodFeedbackRate: int
+        introduction: String,
+        numOfFinishedOrder: int,
+        favorSpots: List<int>
+    }
+```
+
+### tourist
+
+```javascript
+    {
+        id: int
+        openId: String // 微信服务器给的唯一用户标识
+        //avatar: String,
+        //name: String,
+        //gender: ['男', '女'],
+        //finishedOrders: List,
+        //ongoingOrders: List,
+        //waitingOrders: List
+        //invalidOrders: List
+    }
+```
+
+### order
+
+```javascript
+    {
+        id: int
+        touristId: int
+        guideId: int
+        spotId: int
+        generatedDate: Date
+        travelDate: Date
+        message: String // 邀请留言
+        state: ['finished', 'waiting', 'ongoing', 'invalid', 'rejected', 'canceled', 'timeout']
+        cancelReason: String
+        feedback: {
+            spotPoint: int
+            guidePoint: int
+            comment: String // 对这一单的评价
+        }
+    }
+    
+```
+
+### spot
+
+```javascript
+    {
+        id: int
+        name: String
+        location: {
+                province: String
+                city: String
+                region: String
+        },
+        pictureUrl: String
+        introduction: Stirng
+        recommendLevel: int
+        popularity: int
+    }
+```
+
+### State
+
+```javascript
+   enum State{
+       OK,
+       FAIL,
+       WAITING,
+       ONGOING,
+       REJECTED,
+       CANCELED,
+       FINISHED,
+       TIMEOUT,
+       ALL
+   }
+```
+
+### Location
+
+```javascript
+   class Location{
+       String province;
+   
+       String city;
+   
+       String region;
+   }
+```
+
+### GuidePre
+
+```javascript
+   class GuidePre{
+       String openId;
+       
+       String realName; //真实名
+       
+       String idCard; //身份证
+       
+       char gender; //性别
+       
+       Location location; //地址
+       
+       String wechat; //微信号
+       
+       String phone; //电话号码
+       
+       List<Integer> favorSpots; //景点
+   }
+```
+
+### GuideModify
+
+```javascript
+   class GuidePre{
+       int id;
+       
+       Location location; //地址
+       
+       String wechat; //微信号
+       
+       String phone; //电话号码
+       
+       List<Integer> favorSpots; //景点 
+   }
+```
+
+### OrderPre
+
+```javascript
+   class OrderPre{
+       int touristId;
+
+       int guideId;
+       
+       int spotId;
+       
+       Date generatedDate;
+       
+       Date travelDate;
+       
+       String message;
+   }
+```
