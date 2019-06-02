@@ -1,133 +1,132 @@
 <template>
-<scroll-view
-  v-if="finishedLoading"
-  class="scroll"
-  scroll-y
-  enable-back-to-top
-  @scrolltolower="handleScrollToLower"
-  :style="scrollViewStyle">
-  <d-timeline :events="events"></d-timeline>
-  <d-loading :loading="loading"></d-loading>
-  <d-no-more :has-more="hasMore"></d-no-more>
-</scroll-view>
+  <scroll-view
+    v-if="finishedLoading"
+    class="scroll"
+    scroll-y
+    enable-back-to-top
+    @scrolltolower="handleScrollToLower"
+    :style="scrollViewStyle">
+    <d-timeline :events="events"/>
+    <d-loading :loading="loading"/>
+    <d-no-more :has-more="hasMore"/>
+  </scroll-view>
 </template>
 
 <script>
-import DTimeline from '../../components/common/DTimeline'
-import DNoMore from '../../components/common/DNoMore'
-import DLoading from '../../components/common/DLoading'
-import guideApi from '../../api/guide'
-import commonApi from '../../api/common'
-import {GUIDE_ID, FINISHED_STATE, STATES_ARRAY} from '../../api/const/guideConst'
-import { ROLE_SELECT } from '../pages_url'
-import {WINDOW_HEIGHT} from '../../api/const/commonConst'
+  import DTimeline from '../../components/common/DTimeline'
+  import DNoMore from '../../components/common/DNoMore'
+  import DLoading from '../../components/common/DLoading'
+  import guideApi from '../../api/guide'
+  import commonApi from '../../api/common'
+  import {GUIDE_ID, FINISHED_STATE, STATES_ARRAY} from '../../api/const/guideConst'
+  import {ROLE_SELECT} from '../pages_url'
+  import {WINDOW_HEIGHT} from '../../api/const/commonConst'
 
-export default {
-  components: {DLoading, DNoMore, DTimeline},
-  data () {
-    return {
-      header: '向导履历',
-      events: [],
-      guideId: '',
-      loading: false,
-      hasMore: true,
-      scrollHeight: 600,
-      finishedLoading: false,
-      pageName: 'guide_center_experience'
-    }
-  },
-  computed: {
-    scrollViewStyle () {
-      return `height: ${this.scrollHeight}px`
-    }
-  },
-  mounted () {
-    this.finishedLoading = false
-    this.guideId = wx.getStorageSync(GUIDE_ID)
-    if (!this.guideId) {
-      // 登录失效
-      const url = `/${ROLE_SELECT}`
-      this.dLog('跳转', url)
-      wx.redirectTo({ url })
-
-      wx.showToast({
-        title: '获取用户信息失败，请重新登录',
-        icon: 'none'
-      })
-      return
-    }
-
-    this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
-    this.dLog(`${this.scrollHeight}px`)
-    this.loading = false
-    this.finishedLoading = true
-    
-    this.getMoreOrders()
-  },
-  methods: {
-    dLog (message, ...optionalParams) {
-      console.log(this.pageName, message, optionalParams)
+  export default {
+    components: {DLoading, DNoMore, DTimeline},
+    data () {
+      return {
+        header: '向导履历',
+        events: [],
+        guideId: '',
+        loading: false,
+        hasMore: true,
+        scrollHeight: 600,
+        finishedLoading: false,
+        pageName: 'guide_center_experience'
+      }
     },
-    dError (message, ...optionalParams) {
-      console.error(this.pageName, message, optionalParams)
+    computed: {
+      scrollViewStyle () {
+        return `height: ${this.scrollHeight}px`
+      }
     },
-    showErrorToast (errMsg, ...fai) {
-      this.dError(errMsg, fai)
+    mounted () {
+      this.finishedLoading = false
+      this.guideId = wx.getStorageSync(GUIDE_ID)
+      if (!this.guideId) {
+        // 登录失效
+        const url = `/${ROLE_SELECT}`
+        this.dLog('跳转', url)
+        wx.redirectTo({url})
 
-      // 输出提示信息
-      wx.showToast({
-        icon: 'none',
-        title: errMsg
-      })
-    },
-    getMoreOrders () {
-      this.dLog('getMoreOrders 方法响应')
-
-      if (this.loading) {
-        this.dLog('加载中 沉默方法')
+        wx.showToast({
+          title: '获取用户信息失败，请重新登录',
+          icon: 'none'
+        })
         return
       }
 
-      this.hasMore = true
-      this.loading = true
-      let lastIndex = this.events.length
-      guideApi.queryOrders(
-        this.guideId,
-        STATES_ARRAY[FINISHED_STATE],
-        lastIndex,
-        res => {
-          this.dLog('取得邀请列表成功', res)
-          let that = this
+      this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
+      this.dLog(`${this.scrollHeight}px`)
+      this.loading = false
+      this.finishedLoading = true
 
-          res.orderList.forEach(
-            order => this.translateToEvent(order)
-          )
-
-          this.hasMore = res.hasMoreOrder
-
-          this.loading = false
-        },
-        err => {
-          const errMsg = '粗错啦QWQ时间轴更新布鸟辣'
-          this.loading = false
-          this.showErrorToast(errMsg, err)
-        }
-      )
-    },
-    handleScrollToLower (event) {
-      this.dLog(event)
       this.getMoreOrders()
     },
-    translateToEvent (order) {
-      let event = {
-        date: new Date(order.travelDate).toLocaleDateString(),
-        content: ''
-      }
-      this.events.push(event)
+    methods: {
+      dLog (message, ...optionalParams) {
+        console.log(this.pageName, message, optionalParams)
+      },
+      dError (message, ...optionalParams) {
+        console.error(this.pageName, message, optionalParams)
+      },
+      showErrorToast (errMsg, ...fai) {
+        this.dError(errMsg, fai)
+
+        // 输出提示信息
+        wx.showToast({
+          icon: 'none',
+          title: errMsg
+        })
+      },
+      getMoreOrders () {
+        this.dLog('getMoreOrders 方法响应')
+
+        if (this.loading) {
+          this.dLog('加载中 沉默方法')
+          return
+        }
+
+        this.hasMore = true
+        this.loading = true
+        let lastIndex = this.events.length
+        guideApi.queryOrders(
+          this.guideId,
+          STATES_ARRAY[FINISHED_STATE],
+          lastIndex,
+          res => {
+            this.dLog('取得邀请列表成功', res)
+
+            res.orderList.forEach(
+              order => this.translateToEvent(order)
+            )
+
+            this.hasMore = res.hasMoreOrder
+
+            this.loading = false
+          },
+          err => {
+            const errMsg = '粗错啦QWQ时间轴更新布鸟辣'
+            this.loading = false
+            this.showErrorToast(errMsg, err)
+          }
+        )
+      },
+      handleScrollToLower (event) {
+        this.dLog(event)
+        this.getMoreOrders()
+      },
+      translateToEvent (order) {
+        let event = {
+          date: new Date(order.travelDate).toLocaleDateString(),
+          content: ''
+        }
+        this.events.push(event)
         // 事件内容
-      let content = `带领id为${order.id}的游客一起游玩了`
+        let content = `带领id为${order.id}的游客一起游玩了`
         // 获取景点名
-      commonApi.querySpotById(
+        commonApi.querySpotById(
           order.spotId,
           (spot) => {
             content += `景点${spot.name}，`
@@ -160,13 +159,13 @@ export default {
             this.dError(err)
           }
         )
+      }
     }
   }
-}
 </script>
 
 <style scoped>
-.scroll {
-  height: 1000rpx;
-}
+  .scroll {
+    height: 1000px;
+  }
 </style>

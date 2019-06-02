@@ -24,7 +24,13 @@ module.exports = {
     // allow async-await
     'generator-star-spacing': 0,
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    //一行结束后面不要有空格
+    "no-trailing-spaces": 0,
+    // 引号类型
+    'quotes': [0, 'single'],
+    // 语句强制分号结尾
+    "semi": [0, "always"],
   },
   globals: {
     App: true,

@@ -1,63 +1,60 @@
-/* 事件有 */
+<!-- 选择景点组件，显示已选择的景点 -->
 <template>
   <div id="wrapper">
-      <div class="label" v-if="label">
-          {{label}}
+    <div class="label" v-if="label">
+      {{label}}
+    </div>
+    <div id="input-wrapper">
+      <div
+        class="info"
+        @click="handleChooseSpots">
+        {{ info }}
       </div>
-      <div id="input-wrapper">
-            <div 
-            class="info"
-            @click="handleChooseSpots">
-                {{ info }}
-            </div>
-      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { SELECT_SPOTS } from '../../pages/pages_url';
+  import {SELECT_SPOTS} from '../../pages/pages_url'
 
-export default {
-  props: {
+  export default {
+    props: {
       label: {
-          type: String,
-          default: ''
+        type: String,
+        default: ''
       },
       spots: {
-          type: Array,
-          required: true
+        type: Array,
+        required: true
       }
-  },
-  computed: {
+    },
+    computed: {
       info () {
-          if(this.spots.length === 0){
-              return '未选择，点击选择景点';
-          } else {  
-              var res = this.spots.map(
-                  (spot) => spot.name
-              ).reduce(
-                  (x, y) => x + '，' + y
-              )
-              return res;
-          }
+        if (this.spots.length === 0) {
+          return '未选择，点击选择景点'
+        } else {
+          return this.spots
+            .map((spot) => spot.name)
+            .join(',')
+        }
       }
-  },
-  methods: {
-      handleChooseSpots (event) {
-        const url = `/${SELECT_SPOTS}`;
-        console.log('DchooseSpots 跳转', url);
-        wx.navigateTo({ url });
+    },
+    methods: {
+      handleChooseSpots () {
+        const url = `/${SELECT_SPOTS}`
+        console.log('DchooseSpots 跳转', url)
+        wx.navigateTo({url})
       }
+    }
   }
-}
 </script>
 
 <style scoped>
-#wrapper {
+  #wrapper {
     display: flex;
     flex-direction: column;
-    padding: 20rpx;
-}
+    padding: 20px;
+  }
 </style>
 
-<style scoped src="../../assets/style/d-form-item.css"/>
+<style scoped src="../../assets/style/d-form-item.css"></style>

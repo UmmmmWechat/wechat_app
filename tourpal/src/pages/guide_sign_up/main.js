@@ -8,6 +8,6 @@ export default {
   config: {
     navigationBarTitleText: '注册成为引路人',
     navigationBarTextStyle: 'white',
-    navigationBarBackgroundColor: '#42b970',
+    navigationBarBackgroundColor: '#42b970'
   }
 }

@@ -6,7 +6,7 @@ const app = new Vue(App)
 app.$mount()
 
 export default {
-    config: {
-        navigationBarTitleText: '游伴，有伴'
-    }
+  config: {
+    navigationBarTitleText: '游伴，有伴'
+  }
 }

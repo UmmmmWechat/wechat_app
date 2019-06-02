@@ -1,14 +1,14 @@
 .d-search-list {
-    background-color: #42b970;
-    animation: searchListAnimation 0.5s ease-in-out;
-    height: 100%;
+  background-color: #42b970;
+  animation: searchListAnimation 0.5s ease-in-out;
+  height: 100%;
 }
 
 @keyframes searchListAnimation {
-    from {
-        transform: translateY(-100%);
-    }
-    to {
-        transform: translateY(0);
-    }
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }

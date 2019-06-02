@@ -1,9 +1,5 @@
-var mockTourist = {
-
-};
-
-var MOCK_TOURIST_ID = "testTouristID";
+const MOCK_TOURIST_ID = 'testTouristID'
 
 export {
-    MOCK_TOURIST_ID
+  MOCK_TOURIST_ID
 }

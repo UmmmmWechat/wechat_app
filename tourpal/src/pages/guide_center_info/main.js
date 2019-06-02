@@ -5,9 +5,9 @@ const app = new Vue(App)
 app.$mount()
 
 export default {
-    config: {
-        navigationBarTitleText: '个人中心-个人信息',
-        navigationBarTextStyle: 'white',
-        navigationBarBackgroundColor: '#42b970',
-    }
+  config: {
+    navigationBarTitleText: '个人中心-个人信息',
+    navigationBarTextStyle: 'white',
+    navigationBarBackgroundColor: '#42b970'
+  }
 }

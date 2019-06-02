@@ -1,10 +1,11 @@
+<!-- TODO 好像并没有写完 -->
 <template>
   <section>
     <section>
       <calendar
         :mark-date="markedDate"
-      v-on:choseDay="clickDay"
-      v-on:changeMonth="changeDate"/>
+        v-on:chooseDay="clickDay"
+        v-on:changeMonth="changeDate"/>
     </section>
     <section>
       <div
@@ -21,71 +22,74 @@
 </template>
 
 <script>
-import Calendar from "../../components/guide/Calendar"
-import OrderListMini from "../../components/order/OrderListMini"
-import guideApi from "../../api/guide"
-import {GUIDE_ID} from "../../api/const/guideConst";
+  import Calendar from '../../components/guide/Calendar'
+  import OrderListMini from '../../components/order/OrderListMini'
+  import guideApi from '../../api/guide'
+  import {GUIDE_ID} from '../../api/const/guideConst'
 
-export default {
-  components: {
-    Calendar,
-    OrderListMini
-  },
-  data () {
-    return {
-      orders: [],
-      ordersGroupByDate: {},
-      markedDate: [],
-      guideId: ''
-    }
-  },
-  onShow () {
-    this.getOrders()
-  },
-  methods: {
-    getOrders () {
-      try {
-        this.guideId = wx.getStorageSync(GUIDE_ID)
-      } catch (e) {
-        wx.showToast({
-          title: '获取id失败',
-          icon: 'none'
-        })
-        return
+  export default {
+    components: {
+      Calendar,
+      OrderListMini
+    },
+    data () {
+      return {
+        orders: [],
+        ordersGroupByDate: {},
+        markedDate: [],
+        guideId: ''
       }
-      guideApi.queryOngoingOrdersGroupByDate(
-        this.guideId,
-        (res) => {
-          this.ordersGroupByDate = res
-          for (let key in this.ordersGroupByDate) {
-            this.markedDate.push(key)
-          }
-          console.log(this.markedDate)
-          let date = new Date().toLocaleDateString()
-          let orders = this.ordersGroupByDate[date]
-          if (orders) {
-            this.orders = orders
-          }
-        },
-        (err) => {
-          console.log(err)
+    },
+    onShow () {
+      this.getOrders()
+    },
+    methods: {
+      getOrders () {
+        try {
+          this.guideId = wx.getStorageSync(GUIDE_ID)
+        } catch (e) {
+          wx.showToast({
+            title: '获取id失败',
+            icon: 'none'
+          })
+          return
         }
-      )
-    },
-    clickDay (data) {
-      let date = new Date(data).toLocaleDateString()
-      let orders = this.ordersGroupByDate[date]
-      if (orders) {
-        this.orders = orders
-      } else {
-        this.orders = []
+        guideApi.queryOngoingOrdersGroupByDate(
+          this.guideId,
+          (res) => {
+            this.ordersGroupByDate = res
+            for (let key in this.ordersGroupByDate) {
+              if (this.ordersGroupByDate.hasOwnProperty(key)) {
+                this.markedDate.push(key)
+              }
+            }
+            console.log(this.markedDate)
+            let date = new Date().toLocaleDateString()
+            let orders = this.ordersGroupByDate[date]
+            if (orders) {
+              this.orders = orders
+            }
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
+      },
+      clickDay (data) {
+        let date = new Date(data).toLocaleDateString()
+        let orders = this.ordersGroupByDate[date]
+        if (orders) {
+          this.orders = orders
+        } else {
+          this.orders = []
+        }
+      },
+      changeDate (data) {
+        // TODO 左右点击切换月份的响应
+        console.log(data)
       }
-    },
-    changeDate(data) {
-      console.log(data); //左右点击切换月份
-    },
+    }
   }
-}
 </script>
 
 <style>
