@@ -85,6 +85,16 @@
 - 返回
   - touristId (游客在系统中的标识)
 
+### tourist注册
+
+- /sign-up/tourist
+- POST
+- 参数
+  - tourist
+- 返回
+  - SUCCESS
+  - ERROR
+
 ## *Guide* Service
 
 ### guide接受邀请
@@ -159,7 +169,7 @@
 
     	message: 'NOT_REGISTER',
 
-    	guideId: guideId 
+      	guideId: guideId 
 
     }  // 未实名注册
 
@@ -167,7 +177,7 @@
 
     	message: 'SUCCESS',
 
-    	guideId: guideId 
+      	guideId: guideId 
 
     }
 
@@ -257,8 +267,9 @@
 
 ```javascript
     {
-        id: int
-        openId: String
+        id: int,
+        openId: String,
+        age: int,
         avatar: String,
         realName: String,
         idCard: String,
@@ -277,7 +288,10 @@
 ```javascript
     {
         id: int
-        openId: String // 微信服务器给的唯一用户标识
+        openId: String, // 微信服务器给的唯一用户标识
+        name: String,
+        wechat: String,
+        idCard: String
         //avatar: String,
         //name: String,
         //gender: ['男', '女'],
@@ -294,8 +308,11 @@
     {
         id: int
         touristId: int
+        touristName: String
         guideId: int
+        guideName: String
         spotId: int
+        spotName: String
         generatedDate: Date
         travelDate: Date
         message: String // 邀请留言
@@ -344,10 +361,30 @@
    }
 ```
 
+### ResultMessage
+```javascript
+{
+    SUCCESS: 'SUCCESS',
+    ERROR: 'ERROR',
+    ERROR_DATABASE: 'ERROR_DATABASE',
+    INVALID_PARAM: 'INVALID_PARAM',
+    NOT_FOUND: 'NOT_FOUND', 
+    ALREADY_CANCELED: 'ALREADY_CANCELED', // 已经被游客取消了
+    ALREADY_TIMEOUT: 'ALREADY_TIMEOUT',   // 已经过期了
+    ALREADY_ACCEPTED: 'ALREADY_ACCEPTED',
+    ALREADY_REJECTED: 'ALREADY_REJECTED',
+    ERROR_ACCESS_TOKEN: 'ERROR_ACCESS_TOKEN',
+    TIMEOUT_FORM_ID: 'ERROR_FORM_ID', // formId过期
+    NOT_REGISTER: 'NOT_REGISTER',
+    INVALID_CODE: 'INVALID_CODE'
+}
+```
+
+
 ### Location
 
 ```javascript
-   class Location{
+   class Location {
        String province;
    
        String city;
@@ -359,7 +396,7 @@
 ### GuidePre
 
 ```javascript
-   class GuidePre{
+   class GuidePre {
        String openId;
        
        String realName; //真实名
@@ -381,7 +418,7 @@
 ### GuideModify
 
 ```javascript
-   class GuidePre{
+   class GuideModify {
        int id;
        
        Location location; //地址
@@ -397,7 +434,7 @@
 ### OrderPre
 
 ```javascript
-   class OrderPre{
+   class OrderPre {
        int touristId;
 
        int guideId;
