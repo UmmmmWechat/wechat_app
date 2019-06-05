@@ -1,5 +1,5 @@
-<!-- 日期选择器，包装原组件 -->
-<!-- 事件有 on-change -->
+<!-- 时间选择器，包装原组件 -->
+<!-- 事件有 on-change([hh,mm]) -->
 <template>
   <div class="wrapper">
     <div class="label" v-if="label !== '' ">
@@ -7,7 +7,7 @@
     </div>
     <div class="info">
       <picker
-        mode="date"
+        mode="time"
         :start="start"
         :end="end"
         @change="handleChange">
@@ -27,22 +27,24 @@
     props: {
       label: {
         type: String,
-        default: '选择日期'
+        default: '选择时间'
       },
       prompt: {
         type: String,
         default: '未选择，点击开始选择'
       },
       start: {
-        type: String
+        type: String,
+        default: '08:00'
       },
       end: {
-        type: String
+        type: String,
+        default: '20:00'
       }
     },
     data () {
       return {
-        componentName: 'DDatePicker',
+        componentName: 'DTimePicker',
         result: undefined
       }
     },

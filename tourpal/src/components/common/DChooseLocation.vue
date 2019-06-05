@@ -1,5 +1,6 @@
 <!-- 包装了一下微信原装组件 -->
 <!-- 事件有 on-change on-cancel on-location-chosen(调用微信地图选点之后) -->
+<!-- TODO 疑似未用到 可丢弃 并没有 on-change on-cancel -->
 <template>
   <div id="wrapper">
     <div class="label" v-if="label !== '' ">

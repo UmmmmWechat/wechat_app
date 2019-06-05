@@ -15,6 +15,7 @@
         @click="handleToReview">
         向导履历
       </div>
+      <quit-item/>
     </div>
 
   </div>
@@ -22,10 +23,12 @@
 
 <script>
   import GuideProfileCard from '../../components/guide/ProfileCard'
+  import QuitItem from '../../components/common/DQuitItem'
 
   export default {
     components: {
-      GuideProfileCard
+      GuideProfileCard,
+      QuitItem
     },
     methods: {
       handleToInfo (event) {

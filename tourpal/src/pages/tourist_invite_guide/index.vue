@@ -2,7 +2,7 @@
   <div id="out">
     <div id="profile-wrapper">
       <guide-profile-card
-        canInvite="false"
+        :canInvite="false"
         :guide="guide"/>
     </div>
 
@@ -20,6 +20,12 @@
           :start="start"
           :end="end"
           @on-change="handleDateChanged"
+        />
+
+        <d-time-picker
+          label="旅游时间"
+          prompt="可预约早晚八点之间的时间"
+          @on-change="handleTimeChanged"
         />
 
         <d-textarea
@@ -43,6 +49,7 @@
   import DTextarea from '../../components/common/DTextarea'
   import DTitledText from '../../components/common/DTitledText'
   import DDatePicker from '../../components/common/DDatePicker'
+  import DTimePicker from '../../components/common/DTimePicker'
 
   import touristApi from '../../api/tourist'
 
@@ -54,6 +61,7 @@
 
   export default {
     components: {
+      DTimePicker,
       GuideProfileCard,
       DTextarea,
       DTitledText,
@@ -71,13 +79,14 @@
         spotName: 'spotName',
         touristId: 'touristId',
         travelDate: undefined,
+        travelTime: undefined,
         message: undefined,
 
         pageName: 'tourist_invite_guide'
       }
     },
     mounted () {
-      // 取得 向导信息
+      // TODO 取得 向导信息 多个向导
       this.guide = wx.getStorageSync(INVITE_GUIDE_INFO)
       if (!this.guide) {
         const errMsg = '向导信息获取失败'
@@ -134,9 +143,13 @@
           title: errMsg
         })
       },
-      handleDateChanged (e) {
-        this.dLog('handleDateChanged 方法调用', e)
-        this.travelDate = new Date(e)
+      handleDateChanged (date) {
+        this.dLog('handleDateChanged 方法调用', date)
+        this.travelDate = date
+      },
+      handleTimeChanged (time) {
+        this.dLog('handleTimeChanged 方法调用', time)
+        this.travelTime = time
         this.dLog(`travelDate 更新 ${this.travelDate}`)
       },
       handleInput (e) {
@@ -150,8 +163,16 @@
         // 获取formId
         const formId = e.target.formId
 
+        let errMsg;
         if (!this.travelDate) {
-          const errMsg = '请选择旅行时间w'
+          errMsg = '请选择旅行日期w'
+        } else if (!this.travelTime) {
+          errMsg = '请选择旅行时间w'
+        } else if (!this.message) {
+          errMsg = '跟向导说点啥邀请成功的机率更高哟w'
+        }
+
+        if (errMsg) {
           this.dError(errMsg)
 
           // 输出提示信息
@@ -163,25 +184,13 @@
           return
         }
 
-        if (!this.message) {
-          const errMsg = '跟向导说点啥邀请成功的机率更高哟w'
-          this.dError(errMsg)
-
-          // 输出提示信息
-          wx.showToast({
-            icon: 'none',
-            title: errMsg
-          })
-
-          return
-        }
-
+        // TODO 发往多个向导
         const order = {
           touristId: this.touristId,
           guideId: this.guide.id,
           spotId: this.spotId,
           generatedDate: new Date(),
-          travelDate: this.travelDate,
+          travelDate: new Date(`${this.travelDate} ${this.travelTime}`),
           message: this.message
         }
 

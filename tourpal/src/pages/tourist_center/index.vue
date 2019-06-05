@@ -14,12 +14,15 @@
         class="op-item"
         @click="handleToTravelNotes">我的游记
       </div>
+
+      <quit-item />
     </div>
   </div>
 </template>
 
 <script>
   import TouristProfileCard from '../../components/tourist/ProfileCard'
+  import QuitItem from '../../components/common/DQuitItem'
 
   import {TOURIST_TRAVEL_RECORDS, TOURIST_ORDERS} from '../pages_url'
   import {MOCK_TOURIST_ID} from '../../api/mock/tourist_mock_data'
@@ -27,7 +30,8 @@
 
   export default {
     components: {
-      TouristProfileCard
+      TouristProfileCard,
+      QuitItem
     },
     data () {
       return {
