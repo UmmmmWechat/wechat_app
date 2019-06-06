@@ -1,4 +1,4 @@
-import OrderState from '../../utils/OrderState'
+import OrderState from './OrderState'
 
 const GUIDE_ID = 'dGuideId'
 const GUIDE_INFO = 'dGuideInfo'

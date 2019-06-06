@@ -50,8 +50,17 @@
     },
     methods: {
       handleChange (event) {
-        this.result = event.target.value
-        this.$emit('on-change', this.result)
+        const result = event.target.value;
+        if (result >= this.start && result <= this.end) {
+          this.result = result;
+          this.$emit('on-change', this.result)
+        } else {
+          // 输出提示信息
+          wx.showToast({
+            icon: 'none',
+            title: `请选择 ${this.start} 到 ${this.end} 之间的时间`
+          })
+        }
       }
     }
   }

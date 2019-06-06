@@ -11,7 +11,7 @@
     <div id="input-wrapper">
       <textarea
         id="d-input"
-        :value="value"
+        :value="value || defaultValue"
         :placeholder="placeholder"
         placeholder-style="color:rgba(0,0,0,0.3);"
         @confirm="handleEnter"
