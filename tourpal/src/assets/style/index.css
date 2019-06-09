@@ -1,1 +1,5 @@
 /* 全局样式表 */
+
+div {
+  font-family: 'Microsoft Yahei', Tahoma, Simsun, sans-serif;
+}

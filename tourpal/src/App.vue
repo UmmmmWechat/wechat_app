@@ -1,6 +1,7 @@
 <script>
   import {isTestMode} from './api/httpRequestApi'
   import {WINDOW_HEIGHT} from './api/const/commonConst'
+  import {GUIDE_MAIN, TOURIST_MAIN} from "./pages/pages_url";
 
   export default {
     created () {
@@ -15,6 +16,8 @@
       //     console.log(res);
       //   }
       // })
+      // 检查上次使用
+      this.lastUse();
     },
     // @Add 这是整个程序的开始钩子
     onLaunch () {
@@ -31,6 +34,24 @@
         } catch (error) {
           console.log(error)
         }
+      }
+    },
+    methods: {
+      lastUse () {
+        const userType = wx.getStorageSync("user-type");
+        if (!userType) return;
+        const urls = {
+          guide: GUIDE_MAIN,
+          tourist: TOURIST_MAIN
+        };
+        const url = "/" + urls[userType];
+        console.log(url);
+        wx.redirectTo({
+          url,
+          fail: (e) => {
+            console.error(e);
+          }
+        })
       }
     }
   }
@@ -52,6 +73,7 @@
     -moz-transition: width 2s;
     -webkit-transition: width 2s;
     -o-transition: width 2s;
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', STHeiti, 'Microsoft Yahei', Tahoma, Simsun, sans-serif;
   }
 
 </style>

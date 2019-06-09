@@ -11,7 +11,6 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "animate.css": "^3.6.1",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "mpvue": "1.0.10",

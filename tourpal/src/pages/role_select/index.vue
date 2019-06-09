@@ -1,19 +1,36 @@
 <template class="page">
   <div class="container">
-    <div
-      class="role-card"
-      id="tourist-role-card"
-      @click="handleChooseTourist">
-      <p class="title">{{ touristPrompot.title }}</p>
-      <p class="extra">{{ touristPrompot.extra }}</p>
+<!--    <img v-bind:src="logoUrl" class="logo">-->
+    <Logo v-bind:width="540"/>
+    <div class="text">
+<!--      <div class="title">-->
+<!--        游伴，有伴-->
+<!--      </div>-->
+      <div class="intro">
+        自由、可靠、免费的导游平台
+      </div>
     </div>
-    <div
-      class="role-card"
-      id="guide-role-card"
-      @click="handleChooseGuide">
-      <p class="title">{{ guidePrompt.title }}</p>
-      <p class="extra">{{ guidePrompt.extra }}</p>
+    <div class="divider"/>
+    <div class="card">
+      <div class="card-title">请选择一个角色</div>
+      <div class="roles">
+        <div class="role"
+             v-bind:class="{'role-selected': selectedRole === GUIDE}"
+             v-on:click="handleClickRole(GUIDE)">
+          <img v-bind:src="guideIcon" class="role-img">
+          <span class="role-span">导游</span>
+        </div>
+        <div class="role"
+             v-bind:class="{'role-selected': selectedRole === TOURIST}"
+              v-on:click="handleClickRole(TOURIST)">
+          <img v-bind:src="touristIcon" class="role-img">
+          <span class="role-span">游客</span>
+        </div>
+      </div>
     </div>
+    <button v-bind:disabled="!selectedRole" type="primary" class="button" v-on:click="handleClickStart">
+      开始旅程
+    </button>
   </div>
 </template>
 
@@ -22,8 +39,14 @@
 
   import guideApi from '../../api/guide'
   import touristApi from '../../api/tourist'
+  import guideIcon from "../../assets/image/icon_ natural persons.png";
+  import touristIcon from "../../assets/image/icon_ natural persons_2.png";
+  import Logo from "../../components/common/Logo";
+
+  const USER_TYPE = "user-type";
 
   export default {
+    components: {Logo},
     data () {
       return {
         touristPrompot: {
@@ -34,7 +57,12 @@
           title: '向导',
           extra: '守着这一方水土，等待着谁的到来'
         },
-        pageName: 'role_select'
+        pageName: 'role_select',
+        guideIcon: guideIcon,
+        touristIcon: touristIcon,
+        TOURIST: "tourist",
+        GUIDE: "guide",
+        selectedRole: ""
       }
     },
     methods: {
@@ -53,103 +81,184 @@
           title: errMsg
         })
       },
-      handleChooseTourist () {
-        // 选择游客
-        this.dLog('选择了游客')
-
-        touristApi.logIn(
-          (suc) => {
-            // resolve
-            this.dLog('游客登录成功', suc)
-
-            const url = `/${TOURIST_MAIN}`
-            this.dLog('跳转', url)
-            wx.redirectTo({url})
-          },
-          (fai) => {
-            this.showErrorToast('游客登录失败', fai)
-          }
-        )
+      handleClickRole (role) {
+        this.dLog("选择了" + role);
+        this.selectedRole = role;
       },
-      handleChooseGuide () {
-        // 选择向导
-        this.dLog('选择了向导')
+      handleClickStart () {
+        switch (this.selectedRole) {
+          case this.GUIDE:
+            guideApi.logIn(
+                (res) => {
+                  // resolve
+                  this.dLog('向导登录成功', res)
 
-        guideApi.logIn(
-          (res) => {
-            // resolve
-            this.dLog('向导登录成功', res)
+                  wx.setStorageSync(USER_TYPE, this.GUIDE)
 
-            if (res.isNewGuide) {
-              const url = `/${GUIDE_SIGN_UP}`
-              this.dLog('跳转', url)
-              wx.navigateTo({url})
-            } else {
-              const url = `/${GUIDE_MAIN}`
-              this.dLog('跳转', url)
-              wx.switchTab({url})
-            }
-          },
-          (fai) => {
-            this.showErrorToast('向导登录失败', fai)
-          }
-        )
+                  if (res.isNewGuide) {
+                    const url = `/${GUIDE_SIGN_UP}`
+                    this.dLog('跳转', url)
+                    wx.redirectTo({url})
+                  } else {
+                    const url = `/${GUIDE_MAIN}`
+                    this.dLog('跳转', url)
+                    wx.redirectTo({url})
+                  }
+                },
+                (fai) => {
+                  this.showErrorToast('向导登录失败', fai)
+                }
+              )
+            break;
+          case this.TOURIST:
+            touristApi.logIn(
+                (suc) => {
+                  // resolve
+                  this.dLog('游客登录成功', suc)
+
+                  const url = `/${TOURIST_MAIN}`
+                  this.dLog('跳转', url)
+                  wx.redirectTo({
+                    url,
+                    success: () => {
+                      wx.setStorageSync(USER_TYPE, this.TOURIST)
+                    }
+                  })
+                },
+                (fai) => {
+                  this.showErrorToast('游客登录失败', fai)
+                }
+              )
+            break;
+        }
       }
+      // handleChooseTourist () {
+      //   // 选择游客
+      //   this.dLog('选择了游客')
+      //
+      //   touristApi.logIn(
+      //     (suc) => {
+      //       // resolve
+      //       this.dLog('游客登录成功', suc)
+      //
+      //       const url = `/${TOURIST_MAIN}`
+      //       this.dLog('跳转', url)
+      //       wx.redirectTo({url})
+      //     },
+      //     (fai) => {
+      //       this.showErrorToast('游客登录失败', fai)
+      //     }
+      //   )
+      // },
+      // handleChooseGuide () {
+      //   // 选择向导
+      //   this.dLog('选择了向导')
+      //
+      //   guideApi.logIn(
+      //     (res) => {
+      //       // resolve
+      //       this.dLog('向导登录成功', res)
+      //
+      //       if (res.isNewGuide) {
+      //         const url = `/${GUIDE_SIGN_UP}`
+      //         this.dLog('跳转', url)
+      //         wx.navigateTo({url})
+      //       } else {
+      //         const url = `/${GUIDE_MAIN}`
+      //         this.dLog('跳转', url)
+      //         wx.switchTab({url})
+      //       }
+      //     },
+      //     (fai) => {
+      //       this.showErrorToast('向导登录失败', fai)
+      //     }
+      //   )
+      // }
     }
   }
 </script>
 
 <style lang="less" scoped>
   .container {
-    position: fixed;
-
-    height: 100%;
-    width: 100%;
-    padding-bottom: 20%;
+    height: 100vh;
+    width: 100vw;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
-  .role-card {
-    width: 600px;
-    height: 200px;
-    border-radius: 10px;
-    margin: 50px;
+  .logo {
+    width: 540px;
+    height: 360px;
+  }
+
+  .text {
+    margin-top: -2em;
     text-align: center;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    padding: 10px;
-  }
-
-  .role-card:active {
-    transform: translate(0px, 5px);
+    color: #464c5b;
   }
 
   .title {
-    font-size: 1.5em;
-    margin: 20px;
-    color: rgba(255, 255, 255, 0.9);
+
   }
 
-  .extra {
-    font-size: 0.9em;
-    margin: 10px;
-    color: rgba(255, 255, 255, 0.7);
+  .intro {
+    font-size: 1.2em;
+    /*font-weight: bold;*/
   }
 
-  #tourist-role-card {
-    background-color: rgb(255, 127, 116);
-    box-shadow: 0 0 30px rgb(255, 127, 116);
+  .divider {
+    height: 1Px;
+    background-color: rgba(0,0,0,0.1);
+    width: 500px;
+    margin: 2em auto;
   }
 
-  #guide-role-card {
-    background-color: rgb(254, 185, 126);
-    box-shadow: 0 0 30px rgb(254, 185, 126);
+  .card {
+    width: 600px;
   }
+
+  .card-title {
+    color: #9ea7b4;
+  }
+
+  .roles {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .role {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1em;
+    box-shadow: rgba(0,0,0,0.1) 0 0 10px;
+    padding: 10px;
+    border: transparent 2px solid;
+  }
+
+  .role-selected {
+    border: #42b970 2px solid;
+  }
+
+  .role-img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .role-span {
+    font-size: 0.7em;
+    color: #9ea7b4;
+  }
+
+  .button {
+    padding: 0;
+    width: 500px;
+    font-size: 1em;
+  }
+
+
 </style>

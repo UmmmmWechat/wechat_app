@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '欢迎，请问你是？'
+    navigationBarTitleText: '游伴'
   }
 }
