@@ -3,12 +3,12 @@
     <div id="head" class="d-head">
       <div id="user-info-div">
         <span>欢迎：</span>
-        <span class="underline-span">
-          <span
-            class="underline-span"
-            @click="handleToPersonCenter">
+        <span>
+          <!--<span-->
+            <!--class="underline-span"-->
+            <!--@click="handleToPersonCenter">-->
             <open-data type="userNickName"/>
-          </span>
+          <!--</span>-->
         </span>
       </div>
       <d-location-picker :location="location" @on-change="handleLocationChange" />
