@@ -2,14 +2,13 @@
   <div>
     <div id="head" class="d-head">
       <div id="user-info-div">
-        <span>欢迎：</span>
-        <span>
-          <!--<span-->
-            <!--class="underline-span"-->
-            <!--@click="handleToPersonCenter">-->
-            <open-data type="userNickName"/>
-          <!--</span>-->
+        <span>欢迎：
+        <open-data type="userNickName"/>
         </span>
+        <!--<span-->
+        <!--class="underline-span"-->
+        <!--@click="handleToPersonCenter">-->
+        <!--</span>-->
       </div>
       <d-location-picker :location="location" @on-change="handleLocationChange" />
       <div id="search">

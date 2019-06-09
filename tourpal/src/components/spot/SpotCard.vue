@@ -28,9 +28,10 @@
       v-if="!noAction"
       id="btn-wrapper">
       <a
+        id="like-button"
         class="d-a"
         @click="handleClick">
-        感兴趣
+        ❤ 感兴趣
       </a>
     </div>
   </div>
@@ -84,7 +85,8 @@
 
 <style scoped>
   #wrapper {
-    margin: 20px;
+    margin: 40px;
+    border-radius: 20px;
     background-color: #fff;
   }
 
@@ -98,7 +100,7 @@
   }
 
   .text-wrapper {
-    padding: 20px 30px;
+    padding: 30px 40px;
     background-color: #fff;
   }
 
@@ -116,9 +118,16 @@
   }
 
   #btn-wrapper {
-    margin: 30px 10px 10px 10px;
+    margin: -130px 0px 10px 10px;
     padding: 40px;
     text-align: right;
+  }
+
+  #like-button{
+    border: solid 1px ;
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: #42b970;
   }
 
   .text-item-wrapper {
