@@ -103,6 +103,10 @@
         </div>
       </scroll-view>
     </section>
+
+    <div style="width: 100%; height: 50Px"></div>
+
+    <TouristTabBar v-bind:current="currentTab"/>
   </div>
 </template>
 
@@ -118,9 +122,12 @@
   import {TOURIST_ID} from '../../api/const/touristConst'
   import {MOCK_TOURIST_ID} from '../../api/mock/tourist_mock_data'
   import {TOURIST_CENTER, ROLE_SELECT} from '../pages_url'
+  import TouristTabBar from "../../components/tourist/TouristTabBar";
+  import {TOURIST_HOME} from "../../utils/TabbarConfig";
 
   export default {
     components: {
+      TouristTabBar,
       SpotCard,
       DInput,
       DLoading,
@@ -152,7 +159,9 @@
         pageName: 'tourist_main',
 
         scrollTop: undefined,
-        searchScrollTop: undefined
+        searchScrollTop: undefined,
+
+        currentTab: TOURIST_HOME.name
       }
     },
     computed: {

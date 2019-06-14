@@ -17,15 +17,26 @@
       </div>
     </div>
 
+    <div style="width: 100%; height: 50Px"></div>
+    <GuideTabBar v-bind:current="currentTab"/>
+
   </div>
 </template>
 
 <script>
   import GuideProfileCard from '../../components/guide/ProfileCard'
+  import GuideTabBar from "../../components/guide/GuideTabBar";
+  import {GUIDE_USER_CENTER} from "../../utils/TabbarConfig";
 
   export default {
     components: {
+      GuideTabBar,
       GuideProfileCard
+    },
+    data () {
+      return {
+        currentTab: GUIDE_USER_CENTER.name
+      }
     },
     methods: {
       handleToInfo (event) {

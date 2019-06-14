@@ -5,7 +5,6 @@
 
   export default {
     created () {
-      console.log('created')
       // 调用API从本地缓存中获取数据
       // const logs = wx.getStorageSync('logs') || []
       // logs.unshift(Date.now())
@@ -17,11 +16,10 @@
       //   }
       // })
       // 检查上次使用
-      this.lastUse();
+      // this.lastUse();
     },
     // @Add 这是整个程序的开始钩子
     onLaunch () {
-      console.log('launch')
       if (!isTestMode) {
         try {
           // @Add 我在这里把所有的存储给删了，我们并不存在需要记住上次状态的情况，反而如果有上次情况会影响本次运行

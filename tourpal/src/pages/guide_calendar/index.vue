@@ -18,6 +18,8 @@
           :orders="orders"/>
       </div>
     </section>
+    <div style="width: 100%; height: 50Px"></div>
+    <GuideTabBar v-bind:current="currentTab"/>
   </section>
 </template>
 
@@ -26,9 +28,12 @@
   import OrderListMini from '../../components/order/OrderListMini'
   import guideApi from '../../api/guide'
   import {GUIDE_ID} from '../../api/const/guideConst'
+  import GuideTabBar from "../../components/guide/GuideTabBar";
+  import {GUIDE_CALENDAR} from "../../utils/TabbarConfig";
 
   export default {
     components: {
+      GuideTabBar,
       Calendar,
       OrderListMini
     },
@@ -37,7 +42,8 @@
         orders: [],
         ordersGroupByDate: {},
         markedDate: [],
-        guideId: ''
+        guideId: '',
+        currentTab: GUIDE_CALENDAR.name
       }
     },
     onShow () {

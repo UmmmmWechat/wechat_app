@@ -14,7 +14,7 @@ export default {
   config: {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
     pages: [
-      '^pages/role_select/main',
+      'pages/role_select/main',
 
       /** 游客 */
       'pages/tourist_main/main',
@@ -27,7 +27,7 @@ export default {
 
       /** 向导 */
       'pages/guide_sign_up/main',
-      'pages/guide_main/main',
+      '^pages/guide_main/main',
       'pages/guide_check_order/main',
       'pages/guide_calendar/main',
       'pages/guide_center/main',
@@ -49,28 +49,6 @@ export default {
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'white'
       // enablePullDownRefresh: true
-    },
-    'tabBar': {
-      backgroundColor: '#ffffff',
-      color: '#aaaaaa',
-      selectedColor: '#42b970',
-      borderStyle: 'white',
-      'list': [{
-        'pagePath': 'pages/guide_main/main',
-        'text': '邀请',
-        'iconPath': './static/image/invitation.png',
-        'selectedIconPath': './static/image/invitation_selected.png'
-      }, {
-        'pagePath': 'pages/guide_calendar/main',
-        'text': '日程',
-        'iconPath': './static/image/calendar.png',
-        'selectedIconPath': './static/image/calendar_selected.png'
-      }, {
-        'pagePath': 'pages/guide_center/main',
-        'text': '个人中心',
-        'iconPath': './static/image/user_center.png',
-        'selectedIconPath': './static/image/user_center_selected.png'
-      }]
     }
   }
 }
