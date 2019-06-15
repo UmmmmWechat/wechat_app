@@ -6,10 +6,13 @@
       {{label}}
     </div>
     <div class="info">
+      <!--<picker-->
+        <!--mode="time"-->
+        <!--:start="start"-->
+        <!--:end="end"-->
+        <!--@change="handleChange">-->
       <picker
         mode="time"
-        :start="start"
-        :end="end"
         @change="handleChange">
         <div v-if="result">
           {{ result }}
@@ -32,14 +35,14 @@
       prompt: {
         type: String,
         default: '未选择，点击开始选择'
-      },
-      start: {
-        type: String,
-        default: '08:00'
-      },
-      end: {
-        type: String,
-        default: '20:00'
+      // },
+      // start: {
+      //   type: String,
+      //   default: '08:00'
+      // },
+      // end: {
+      //   type: String,
+      //   default: '20:00'
       }
     },
     data () {
@@ -50,17 +53,19 @@
     },
     methods: {
       handleChange (event) {
-        const result = event.target.value;
-        if (result >= this.start && result <= this.end) {
-          this.result = result;
-          this.$emit('on-change', this.result)
-        } else {
-          // 输出提示信息
-          wx.showToast({
-            icon: 'none',
-            title: `请选择 ${this.start} 到 ${this.end} 之间的时间`
-          })
-        }
+        this.result = event.target.value;
+        this.$emit('on-change', this.result)
+        // const result = event.target.value;
+        // if (result >= this.start && result <= this.end) {
+        //   this.result = result;
+        //   this.$emit('on-change', this.result)
+        // } else {
+        //   // 输出提示信息
+        //   wx.showToast({
+        //     icon: 'none',
+        //     title: `请选择 ${this.start} 到 ${this.end} 之间的时间`
+        //   })
+        // }
       }
     }
   }
