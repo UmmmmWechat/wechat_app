@@ -1,6 +1,193 @@
-# Tourpal API & 数据结构
+# Tourpal 数据结构 & API
+
+## 数据结构
+
+### guide
+
+```javascript
+    {
+        id: int,
+        openId: String,
+        avatar: String,
+        realName: String,
+        idCard: String,
+        gender: ['男'，'女'],
+        wechat: String,
+        phone: String,
+        goodFeedbackRate: int
+        introduction: String,
+        numOfFinishedOrder: int,
+        favorSpots: List<int>
+          
+        //新增
+        age: int,  // 无需设置，由身份证计算得到
+    }
+```
+
+### tourist （懒得加数据结构，注册也直接用这个）
+
+```javascript
+    {
+        id: int
+        openId: String, // 微信服务器给的唯一用户标识
+          
+        // 新增
+        name: String,
+        wechat: String,
+        idCard: String，
+        age: int,  // 无需设置，由身份证计算得到
+    }
+```
+
+### order
+
+```javascript
+    {
+        id: int
+        touristId: int
+        guideId: int
+        spotId: int
+        generatedDate: Date
+        travelDate: Date
+        message: String // 邀请留言
+        state: ['finished', 'waiting', 'ongoing', 'invalid', 'rejected', 'canceled', 'timeout']
+        cancelReason: String
+        feedback: {
+            spotPoint: int
+            guidePoint: int
+            comment: String // 对这一单的评价
+        }
+    }
+    
+```
+
+### spot
+
+```javascript
+    {
+        id: int
+        name: String
+        location: {
+                province: String
+                city: String
+                region: String
+        },
+        pictureUrl: String
+        introduction: Stirng
+        recommendLevel: int
+        popularity: int
+    }
+```
+
+### State
+
+```javascript
+   enum State{
+       OK,
+       FAIL,
+       WAITING,
+       ONGOING,
+       REJECTED,
+       CANCELED,
+       FINISHED,
+       TIMEOUT,
+       ALL
+   }
+```
+
+### ResultMessage
+```javascript
+{
+    SUCCESS: 'SUCCESS',
+    ERROR: 'ERROR',           // 实际未使用，直接 throw err
+    ERROR_DATABASE: 'ERROR_DATABASE',
+    INVALID_PARAM: 'INVALID_PARAM',
+    NOT_FOUND: 'NOT_FOUND', 
+    ALREADY_CANCELED: 'ALREADY_CANCELED', // 已经被游客取消了
+    ALREADY_TIMEOUT: 'ALREADY_TIMEOUT',   // 已经过期了
+    ALREADY_ACCEPTED: 'ALREADY_ACCEPTED',
+    ALREADY_REJECTED: 'ALREADY_REJECTED',
+    ERROR_ACCESS_TOKEN: 'ERROR_ACCESS_TOKEN',
+    TIMEOUT_FORM_ID: 'ERROR_FORM_ID', // formId过期
+    NOT_REGISTER: 'NOT_REGISTER',
+    INVALID_CODE: 'INVALID_CODE'
+}
+```
+
+
+### Location
+
+```javascript
+   class Location {
+       String province;
+   
+       String city;
+   
+       String region;
+   }
+```
+
+### GuidePre
+
+```java
+   class GuidePre {
+       String openId;
+       
+       String realName; //真实名
+       
+       String idCard; //身份证
+       
+       char gender; //性别
+       
+       Location location; //地址
+       
+       String wechat; //微信号
+       
+       String phone; //电话号码
+       
+       List<Integer> favorSpots; //景点
+   }
+```
+
+### GuideModify
+
+```java
+   class GuideModify {
+       int id;
+       
+       Location location; //地址
+       
+       String wechat; //微信号
+       
+       String phone; //电话号码
+       
+       List<Integer> favorSpots; //景点 
+   }
+```
+
+### OrderPre
+
+```java
+   class OrderPre {
+       int touristId;
+
+       List<Integer> guideIds;
+       
+       int spotId;
+       
+       Date generatedDate;
+       
+       Date travelDate;
+       
+       String message;
+   }
+```
+
+
 
 ## API
+
+## Tourist Service
 
 ### tourist取消订单
 
@@ -11,7 +198,7 @@
   * cancelMessage
 * 返回
   * SUCCESS
-  * ERROR, ALREADY_ACCEPTED, ALREADY_REJECTED (已经被导游处理了)
+  * ALREADY_ACCEPTED, ALREADY_REJECTED (已经被导游处理了)
 
 ### tourist评论订单
 
@@ -19,10 +206,9 @@
 - POST
 - 参数
   - orderId
-  - feedback (数据结构见之前的会议)
+  - feedback
 - 返回
   - SUCCESS
-  - ERROR
 
 ### tourist根据关键词获取 guides
 
@@ -71,7 +257,7 @@
 - /orders/new
 - POST
 - 参数
-  - order (数据结构见会议)
+  - order: OrderPre (数据结构见上面)
   - formId (表单submit之后会有的，参见我的邀请界面的逻辑代码)
 - 返回
   - SUCCESS
@@ -81,9 +267,25 @@
 - /login/tourist
 - POST
 - 参数
+  
   - code (微信小程序临时凭证)
 - 返回
-  - touristId (游客在系统中的标识)
+  
+  - {
+  
+    message: 'NOT_REGISTER',
+  
+     touristId: touristId
+  
+    }  // 未实名注册
+  
+  - {
+  
+    message: 'SUCCESS',
+  
+     	touristId: touristId
+  
+    }
 
 ### tourist注册
 
@@ -93,9 +295,8 @@
   - tourist
 - 返回
   - SUCCESS
-  - ERROR
 
-## *Guide* Service
+## Guide Service
 
 ### guide接受邀请
 
@@ -124,14 +325,14 @@
 - 参数
   - guideId
 - 返回
-  - guide (数据结构见会议)
+  - guide (数据结构见上面)
 
 ### guide修改导游信息
 
 - /guides/modify
 - POST
 - 参数
-  - guide (数据结构见会议)
+  - guide: GuideModify (数据结构见上面)
 - 返回
   - SUCCESS
 
@@ -186,11 +387,10 @@
 - /sign-up/guide
 - POST
 - 参数
-  - guide （数据结构见会议）
+  - guide: GuidePre （数据结构见上面）
   - code 
 - 返回
-  - 'SUCCESS' 200  onSuccess
-  - 非200 onFail
+  - SUCCESS
 
 ## Common Service
 
@@ -201,7 +401,7 @@
 - 参数
   - spotId
 - 返回
-  - spot (数据结构见会议)
+  - spot (数据结构见上面)
 
 ### 根据关键词和城市获取 spots
 
@@ -241,7 +441,7 @@
 - 参数
   - guideId
 - 返回
-  - guide(数据结构见会议)
+  - guide(数据结构见上面)
 
 ### 根据id获取guide的基本信息
 
@@ -259,192 +459,4 @@
 - 参数
   - orderId
 - 返回
-  - order(数据结构见会议)
-
-## 数据结构
-
-### guide
-
-```javascript
-    {
-        id: int,
-        openId: String,
-        age: int,
-        avatar: String,
-        realName: String,
-        idCard: String,
-        gender: ['男'，'女'],
-        wechat: String,
-        phone: String,
-        goodFeedbackRate: int
-        introduction: String,
-        numOfFinishedOrder: int,
-        favorSpots: List<int>
-    }
-```
-
-### tourist
-
-```javascript
-    {
-        id: int
-        openId: String, // 微信服务器给的唯一用户标识
-        name: String,
-        wechat: String,
-        idCard: String
-        //avatar: String,
-        //name: String,
-        //gender: ['男', '女'],
-        //finishedOrders: List,
-        //ongoingOrders: List,
-        //waitingOrders: List
-        //invalidOrders: List
-    }
-```
-
-### order
-
-```javascript
-    {
-        id: int
-        touristId: int
-        touristName: String
-        guideId: int
-        guideName: String
-        spotId: int
-        spotName: String
-        generatedDate: Date
-        travelDate: Date
-        message: String // 邀请留言
-        state: ['finished', 'waiting', 'ongoing', 'invalid', 'rejected', 'canceled', 'timeout']
-        cancelReason: String
-        feedback: {
-            spotPoint: int
-            guidePoint: int
-            comment: String // 对这一单的评价
-        }
-    }
-    
-```
-
-### spot
-
-```javascript
-    {
-        id: int
-        name: String
-        location: {
-                province: String
-                city: String
-                region: String
-        },
-        pictureUrl: String
-        introduction: Stirng
-        recommendLevel: int
-        popularity: int
-    }
-```
-
-### State
-
-```javascript
-   enum State{
-       OK,
-       FAIL,
-       WAITING,
-       ONGOING,
-       REJECTED,
-       CANCELED,
-       FINISHED,
-       TIMEOUT,
-       ALL
-   }
-```
-
-### ResultMessage
-```javascript
-{
-    SUCCESS: 'SUCCESS',
-    ERROR: 'ERROR',
-    ERROR_DATABASE: 'ERROR_DATABASE',
-    INVALID_PARAM: 'INVALID_PARAM',
-    NOT_FOUND: 'NOT_FOUND', 
-    ALREADY_CANCELED: 'ALREADY_CANCELED', // 已经被游客取消了
-    ALREADY_TIMEOUT: 'ALREADY_TIMEOUT',   // 已经过期了
-    ALREADY_ACCEPTED: 'ALREADY_ACCEPTED',
-    ALREADY_REJECTED: 'ALREADY_REJECTED',
-    ERROR_ACCESS_TOKEN: 'ERROR_ACCESS_TOKEN',
-    TIMEOUT_FORM_ID: 'ERROR_FORM_ID', // formId过期
-    NOT_REGISTER: 'NOT_REGISTER',
-    INVALID_CODE: 'INVALID_CODE'
-}
-```
-
-
-### Location
-
-```javascript
-   class Location {
-       String province;
-   
-       String city;
-   
-       String region;
-   }
-```
-
-### GuidePre
-
-```javascript
-   class GuidePre {
-       String openId;
-       
-       String realName; //真实名
-       
-       String idCard; //身份证
-       
-       char gender; //性别
-       
-       Location location; //地址
-       
-       String wechat; //微信号
-       
-       String phone; //电话号码
-       
-       List<Integer> favorSpots; //景点
-   }
-```
-
-### GuideModify
-
-```javascript
-   class GuideModify {
-       int id;
-       
-       Location location; //地址
-       
-       String wechat; //微信号
-       
-       String phone; //电话号码
-       
-       List<Integer> favorSpots; //景点 
-   }
-```
-
-### OrderPre
-
-```javascript
-   class OrderPre {
-       int touristId;
-
-       int guideId;
-       
-       int spotId;
-       
-       Date generatedDate;
-       
-       Date travelDate;
-       
-       String message;
-   }
-```
+  - order(数据结构见上面)
