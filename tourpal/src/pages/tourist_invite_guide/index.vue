@@ -2,7 +2,7 @@
   <div id="out">
     <div id="profile-wrapper">
       <guide-profile-card
-        canInvite="false"
+        :canInvite="false"
         :guide="guide"/>
     </div>
 
@@ -16,15 +16,21 @@
 
         <d-date-picker
           label="旅游日期"
-          prompt="可预约四周内的时间"
+          :prompt="travelDate || '可预约四周内的时间'"
           :start="start"
           :end="end"
           @on-change="handleDateChanged"
         />
 
+        <d-time-picker
+          label="旅游时间"
+          :prompt="travelTime || '可预约早晚八点之间的时间'"
+          @on-change="handleTimeChanged"
+        />
+
         <d-textarea
           label="留言"
-          placeholder="请给向导留个言吧"
+          :placeholder="message || '请给向导留个言吧'"
           @input="handleInput"/>
 
         <button
@@ -43,8 +49,10 @@
   import DTextarea from '../../components/common/DTextarea'
   import DTitledText from '../../components/common/DTitledText'
   import DDatePicker from '../../components/common/DDatePicker'
+  import DTimePicker from '../../components/common/DTimePicker'
 
   import touristApi from '../../api/tourist'
+  import StorageUtil from '../../utils/StorageUtil'
 
   import {mockGuide} from '../../api/mock/guide_mock_data'
   import {INVITE_GUIDE_INFO} from '../../api/const/guideConst'
@@ -54,6 +62,7 @@
 
   export default {
     components: {
+      DTimePicker,
       GuideProfileCard,
       DTextarea,
       DTitledText,
@@ -71,13 +80,13 @@
         spotName: 'spotName',
         touristId: 'touristId',
         travelDate: undefined,
+        travelTime: undefined,
         message: undefined,
 
         pageName: 'tourist_invite_guide'
       }
     },
     mounted () {
-      // 取得 向导信息
       this.guide = wx.getStorageSync(INVITE_GUIDE_INFO)
       if (!this.guide) {
         const errMsg = '向导信息获取失败'
@@ -109,6 +118,10 @@
         return
       }
 
+      this.travelDate = StorageUtil.getOrderTravelDate();
+      this.travelTime = StorageUtil.getOrderTravelTime();
+      this.message = StorageUtil.getOrderMessage();
+
       // 设置时间区间
       let startDate = new Date()
       let endDate = new Date()
@@ -134,10 +147,15 @@
           title: errMsg
         })
       },
-      handleDateChanged (e) {
-        this.dLog('handleDateChanged 方法调用', e)
-        this.travelDate = new Date(e)
+      handleDateChanged (date) {
+        this.dLog('handleDateChanged 方法调用', date)
+        this.travelDate = date
         this.dLog(`travelDate 更新 ${this.travelDate}`)
+      },
+      handleTimeChanged (time) {
+        this.dLog('handleTimeChanged 方法调用', time)
+        this.travelTime = time
+        this.dLog(`travelTime 更新 ${this.travelTime}`)
       },
       handleInput (e) {
         this.dLog('handleInput 方法调用', e)
@@ -150,21 +168,24 @@
         // 获取formId
         const formId = e.target.formId
 
+        let message = this.message;
+
+        let errMsg;
         if (!this.travelDate) {
-          const errMsg = '请选择旅行时间w'
-          this.dError(errMsg)
-
-          // 输出提示信息
-          wx.showToast({
-            icon: 'none',
-            title: errMsg
-          })
-
-          return
+          errMsg = '请选择旅行日期w'
+        } else if (!this.travelTime) {
+          errMsg = '请选择旅行时间w'
+        } else {
+          errMsg = '跟向导说点啥邀请成功的机率更高哟w'
+          if (message) {
+            message = message.trim();
+            if (message.length !== 0) {
+              errMsg = null;
+            }
+          }
         }
 
-        if (!this.message) {
-          const errMsg = '跟向导说点啥邀请成功的机率更高哟w'
+        if (errMsg) {
           this.dError(errMsg)
 
           // 输出提示信息
@@ -181,9 +202,11 @@
           guideId: this.guide.id,
           spotId: this.spotId,
           generatedDate: new Date(),
-          travelDate: this.travelDate,
-          message: this.message
+          travelDate: new Date(`${this.travelDate} ${this.travelTime}`),
+          message
         }
+
+        StorageUtil.setOrder(order);
 
         this.dLog('生成表单', order)
 
@@ -198,7 +221,7 @@
             setTimeout(
               () => {
                 wx.navigateBack({
-                  delta: 2
+                  delta: 1
                 })
               }, 800
             )

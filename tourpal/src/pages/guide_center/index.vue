@@ -15,6 +15,7 @@
         @click="handleToReview">
         向导履历
       </div>
+      <quit-item/>
     </div>
 
     <div style="width: 100%; height: 50Px"></div>
@@ -27,11 +28,13 @@
   import GuideProfileCard from '../../components/guide/ProfileCard'
   import GuideTabBar from "../../components/guide/GuideTabBar";
   import {GUIDE_USER_CENTER} from "../../utils/TabbarConfig";
+  import QuitItem from '../../components/common/DQuitItem'
 
   export default {
     components: {
       GuideTabBar,
-      GuideProfileCard
+      GuideProfileCard，
+      QuitItem
     },
     data () {
       return {

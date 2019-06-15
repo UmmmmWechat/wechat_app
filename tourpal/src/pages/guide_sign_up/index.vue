@@ -61,7 +61,6 @@
 <script>
   import DInput from '../../components/common/DInput'
   import DTextarea from '../../components/common/DTextarea'
-  import DChooseLocation from '../../components/common/DChooseLocation'
   import DSelector from '../../components/common/DSelector'
   import DChooseSpots from '../../components/common/DChooseSpots'
 
@@ -73,7 +72,6 @@
     components: {
       DInput,
       DTextarea,
-      DChooseLocation,
       DChooseSpots,
       DSelector
     },

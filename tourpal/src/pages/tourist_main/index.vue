@@ -2,29 +2,15 @@
   <div>
     <div id="head" class="d-head">
       <div id="user-info-div">
-        <span>欢迎：</span>
-        <span class="underline-span">
-        <span
-          class="underline-span"
-          @click="handleToPersonCenter">
-          <open-data type="userNickName"/>
+        <span>欢迎：
+        <open-data type="userNickName"/>
         </span>
-      </span>
+        <!--<span-->
+        <!--class="underline-span"-->
+        <!--@click="handleToPersonCenter">-->
+        <!--</span>-->
       </div>
-      <div>
-        <span>旅游地点：</span>
-        <div style="display:inline-block;">
-          <picker
-            mode="region"
-            @change="handleLocationChange"
-          >
-        <span
-          class="underline-span">
-        {{ city }}
-        </span>
-          </picker>
-        </div>
-      </div>
+      <d-location-picker :location="location" @on-change="handleLocationChange" />
       <div id="search">
         <icon type="search" size="10" color="white"/>
         <div style="display:inline-block;width:90%;">
@@ -116,10 +102,12 @@
   import DInput from '../../components/common/DInput'
   import DLoading from '../../components/common/DLoading'
   import DNoMore from '../../components/common/DNoMore'
+  import DLocationPicker from '../../components/common/DLocationPicker'
 
   import spotApi from '../../api/spot'
 
   import {TOURIST_ID} from '../../api/const/touristConst'
+  import {DEFAULT_LOCATION} from '../../api/const/spotConst'
   import {MOCK_TOURIST_ID} from '../../api/mock/tourist_mock_data'
   import {TOURIST_CENTER, ROLE_SELECT} from '../pages_url'
   import TouristTabBar from "../../components/tourist/TouristTabBar";
@@ -131,17 +119,14 @@
       SpotCard,
       DInput,
       DLoading,
-      DNoMore
+      DNoMore,
+      DLocationPicker
     },
     data () {
       return {
         touristId: MOCK_TOURIST_ID,
 
-        location: {
-          province: '江苏省',
-          city: '南京市',
-          region: '栖霞区'
-        },
+        location: DEFAULT_LOCATION,
 
         loading: false,
 
@@ -162,17 +147,6 @@
         searchScrollTop: undefined,
 
         currentTab: TOURIST_HOME.name
-      }
-    },
-    computed: {
-      city () {
-        let result = ''
-        for (let key in this.location) {
-          if (this.location.hasOwnProperty(key)) {
-            result = result + this.location[key] + '-'
-          }
-        }
-        return result.slice(0, result.length - 1)
       }
     },
     mounted () {
@@ -289,40 +263,28 @@
           }
         )
       },
-      handleLocationChange (event) {
-        this.dLog('handleLocationChange 方法调用', event)
+      handleLocationChange (newLocation) {
+        this.dLog('handleLocationChange 方法调用', this.location, newLocation, newLocation.province)
 
-        const value = event.target.value
-        const province = value[0]
-        const city = value[1]
-        const region = value[2]
-
-        if (this.location.province === province &&
-          this.location.city === city &&
-          this.location.region === region) {
+        if (this.location.province === newLocation.province &&
+          this.location.city === newLocation.city) {
           // 检查是否发生了变动
           this.dLog('所在城市未变动')
         } else {
-          this.dLog('所在城市变动', location)
-
-          const location = {
-            province,
-            city,
-            region
-          }
+          this.dLog('所在城市变动 原 location:', this.location)
 
           // 检查该城市是否支持
           spotApi.checkLocationAvailable(
-            location,
+            newLocation,
             (res) => {
               this.dLog('检查所在城市是否支持成功', res)
 
               if (res.isAvailable) {
                 // 支持该地区
-                this.location = location
+                this.location = newLocation
 
                 if (this.isSearch) {
-                  this.handleResetSearch(event)
+                  this.handleResetSearch('location 变动')
                 } else {
                   this.resetSpots()
 

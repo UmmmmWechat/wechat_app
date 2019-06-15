@@ -49,7 +49,32 @@ const AVAILABLE_LOCATION_ARRAY = [
   GUANGZHOU_LOCATION
 ]
 
-// TODO 移除提示 使用选择可选城市
+const AVAILABLE_PROVINCE_ARRAY = (function () {
+  let arr = AVAILABLE_LOCATION_ARRAY.map(location => location.province).sort();
+  const arrLen = arr.length;
+  let provinces = [];
+  if (arrLen > 0) {
+    provinces.push(arr[0]);
+    for (let i = 1; i < arrLen; i++) {
+      if (arr[i] !== arr[i - 1]) {
+        provinces.push(arr[i]);
+      }
+    }
+  }
+  return provinces;
+}())
+
+const AVAILABLE_CITY_ARRAY = (function () {
+  let cities = {};
+  AVAILABLE_LOCATION_ARRAY.forEach((location) => {
+    if (!cities[location.province]) {
+      cities[location.province] = [];
+    }
+    cities[location.province].push(location.city);
+  })
+  return cities;
+}());
+
 const AVAILABLE_LEVEL_PROMPT = [
   '支持',
   '暂不支持该省份',
@@ -60,10 +85,15 @@ const AVAILABLE_LEVEL_PROMPT = [
 const D_SPOT_ID = 'dSpotID'
 const D_SPOT_NAME = 'dSpotName'
 
+const DEFAULT_LOCATION = NANJING_LOCATION;
+
 export {
+  DEFAULT_LOCATION,
   SPOT_MAX_NUM,
   GET_ALL_TAG,
   AVAILABLE_LOCATION_ARRAY,
+  AVAILABLE_PROVINCE_ARRAY,
+  AVAILABLE_CITY_ARRAY,
   AVAILABLE_LEVEL_PROMPT,
   D_SPOT_ID,
   D_SPOT_NAME

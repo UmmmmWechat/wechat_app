@@ -2,10 +2,10 @@
   <div>
     <div id="head" class="d-head">
       <div>
-        <span>欢迎&emsp;</span>
-        <span
-          class="underline_span"
-          @click="handleGuideNameClicked">
+        <span>欢迎</span>
+        <span>
+          <!--class="underline_span"-->
+          <!--@click="handleGuideNameClicked">-->
           {{ guide.realName }}
         </span>
       </div>
