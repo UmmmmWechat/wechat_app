@@ -9,14 +9,14 @@
       {{label}}
     </label>
     <div id="input-wrapper">
-        <textarea
-          id="d-input"
-          :value="value"
-          :placeholder="placeholder"
-          placeholder-style="color:rgba(0,0,0,0.3);"
-          @confirm="handleEnter"
-          @input="handleInput"
-          @focus="handleFocus"></textarea>
+      <textarea
+        id="d-input"
+        :value="value || defaultValue"
+        :placeholder="placeholder"
+        placeholder-style="color:rgba(0,0,0,0.3);"
+        @confirm="handleEnter"
+        @input="handleInput"
+        @focus="handleFocus"/>
     </div>
   </div>
 </template>

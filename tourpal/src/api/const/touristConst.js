@@ -1,4 +1,4 @@
-import OrderState from '../../utils/OrderState'
+import OrderState from './OrderState'
 
 const GUIDE_MAX_NUM = 10
 const GET_ALL_TAG = -1

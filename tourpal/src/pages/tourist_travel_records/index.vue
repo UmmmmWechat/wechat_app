@@ -25,7 +25,7 @@
   import DNoMore from '../../components/common/DNoMore'
   import DTimeline from '../../components/common/DTimeline'
   import {WINDOW_HEIGHT} from '../../api/const/commonConst'
-  import OrderState from '../../utils/OrderState'
+  import OrderState from '../../api/const/OrderState'
 
   export default {
     components: {

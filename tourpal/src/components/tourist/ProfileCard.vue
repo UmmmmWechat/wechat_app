@@ -13,23 +13,17 @@
 
 <script>
   export default {
-    props: {
-      avatar: {
-        type: String,
-        required: true
-      },
-      name: {
-        type: String,
-        required: true
-      }
-    }
+
   }
 </script>
 
 <style scoped>
   #wrapper {
-    text-align: center;
-    padding: 20px;
+    min-height:400px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
   }
 
   #text {
@@ -40,8 +34,9 @@
   #avatar {
     height: 200px;
     width: 200px;
-    text-align: center;
-    position: relative;
-    left: 265px;
+
+    border: thin solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    overflow: hidden;
   }
 </style>

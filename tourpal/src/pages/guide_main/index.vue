@@ -2,10 +2,10 @@
   <div>
     <div id="head" class="d-head">
       <div>
-        <span>欢迎&emsp;</span>
-        <span
-          class="underline_span"
-          @click="handleGuideNameClicked">
+        <span>欢迎</span>
+        <span>
+          <!--class="underline_span"-->
+          <!--@click="handleGuideNameClicked">-->
           {{ guide.realName }}
         </span>
       </div>
@@ -21,6 +21,9 @@
         @on-cancel="handleOrderChanged"
         @on-reject="handleOrderChanged"/>
     </div>
+
+    <div style="width: 100%; height: 50Px"></div>
+    <GuideTabBar v-bind:current="currentTab"/>
   </div>
 </template>
 
@@ -32,9 +35,12 @@
   import {GUIDE_ID, GUIDE_INFO, STATES_ARRAY, WAITING_STATE} from '../../api/const/guideConst'
   import {GUIDE_TYPE} from '../../api/const/orderConst'
   import {GUIDE_CENTER, ROLE_SELECT, GUIDE_SIGN_UP} from '../pages_url'
+  import GuideTabBar from "../../components/guide/GuideTabBar";
+  import {GUIDE_HOME} from "../../utils/TabbarConfig";
 
   export default {
     components: {
+      GuideTabBar,
       OrderListGuide
     },
     data () {
@@ -44,7 +50,8 @@
         orders: [],
         hasMore: true,
         loading: false,
-        pageName: 'guide_main'
+        pageName: 'guide_main',
+        currentTab: GUIDE_HOME.name
       }
     },
     onShow () {

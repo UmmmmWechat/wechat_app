@@ -1,5 +1,5 @@
 <template>
-  <img v-bind:src="logo" v-bind:style="this.style">
+  <img v-bind:src="logo" v-bind:style="style">
 </template>
 
 <script>
@@ -24,6 +24,9 @@
           height: (this.width / 3 * 2) + "rpx"
         }
       }
+    },
+    mounted () {
+      console.log("logo mounted")
     }
   }
 </script>

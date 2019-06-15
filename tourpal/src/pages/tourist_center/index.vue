@@ -14,26 +14,39 @@
         class="op-item"
         @click="handleToTravelNotes">我的游记
       </div>
+
+      <quit-item />
     </div>
+
+    <div style="width: 100%; height: 50Px"></div>
+
+    <TouristTabBar v-bind:current="currentTab"/>
   </div>
 </template>
 
 <script>
   import TouristProfileCard from '../../components/tourist/ProfileCard'
+  import QuitItem from '../../components/common/DQuitItem'
 
   import {TOURIST_TRAVEL_RECORDS, TOURIST_ORDERS} from '../pages_url'
   import {MOCK_TOURIST_ID} from '../../api/mock/tourist_mock_data'
   import {TOURIST_ID} from '../../api/const/touristConst'
+  import TouristTabBar from "../../components/tourist/TouristTabBar";
+  import {TOURIST_USER_CENTER} from "../../utils/TabbarConfig";
 
   export default {
     components: {
-      TouristProfileCard
+      TouristTabBar,
+      TouristProfileCard,
+      QuitItem
     },
     data () {
       return {
         touristId: MOCK_TOURIST_ID,
 
-        pageName: 'tourist_center'
+        pageName: 'tourist_center',
+
+        currentTab: TOURIST_USER_CENTER.name
       }
     },
     mounted () {
