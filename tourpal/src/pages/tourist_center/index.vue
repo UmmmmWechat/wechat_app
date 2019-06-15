@@ -37,7 +37,7 @@
   export default {
     components: {
       TouristTabBar,
-      TouristProfileCard
+      TouristProfileCard,
       QuitItem
     },
     data () {

@@ -17,7 +17,7 @@ export default {
       'pages/role_select/main',
 
       /** 游客 */
-      'pages/tourist_main/main',
+      '^pages/tourist_main/main',
       'pages/tourist_invite_guide/main',
       'pages/tourist_rate_order/main',
       'pages/tourist_orders/main',
@@ -27,7 +27,7 @@ export default {
 
       /** 向导 */
       'pages/guide_sign_up/main',
-      '^pages/guide_main/main',
+      'pages/guide_main/main',
       'pages/guide_check_order/main',
       'pages/guide_calendar/main',
       'pages/guide_center/main',

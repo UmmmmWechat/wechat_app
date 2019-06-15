@@ -33,7 +33,7 @@
   export default {
     components: {
       GuideTabBar,
-      GuideProfileCard，
+      GuideProfileCard,
       QuitItem
     },
     data () {
