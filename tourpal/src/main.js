@@ -17,7 +17,7 @@ export default {
       'pages/role_select/main',
 
       /** 游客 */
-      '^pages/tourist_main/main',
+      'pages/tourist_main/main',
       'pages/tourist_invite_guide/main',
       'pages/tourist_rate_order/main',
       'pages/tourist_orders/main',
@@ -40,7 +40,7 @@ export default {
       'pages/show_spot_page/main',
       'pages/show_guide_page/main',
 
-      'pages/test/main',
+      '^pages/test/main',
       'pages/z_test/main'
     ],
     window: {
