@@ -21,7 +21,10 @@
       </div>
       <div class="text-item-wrapper">
         <span class="title-span">推荐指数：</span>
-        <span>{{ computedLevel }}</span>
+        <!-- <span>{{ computedLevel }}</span> -->
+        <span>
+          <DRating v-bind:rating="computedLevel"/>
+        </span>
       </div>
     </div>
     <div
@@ -40,8 +43,12 @@
 <script>
   import {D_SPOT_ID, D_SPOT_NAME} from '../../api/const/spotConst'
   import {SHOW_SPOT_GUIDE} from '../../pages/pages_url'
+  import DRating from "../common/DRating"
 
   export default {
+    components: {
+      DRating
+    },
     props: {
       spot: {
         type: Object,
