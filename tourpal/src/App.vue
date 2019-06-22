@@ -1,7 +1,9 @@
 <script>
   import {isTestMode} from './api/httpRequestApi'
-  import {WINDOW_HEIGHT} from './api/const/commonConst'
+  import {WINDOW_HEIGHT, USER_TYPE, TOURIST, GUIDE} from './api/const/commonConst'
   import {GUIDE_MAIN, TOURIST_MAIN} from "./pages/pages_url";
+  import {TOURIST_ID} from './api/const/touristConst'
+  import {GUIDE_ID} from './api/const/guideConst'
 
   export default {
     created () {
@@ -22,35 +24,49 @@
     onLaunch () {
       if (!isTestMode) {
         try {
+          // 保留部分数据
+          const userType = wx.getStorageSync(USER_TYPE);
+          const touristId = wx.getStorageSync(TOURIST_ID);
+          const guideId = wx.getStorageSync(GUIDE_ID);
           // @Add 我在这里把所有的存储给删了，我们并不存在需要记住上次状态的情况，反而如果有上次情况会影响本次运行
           wx.clearStorageSync()
+          // 保留部分数据
+          if (userType === TOURIST && touristId) {
+            wx.setStorageSync(USER_TYPE, userType)
+            wx.setStorageSync(TOURIST_ID, touristId)
+          } else if (userType === GUIDE && guideId) {
+            wx.setStorageSync(USER_TYPE, userType)
+            wx.setStorageSync(GUIDE_ID, guideId)
+          }
           // 在这里获取了屏幕可用高度
           let sysInfo = wx.getSystemInfoSync()
           let windowHeight = sysInfo.windowHeight
           wx.setStorageSync(WINDOW_HEIGHT, windowHeight)
           console.log('windowHeight: ' + windowHeight)
         } catch (error) {
-          console.log(error)
+          console.error(error)
         }
       }
-    },
-    methods: {
-      lastUse () {
-        const userType = wx.getStorageSync("user-type");
-        if (!userType) return;
-        const urls = {
-          guide: GUIDE_MAIN,
-          tourist: TOURIST_MAIN
-        };
-        const url = "/" + urls[userType];
-        console.log(url);
-        wx.redirectTo({
-          url,
-          fail: (e) => {
-            console.error(e);
-          }
-        })
-      }
+    // },
+    // methods: {
+    //   lastUse () {
+    //     const userType = wx.getStorageSync(USER_TYPE);
+    //     let url = '/';
+    //     if (userType === TOURIST) {
+    //       url += TOURIST_MAIN
+    //     } else if (userType === GUIDE) {
+    //       url += GUIDE_MAIN
+    //     } else {
+    //       return;
+    //     }
+    //     console.log('lasturl:', url);
+    //     wx.redirectTo({
+    //       url,
+    //       fail: (e) => {
+    //         console.error(e);
+    //       }
+    //     })
+    //   }
     }
   }
 </script>

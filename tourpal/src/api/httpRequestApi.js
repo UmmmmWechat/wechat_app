@@ -28,7 +28,7 @@ const mockSuccess = (onSuccess) => {
   setTimeout(onSuccess, 500)
 }
 
-const isTestMode = true
+const isTestMode = false
 
 export {
   dRequest,

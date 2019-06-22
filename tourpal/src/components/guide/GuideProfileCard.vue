@@ -19,7 +19,7 @@
           <div class="text-item"><span class="title-span">微信：</span><span>{{ guide.wechat }}</span></div>
           <div class="text-item"><span class="title-span">手机：</span><span>{{ guide.phone }}</span></div>
         </template>
-        <div class="text-item">
+        <div class="text-item" v-if="canInvite">
           <span class="title-span">好评度：</span>
           <progress
             class="progress"
@@ -35,7 +35,7 @@
       id="btn-wrapper"
       class="invite-a-wrapper">
       <a
-        class="d-a"
+        class="button-a d-a"
         @click="handleInvite">
         发起邀请
       </a>
@@ -120,6 +120,10 @@
 
   #text-wrapper {
     margin: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
   }
 
   .title-span {

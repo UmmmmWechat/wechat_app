@@ -235,7 +235,7 @@
 
             this.hasMoreArray[index] = res.hasMoreOrder
 
-            this.ordersArray.push(...res.orderList)
+            this.ordersArray[index].push(...res.orderList)
 
             this.dLog(this.loadingArray)
             this.loadingArray.splice(index, 1, false)
@@ -387,8 +387,12 @@
   }
 
   #search {
+    color: white;
     font-size: 0.8em;
-    margin-bottom: 20px;
+  }
+
+  #navigator-bar {
+    margin-top: 20px;
   }
 
   .clear-btn {

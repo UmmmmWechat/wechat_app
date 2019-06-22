@@ -6,10 +6,6 @@
       粗错啦 QWQ
     </div>
     <div v-else>
-      <div id="head">
-        <span>{{order.state}}</span>
-      </div>
-
       <div id="body">
         <div>
           <span class="title-span">景点：</span>
@@ -61,6 +57,7 @@
   import touristApi from '../../api/tourist'
 
   import * as ResultMessage from '../../api/returnMessage'
+  import {formatTime} from '../../utils/dUtils'
 
   import {
     STATES_ARRAY,
@@ -99,11 +96,11 @@
     computed: {
       computedTravelDate () {
         if (!this.order) return ''
-        return new Date(this.order.travelDate).toLocaleDateString()
+        return formatTime(new Date(this.order.travelDate));
       },
       computedCreatedDate () {
         if (!this.order) return ''
-        return new Date(this.order.generatedDate).toLocaleDateString()
+        return formatTime(new Date(this.order.generatedDate));
       }
     },
     mounted () {
@@ -252,7 +249,7 @@
   }
 
   #body {
-    padding: 0 20px 20px 20px;
+    padding: 20px;
     color: black;
     color: gray;
   }

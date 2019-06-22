@@ -36,14 +36,13 @@
 
 <script>
   import {TOURIST_MAIN, GUIDE_SIGN_UP, GUIDE_MAIN} from '../pages_url'
+  import {USER_TYPE, TOURIST, GUIDE} from '../../api/const/commonConst'
 
   import guideApi from '../../api/guide'
   import touristApi from '../../api/tourist'
   import guideIcon from "../../assets/image/icon_ natural persons.png";
   import touristIcon from "../../assets/image/icon_ natural persons_2.png";
   import Logo from "../../components/common/Logo";
-
-  const USER_TYPE = "user-type";
 
   export default {
     components: {Logo},
@@ -60,11 +59,29 @@
         pageName: 'role_select',
         guideIcon: guideIcon,
         touristIcon: touristIcon,
-        TOURIST: "tourist",
-        GUIDE: "guide",
         selectedRole: "",
-        isLoading: false
+        isLoading: false,
+        TOURIST,
+        GUIDE
       }
+    },
+    mounted () {
+      const userType = wx.getStorageSync(USER_TYPE);
+      let url = '/';
+      if (userType === TOURIST) {
+        url += TOURIST_MAIN
+      } else if (userType === GUIDE) {
+        url += GUIDE_MAIN
+      } else {
+        return;
+      }
+      console.log('lasturl:', url);
+      wx.redirectTo({
+        url,
+        fail: (e) => {
+          console.error(e);
+        }
+      })
     },
     methods: {
       dLog (message, ...optionalParams) {
@@ -90,13 +107,13 @@
         if (!this.isLoading) {
           this.isLoading = true;
           switch (this.selectedRole) {
-            case this.GUIDE:
+            case GUIDE:
               guideApi.logIn(
                 (res) => {
                   // resolve
                   this.dLog('向导登录成功', res)
 
-                  wx.setStorageSync(USER_TYPE, this.GUIDE)
+                  wx.setStorageSync(USER_TYPE, GUIDE)
 
                   if (res.isNewGuide) {
                     const url = `/${GUIDE_SIGN_UP}`
@@ -116,7 +133,7 @@
                 }
               )
               break;
-            case this.TOURIST:
+            case TOURIST:
               touristApi.logIn(
                 (suc) => {
                   // resolve
@@ -127,7 +144,7 @@
                   wx.redirectTo({
                     url,
                     success: () => {
-                      wx.setStorageSync(USER_TYPE, this.TOURIST)
+                      wx.setStorageSync(USER_TYPE, TOURIST)
                     }
                   })
 

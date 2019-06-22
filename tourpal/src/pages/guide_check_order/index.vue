@@ -9,7 +9,7 @@
         </section>
         <section class="info-item">
           <span class="title-span">邀请状态：</span>
-          <span class="value-span">{{ order.state }}</span>
+          <span class="value-span">{{ statePrompts[order.state] }}</span>
         </section>
         <section class="info-item">
           <span class="title-span">游客编号：</span>
@@ -58,7 +58,9 @@
   import guideApi from '../../api/guide'
 
   import {SELECTED_ORDER_INFO, STATES_ARRAY, WAITING_STATE} from '../../api/const/guideConst'
+  import {statePrompts} from '../../api/const/OrderState'
   import * as ResultMessage from '../../api/returnMessage'
+  import {formatTime} from '../../utils/dUtils'
 
   export default {
     components: {
@@ -69,17 +71,18 @@
         order: undefined,
         loading: false,
         waiting: STATES_ARRAY[WAITING_STATE],
-        pageName: 'guide_check_order'
+        pageName: 'guide_check_order',
+        statePrompts
       }
     },
     computed: {
       computedTravelDate () {
         if (!this.order) return ''
-        return new Date(this.order.travelDate).toLocaleDateString()
+        return formatTime(new Date(this.order.travelDate));
       },
       computedCreatedDate () {
         if (!this.order) return ''
-        return new Date(this.order.generatedDate).toLocaleDateString()
+        return formatTime(new Date(this.order.generatedDate));
       }
     },
     mounted () {

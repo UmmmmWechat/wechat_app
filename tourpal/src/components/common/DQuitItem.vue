@@ -7,13 +7,24 @@
 </template>
 
 <script>
+  import {WINDOW_HEIGHT} from '../../api/const/commonConst'
+
   export default {
     name: 'DQuitItem',
     methods: {
       handleQuit () {
         console.log('退出登录')
         wx.reLaunch({
-          url: '../role_select/main'
+          url: '../role_select/main',
+          success: () => {
+            console.log('quit success');
+            // 保留部分数据
+            const windowHeight = wx.getStorageSync(WINDOW_HEIGHT);
+            // 清空数据
+            wx.clearStorage()
+            // 保留部分数据
+            wx.setStorage({key: WINDOW_HEIGHT, data: windowHeight})
+          }
         })
       }
     }

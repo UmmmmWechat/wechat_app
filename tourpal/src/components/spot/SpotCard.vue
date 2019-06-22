@@ -10,11 +10,11 @@
       <div id="title-div">
         {{ spot.name }}
       </div>
-      <div id="content-div">
+      <div v-if="!mini" id="content-div">
         {{ spot.introduction }}
       </div>
     </div>
-    <div class="text-wrapper">
+    <div v-if="!mini" class="text-wrapper">
       <div class="text-item-wrapper">
         <span class="title-span">热度：</span>
         <span>{{ spot.popularity }}</span>
@@ -31,10 +31,9 @@
       v-if="!noAction"
       id="btn-wrapper">
       <a
-        id="like-button"
-        class="d-a"
+        class="like-icon-before button-a d-a"
         @click="handleClick">
-        ❤ 感兴趣
+        感兴趣
       </a>
     </div>
   </div>
@@ -50,6 +49,10 @@
       DRating
     },
     props: {
+      mini: {
+        type: Boolean,
+        default: false
+      },
       spot: {
         type: Object,
         required: true
@@ -128,13 +131,6 @@
     margin: -130px 0px 10px 10px;
     padding: 40px;
     text-align: right;
-  }
-
-  #like-button{
-    border: solid 1px ;
-    border-radius: 10px;
-    padding: 10px 20px;
-    color: #42b970;
   }
 
   .text-item-wrapper {

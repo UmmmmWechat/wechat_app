@@ -7,10 +7,6 @@
     </div>
     <div v-else>
       <section @click="checkOrderDetail">
-        <div class="head">
-          <span>{{order.state}}</span>
-        </div>
-
         <div id="body">
           <div>
             <span class="title-span">景点：</span>
@@ -57,6 +53,7 @@
 
   import {STATES_ARRAY, WAITING_STATE, SELECTED_ORDER_INFO} from '../../api/const/guideConst'
   import {GUIDE_CHECK_ORDER} from '../../pages/pages_url'
+  import {formatTime} from '../../utils/dUtils'
 
   export default {
     props: {
@@ -69,20 +66,22 @@
       }
     },
     data () {
+      console.log('!!!', this.order);
       return {
         componentName: 'OrderCardGuide',
         waiting: STATES_ARRAY[WAITING_STATE],
 
         errorOccur: false,
-        spotName: ''
+        spotName: '',
+        travelDate: new Date(this.order.travelDate)
       }
     },
     computed: {
       computedTravelDate () {
-        return new Date(this.order.travelDate).toLocaleDateString()
+        return formatTime(new Date(this.order.travelDate));
       },
       computedCreatedDate () {
-        return new Date(this.order.generatedDate).toLocaleDateString()
+        return formatTime(new Date(this.order.generatedDate));
       }
     },
     mounted () {
@@ -108,10 +107,6 @@
       )
     },
     methods: {
-      formatDate (date) {
-        console.log('date:', date)
-        return new Date(date).toLocaleDateString()
-      },
       dLog (message, ...optionalParams) {
         console.log(this.componentName, message, optionalParams)
       },
@@ -213,7 +208,7 @@
   }
 
   #body {
-    padding: 20px 20px 20px 20px;
+    padding: 20px;
     /* color: black; */
     color: gray;
   }

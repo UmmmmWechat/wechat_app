@@ -2,13 +2,14 @@
   <div id="out">
     <div v-if="order.spot" id="rate-spot" class="rate-item">
       <spot-card
+        :mini="true"
         :spot="order.spot"
         :noAction="true"/>
     </div>
     <div v-if="order.guide" id="rate-guide" class="rate-item">
       <guide-card
         :guide="order.guide"
-        canInvite="false"/>
+        :canInvite="false"/>
     </div>
     <div>
       <div class="form-item">
@@ -183,5 +184,11 @@
   .label {
     color: gray;
     text-align: left;
+  }
+</style>
+
+<style>
+  #rate-spot #wrapper {
+    margin: 0 20px;
   }
 </style>
