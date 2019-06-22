@@ -40,12 +40,14 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
       <button
         class="btn-wrapper"
         size="mini"
+        :disabled="!searchWord"
         @click="handleClearSearch">
         清空搜索
       </button>
       <button
         class="btn-wrapper"
         size="mini"
+        :disabled="!selectedSpots.length"
         @click="handleClearSelect">
         清空所选
       </button>

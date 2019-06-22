@@ -169,7 +169,7 @@
 
             const url = `/${GUIDE_MAIN}`
             this.dLog('跳转', url)
-            wx.switchTab({url})
+            wx.redirectTo({url})
 
             // 输出提示信息
             wx.showToast({

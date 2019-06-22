@@ -1,11 +1,9 @@
-<!-- TODO 好像并没有写完 -->
 <template>
   <section>
     <section>
       <calendar
         :mark-date="markedDate"
-        v-on:chooseDay="clickDay"
-        v-on:changeMonth="changeDate"/>
+        @onChangeDay="onChangeDay" />
     </section>
     <section>
       <div
@@ -24,7 +22,7 @@
 </template>
 
 <script>
-  import Calendar from '../../components/guide/Calendar'
+  import Calendar from '../../components/common/DCalendar'
   import OrderListMini from '../../components/order/OrderListMini'
   import guideApi from '../../api/guide'
   import {GUIDE_ID} from '../../api/const/guideConst'
@@ -69,7 +67,7 @@
                 this.markedDate.push(key)
               }
             }
-            console.log(this.markedDate)
+            console.log('markedDate: ', this.markedDate)
             let date = new Date().toLocaleDateString()
             let orders = this.ordersGroupByDate[date]
             if (orders) {
@@ -81,18 +79,15 @@
           }
         )
       },
-      clickDay (data) {
+      onChangeDay (data) {
         let date = new Date(data).toLocaleDateString()
+        console.log('clickDay', data)
         let orders = this.ordersGroupByDate[date]
         if (orders) {
           this.orders = orders
         } else {
           this.orders = []
         }
-      },
-      changeDate (data) {
-        // TODO 左右点击切换月份的响应
-        console.log(data)
       }
     }
   }

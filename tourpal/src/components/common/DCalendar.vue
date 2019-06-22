@@ -86,7 +86,7 @@
         let month = this.date.getMonth();
         let day = this.date.getDate();
 
-        console.log(year, month, day);
+        console.log('DCalendar', year, month, day);
 
         month += delt;
         if (month < 0) {

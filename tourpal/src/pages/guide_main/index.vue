@@ -2,7 +2,7 @@
   <div>
     <div id="head" class="d-head">
       <div>
-        <span>欢迎</span>
+        <span>欢迎：</span>
         <span>
           <!--class="underline_span"-->
           <!--@click="handleGuideNameClicked">-->
@@ -129,13 +129,9 @@
           this.dLog('加载中 return')
           return
         }
-        if (!this.hasMore) {
-          this.dLog('已经加载全部 return')
-          return
-        }
 
         // 改为正在loading
-        this.loading = false
+        this.loading = true
 
         this.orders.splice(0, this.orders.length)// 清空原 orders 数组
 
@@ -147,7 +143,7 @@
           (res) => {
             this.dLog('取得等待中的邀请完成', res)
 
-            this.hasMore = res.hasMore
+            this.hasMore = res.hasMoreOrder
 
             this.orders.push(...res.orderList)
 

@@ -24,8 +24,6 @@ this.$emit('on-cancel', orderId)
         @on-cancel="handleOnCancel"/>
       <d-loading :loading="loading" :color="color"/>
       <d-no-more :has-more="hasMore" :color="color"/>
-      <!--TODO 不明-->
-      <!--<d-no-more :has-more="!hasMore || orders.length || loading || firstSearch" :color="color"/>-->
     </div>
     <div v-else>
       <order-card-guide
@@ -38,8 +36,6 @@ this.$emit('on-cancel', orderId)
         @on-cancel="handleOnCancel"/>
       <d-loading :loading="loading" :color="color"/>
       <d-no-more :has-more="hasMore" :color="color"/>
-      <!--TODO 不明-->
-      <!--<d-no-more :has-more="!hasMore || orders.length || loading || firstSearch" :color="color"/>-->
     </div>
   </scroll-view>
 </template>
@@ -106,7 +102,7 @@ this.$emit('on-cancel', orderId)
     mounted () {
       this.finishedLoading = false
       this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
-      console.log(this.scrollHeight)
+      console.log('scrollHeight: ' + this.scrollHeight)
 
       this.scrollToTop()
       this.finishedLoading = true

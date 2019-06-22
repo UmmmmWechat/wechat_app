@@ -8,6 +8,7 @@ import * as httpRequest from './httpRequestApi'
 import guideStub from './guideStub'
 import commonApi from './common'
 import {MOCK_ORDERS} from './mock/order_mock_data'
+import {MOCK_USER_AVATAR_URL} from './const/imgConst'
 
 const apiName = 'guideApi'
 
@@ -115,7 +116,7 @@ export default {
       guide.id = wx.getStorageSync(constant.GUIDE_ID)
       if (!guide.id) {
         this.dError('未取得 guideId')
-        const onSuccess = (suc) => {
+        const onSuccess = () => {
           guide.id = wx.getStorageSync(constant.GUIDE_ID)
           this.requestSignUp(guide, resolve, reject)
         }
@@ -212,7 +213,7 @@ export default {
   },
 
   /**
-   * 根据日期分组获得所有已完成的订单
+   * 根据日期分组获得所有进行中的订单
    * @param guideId
    * @param resolve
    * @param reject
@@ -353,6 +354,9 @@ export default {
         },
         httpRequest.GET,
         (res) => {
+          if (res.avatar === 'http://www.wenxiangdong.cn/images/user.svg') {
+            res.avatar = MOCK_USER_AVATAR_URL;
+          }
           this.dLog('query user info 请求成功', res)
           this.transSpotIDToSpot(res, resolve, reject)
         },

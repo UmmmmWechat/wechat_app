@@ -60,6 +60,7 @@
       <div class="item-wrapper">
         <d-input
           label="手机号"
+          :type="'number'"
           :placeholder="guide.phone"
           confirm-type="search"
           @input="form.phone = $event"/>
@@ -83,7 +84,7 @@
         <button
           type="primary"
           @click="handleSubmit">
-          确定
+          提交
         </button>
       </div>
 
