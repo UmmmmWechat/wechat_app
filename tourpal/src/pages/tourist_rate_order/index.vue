@@ -22,7 +22,7 @@
         </slider>
       </div>
       <div class="form-item">
-        <span class="label">给向导评分</span>
+        <span class="label">给导游评分</span>
         <slider
           :min="0" :max="5"
           show-value
@@ -76,8 +76,8 @@
         // 跳回
         wx.navigateBack()
 
-        // 未找到向导ID
-        this.showErrorRoast('粗错啦QWQ没有找到你的邀请')
+        // 未找到导游ID
+        this.showErrorToast('粗错啦QWQ没有找到你的邀请')
         return
       }
 

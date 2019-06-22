@@ -107,6 +107,7 @@
 
   import guideApi from '../../api/guide'
   import {GUIDE_INFO, SELECTED_SPOTS} from '../../api/const/guideConst'
+  import {validTel} from '../../utils/dUtils'
 
   export default {
     components: {
@@ -129,17 +130,17 @@
       }
     },
     mounted () {
-      // 取得向导信息
+      // 取得导游信息
       this.guide = wx.getStorageSync(GUIDE_INFO)
       if (!this.guide) {
-        // 未取得向导信息
-        const errMsg = '粗错啦QWQ没找到你的向导信息'
+        // 未取得导游信息
+        const errMsg = '粗错啦QWQ没找到你的导游信息'
 
         // 跳回
         wx.navigateBack()
 
         // 显示错误信息
-        this.showErrorRoast(errMsg)
+        this.showErrorToast(errMsg)
 
         return
       }
@@ -148,10 +149,10 @@
       this.editMode = false
       this.hasCheck = false
       this.form = {
-        wechat: '',
-        phone: '',
-        introduction: '',
-        favorSpots: []
+        wechat: this.guide.wechat,
+        phone: this.guide.phone,
+        introduction: this.guide.introduction,
+        favorSpots: [...this.guide.favorSpots]
       }
 
       // 保存景点信息
@@ -172,7 +173,6 @@
         if (!this.guide || this.guide.favorSpots.length === 0) {
           return '未选择，点击选择景点'
         } else {
-          // TODO 测试
           return this.guide.favorSpots.map(
             (spot) => spot.name
           ).join(',')
@@ -186,7 +186,7 @@
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息
@@ -253,11 +253,20 @@
         this.hasCheck = false
         this.dLog('checkModify 方法调用', this.form)
 
-        // 检查修改合法性
-        if (!this.form.favorSpots || !this.form.favorSpots.length) {
-          const errMsg = '请输入你想负责的景点'
+        // 检查表单项
+        let errMsg;
+        if (!this.form.wechat) {
+          errMsg = '请输入你的微信号'
+        } else if (!this.form.favorSpots || !this.form.favorSpots.length) {
+          errMsg = '请输入你想负责的景点'
+        } else if (!(this.form.phone && validTel(this.form.phone))) {
+          errMsg = '请输入正确的手机号'
+        } else if (!(this.form.introduction && this.form.introduction.length <= 50)) {
+          errMsg = '请简短地介绍下自己（50字以内）'
+        }
+        if (errMsg) {
           this.showErrorToast(errMsg)
-          return false
+          return;
         }
 
         // 保存修改信息

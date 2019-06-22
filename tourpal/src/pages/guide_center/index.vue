@@ -13,7 +13,7 @@
       <div
         class="op-item"
         @click="handleToReview">
-        向导履历
+        导游履历
       </div>
       <quit-item/>
     </div>
@@ -43,13 +43,13 @@
     },
     methods: {
       handleToInfo (event) {
-        console.log('向导个人中心-个人信息')
+        console.log('导游个人中心-个人信息')
         wx.navigateTo({
           url: '../guide_center_info/main'
         })
       },
       handleToReview (event) {
-        console.log('向导个人中心-向导履历')
+        console.log('导游个人中心-导游履历')
         wx.navigateTo({
           url: '../guide_center_experience/main'
         })

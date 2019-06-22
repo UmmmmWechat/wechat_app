@@ -1,7 +1,7 @@
 <template>
   <section>
     <div style="text-align: center; margin: 20px;">
-      <img :src="guide.avatar"/>
+      <img class="avatar" :src="guide.avatar"/>
     </div>
     <div class="name-wrapper">
       {{ guide.realName }}
@@ -13,24 +13,22 @@
           :percent="guide.goodFeedbackRate"
           show-info/>
       </div>
-      <div class="item-wrapper"><span class="title-span">性别：</span>{{ guide.gender }}</div>
       <div class="item-wrapper">
-      <span class="title-span">
-        微信：
-      </span>
-        <span style="text-decoration: underline" @click="handleClickWechat">
-        {{ guide.wechat }}
-      </span>
+        <span class="title-span">性别：</span>
+        <span>{{ guide.gender }}</span>
       </div>
       <div class="item-wrapper">
-      <span class="title-span">
-        电话：
-      </span>
-        <span style="text-decoration: underline" @click="handleClickPhone">
-        {{ guide.phone }}
-      </span>
+        <span class="title-span">微信：</span>
+        <span style="text-decoration: underline" @click="handleClickWechat">{{ guide.wechat }}</span>
       </div>
-      <div class="item-wrapper"><span class="title-span">自我介绍：</span>{{ guide.introduction }}</div>
+      <div class="item-wrapper">
+        <span class="title-span">电话：</span>
+        <span style="text-decoration: underline" @click="handleClickPhone">{{ guide.phone }}</span>
+      </div>
+      <div class="item-wrapper">
+        <span class="title-span">自我介绍：</span>
+        <span>{{ guide.introduction }}</span>
+      </div>
     </div>
   </section>
 </template>
@@ -47,15 +45,15 @@
         wechatActionSheetItemList: ['复制到剪贴板']
       }
     },
-    mounted () {
+    beforeMount () {
       // 取得 Guide
       this.guide = wx.getStorageSync(CHECK_GUIDE)
       if (!this.guide) {
         // 跳回
         wx.navigateBack()
 
-        // 未找到向导ID
-        this.showErrorRoast('粗错啦QWQ没有找到你要的向导')
+        // 未找到导游ID
+        this.showErrorToast('粗错啦QWQ没有找到你要的导游')
       }
     },
     methods: {
@@ -111,7 +109,7 @@
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息
@@ -125,6 +123,13 @@
 </script>
 
 <style scoped>
+  .avatar {
+    margin: 20px;
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+  }
+
   .name-wrapper {
     font-size: 1.5em;
     font-weight: bold;

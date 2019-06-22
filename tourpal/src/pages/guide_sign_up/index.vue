@@ -70,6 +70,8 @@
   import {GUIDE_MAIN} from '../pages_url'
   import {SELECTED_SPOTS} from '../../api/const/guideConst'
 
+  import {validIdcard, validTel} from '../../utils/dUtils'
+
   export default {
     components: {
       DInput,
@@ -130,34 +132,25 @@
         this.dLog('handleSubmit 方法响应', event, this.form)
 
         // 检查表单项
+        let errMsg;
         if (!this.form.realName) {
-          const errMsg = '请输入你的真实姓名'
-          this.showErrorToast(errMsg)
-          return
-        } else if (!this.form.idCard) {
-          const errMsg = '请输入你的身份证号'
-          this.showErrorToast(errMsg)
-          return
+          errMsg = '请输入你的真实姓名'
         } else if (!this.form.gender) {
-          const errMsg = '请输入你的性别'
-          this.showErrorToast(errMsg)
-          return
-        } else if (!this.form.favorSpots || !this.form.favorSpots.length) {
-          const errMsg = '请输入你想负责的景点'
-          this.showErrorToast(errMsg)
-          return
+          errMsg = '请输入你的性别'
         } else if (!this.form.wechat) {
-          const errMsg = '请输入你的微信号'
+          errMsg = '请输入你的微信号'
+        } else if (!this.form.favorSpots || !this.form.favorSpots.length) {
+          errMsg = '请输入你想负责的景点'
+        } else if (!(this.form.idCard && validIdcard(this.form.idCard))) {
+          errMsg = '请输入正确的身份证号'
+        } else if (!(this.form.phone && validTel(this.form.phone))) {
+          errMsg = '请输入正确的手机号'
+        } else if (!(this.form.introduction && this.form.introduction.length <= 50)) {
+          errMsg = '请简短地介绍下自己（50字以内）'
+        }
+        if (errMsg) {
           this.showErrorToast(errMsg)
-          return
-        } else if (!this.form.phone) {
-          const errMsg = '请输入你的手机号'
-          this.showErrorToast(errMsg)
-          return
-        } else if (!this.form.introduction) {
-          const errMsg = '请简短地介绍下自己'
-          this.showErrorToast(errMsg)
-          return
+          return;
         }
 
         // 发起注册请求

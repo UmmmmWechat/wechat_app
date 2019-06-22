@@ -82,7 +82,7 @@ export default {
   },
 
   /**
-   * 根据景点查询向导
+   * 根据景点查询导游
    * @param {*} spotId
    * @param {*} lastIndex
    * @param {*} resolve
@@ -96,7 +96,7 @@ export default {
     } else {
       // 发起网络请求
       const onSuccess = (suc) => {
-        // 成功的返回信息中为 向导数组
+        // 成功的返回信息中为 导游数组
         this.dLog('服务器端通过景点取得导游成功', suc)
 
         const hasMoreGuide = lastIndex !== constant.GET_ALL_TAG && suc.length === constant.GUIDE_MAX_NUM
@@ -136,7 +136,7 @@ export default {
     } else {
       // 发起网络请求
       const onSuccess = (suc) => {
-        // 成功的返回信息中为 向导数组
+        // 成功的返回信息中为 导游数组
         this.dLog('服务器端通过关键词搜索导游成功', suc)
 
         const hasMoreGuide = lastIndex !== constant.GET_ALL_TAG && suc.length === constant.GUIDE_MAX_NUM

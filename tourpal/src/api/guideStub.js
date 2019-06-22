@@ -17,7 +17,7 @@ export default {
   },
 
   /**
-   * 向导登录桩
+   * 导游登录桩
    * @param {*} resolve
    * @param {*} reject
    */
@@ -33,16 +33,16 @@ export default {
     } else {
       this.dLog('老导游，不需要进行注册')
       const guideId = mockData.mockGuide.id
-      // 保存 向导ID
+      // 保存 导游ID
       wx.setStorage({
         key: constant.GUIDE_ID,
         data: guideId,
         success: () => {
-          this.dLog('保存向导ID成功')
+          this.dLog('保存导游ID成功')
           resolve({isNewGuide: isNewGuide})
         },
         fail: () => {
-          this.dLog('保存向导ID失败')
+          this.dLog('保存导游ID失败')
           reject()
         }
       })
@@ -50,7 +50,7 @@ export default {
   },
 
   /**
-   * 新向导注册的方法
+   * 新导游注册的方法
    * @param {*} guide
    * @param {*} resolve
    * @param {*} reject

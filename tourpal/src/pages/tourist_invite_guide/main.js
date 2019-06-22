@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '邀请向导'
+    navigationBarTitleText: '邀请导游'
   }
 }

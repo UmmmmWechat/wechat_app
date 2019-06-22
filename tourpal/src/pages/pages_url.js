@@ -10,7 +10,7 @@ const TOURIST_ORDERS = 'pages/tourist_orders/main'
 const TOURIST_TRAVEL_RECORDS = 'pages/tourist_travel_records/main'
 const SHOW_SPOT_GUIDE = 'pages/show_spot_guide/main'
 
-/** 向导 */
+/** 导游 */
 const GUIDE_SIGN_UP = 'pages/guide_sign_up/main'
 const GUIDE_MAIN = 'pages/guide_main/main'
 const GUIDE_CHECK_ORDER = 'pages/guide_check_order/main'
@@ -42,7 +42,7 @@ export {
   TOURIST_TRAVEL_RECORDS,
   SHOW_SPOT_GUIDE,
 
-  /** 向导 */
+  /** 导游 */
     GUIDE_SIGN_UP,
   GUIDE_MAIN,
   GUIDE_CHECK_ORDER,

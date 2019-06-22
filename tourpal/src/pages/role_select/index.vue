@@ -53,7 +53,7 @@
           extra: '我达达的马蹄，美丽的错误'
         },
         guidePrompt: {
-          title: '向导',
+          title: '导游',
           extra: '守着这一方水土，等待着谁的到来'
         },
         pageName: 'role_select',
@@ -111,7 +111,7 @@
               guideApi.logIn(
                 (res) => {
                   // resolve
-                  this.dLog('向导登录成功', res)
+                  this.dLog('导游登录成功', res)
 
                   wx.setStorageSync(USER_TYPE, GUIDE)
 
@@ -128,7 +128,7 @@
                   this.isLoading = false;
                 },
                 (fai) => {
-                  this.showErrorToast('向导登录失败', fai)
+                  this.showErrorToast('导游登录失败', fai)
                   this.isLoading = false;
                 }
               )
@@ -181,13 +181,13 @@
       //   )
       // },
       // handleChooseGuide () {
-      //   // 选择向导
-      //   this.dLog('选择了向导')
+      //   // 选择导游
+      //   this.dLog('选择了导游')
       //
       //   guideApi.logIn(
       //     (res) => {
       //       // resolve
-      //       this.dLog('向导登录成功', res)
+      //       this.dLog('导游登录成功', res)
       //
       //       if (res.isNewGuide) {
       //         const url = `/${GUIDE_SIGN_UP}`
@@ -200,7 +200,7 @@
       //       }
       //     },
       //     (fai) => {
-      //       this.showErrorToast('向导登录失败', fai)
+      //       this.showErrorToast('导游登录失败', fai)
       //     }
       //   )
       // }

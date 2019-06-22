@@ -188,7 +188,7 @@
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息
@@ -254,7 +254,7 @@
             this.loading = false
           },
           () => {
-            this.showErrorRoast('取得景点列表失败')
+            this.showErrorToast('取得景点列表失败')
 
             this.loading = false
           }
@@ -292,11 +292,11 @@
                 }
               } else {
                 // 不支持该地区
-                this.showErrorRoast(res.errMsg)
+                this.showErrorToast(res.errMsg)
               }
             },
             (rej) => {
-              this.showErrorRoast('检查所在城市是否支持失败', rej)
+              this.showErrorToast('检查所在城市是否支持失败', rej)
             }
           )
         }
@@ -336,7 +336,7 @@
             }
           },
           (err) => {
-            this.showErrorRoast('取得景点列表失败', err)
+            this.showErrorToast('取得景点列表失败', err)
 
             this.loading = false
           }
@@ -360,7 +360,7 @@
 
         // 非空检查
         if (!this.searchWord) {
-          this.showErrorRoast('请输入搜索关键词w')
+          this.showErrorToast('请输入搜索关键词w')
           return
         }
 
@@ -391,7 +391,7 @@
             this.loading = false
           },
           (fai) => {
-            this.showErrorRoast('搜索景点列表失败', fai)
+            this.showErrorToast('搜索景点列表失败', fai)
 
             this.loading = false
           }
@@ -427,7 +427,7 @@
             this.loading = false
           },
           () => {
-            this.showErrorRoast('搜索景点列表失败')
+            this.showErrorToast('搜索景点列表失败')
 
             this.loading = false
           }

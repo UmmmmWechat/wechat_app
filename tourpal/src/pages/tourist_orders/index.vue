@@ -162,7 +162,7 @@
         this.dLog('跳转', url)
         wx.redirectTo({url})
 
-        this.showErrorRoast('未找到游客ID 需要先去登录')
+        this.showErrorToast('未找到游客ID 需要先去登录')
 
         return
       }
@@ -194,7 +194,7 @@
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息
@@ -243,7 +243,7 @@
             this.dLog(this.loadingArray)
           },
           (rej) => {
-            this.showErrorRoast('取得邀请列表失败', rej, index)
+            this.showErrorToast('取得邀请列表失败', rej, index)
 
             // this.loadingArray[index] = false
             this.loadingArray.splice(index, 1, false)
@@ -279,7 +279,7 @@
 
         // 非空检查
         if (!this.searchWord) {
-          this.showErrorRoast('请输入搜索关键词w')
+          this.showErrorToast('请输入搜索关键词w')
           return
         }
 
@@ -325,7 +325,7 @@
             this.loading = false
           },
           () => {
-            this.showErrorRoast('搜索邀请列表失败')
+            this.showErrorToast('搜索邀请列表失败')
 
             this.loading = false
           }
@@ -373,12 +373,7 @@
 
 <style scoped>
   .swiper {
-    /*height: 1000rpx;*/
     padding: 40px 0;
-  }
-
-  .swiper-item {
-    /*height: 100%;*/
   }
 
   .btn-wrapper {

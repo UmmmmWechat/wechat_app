@@ -41,7 +41,7 @@ export default {
   },
 
   /**
-   * 根据景点查询向导
+   * 根据景点查询导游
    * @param {String} spotId 景点ID
    * @param {*} lastIndex
    * @param {*} resolve

@@ -62,7 +62,7 @@
         wx.navigateBack()
 
         // 未找到游客ID
-        this.showErrorRoast('粗错啦QWQ 没有找到你的ID')
+        this.showErrorToast('粗错啦QWQ 没有找到你的ID')
 
         return
       }
@@ -82,7 +82,7 @@
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息
@@ -117,7 +117,7 @@
             this.loading = false
           },
           () => {
-            this.showErrorRoast('粗错啦QWQ暂时找不到')
+            this.showErrorToast('粗错啦QWQ暂时找不到')
             this.loading = false
           }
         )
@@ -160,27 +160,27 @@
         let guideCommend = ''
         switch (feedback.guidePoint) {
           case 0:
-            guideCommend = '向导太差劲了'
+            guideCommend = '导游太差劲了'
             break
           case 1:
           case 2:
-            guideCommend = '向导一般'
+            guideCommend = '导游一般'
             break
           case 3:
           case 4:
-            guideCommend = '向导人还不赖嘛'
+            guideCommend = '导游人还不赖嘛'
             break
           case 5:
-            guideCommend = '向导人超好的'
+            guideCommend = '导游人超好的'
             break
         }
 
         const onFail = () => {
-          this.showErrorRoast('邀请记录粗错啦QWQ')
+          this.showErrorToast('邀请记录粗错啦QWQ')
           this.loading = false
         }
 
-        // 查询向导姓名
+        // 查询导游姓名
         commonApi.queryBasicGuideById(
           order.guideId,
           (guide) => {

@@ -7,7 +7,7 @@
         <icon type="search" size="10" color="white"/>
         <div style="display:inline-block;width:90%;">
           <d-input
-            placeholder="搜索向导"
+            placeholder="搜索导游"
             confirm-type="search"
             :value="searchValue"
             @input="handleSearchInput"
@@ -134,7 +134,7 @@
       if (!this.spotID) {
         wx.navigateBack()
         const errMsg = '取得景点ID失败'
-        this.showErrorRoast(errMsg)
+        this.showErrorToast(errMsg)
         return
       }
       this.dLog('取得景点ID完成')
@@ -144,7 +144,7 @@
       if (!this.spotName) {
         wx.navigateBack()
         const errMsg = '取得景点名称失败'
-        this.showErrorRoast(errMsg)
+        this.showErrorToast(errMsg)
         return
       }
       this.dLog('取得景点名称完成')
@@ -178,7 +178,7 @@
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息
@@ -237,7 +237,7 @@
             this.loading = false
           },
           (rej) => {
-            this.showErrorRoast('通过景点取得导游列表失败', rej)
+            this.showErrorToast('通过景点取得导游列表失败', rej)
             this.loading = false
           }
         )
@@ -256,7 +256,7 @@
 
         // 非空检查
         if (!this.searchWord) {
-          this.showErrorRoast('请输入搜索关键词w')
+          this.showErrorToast('请输入搜索关键词w')
           return
         }
 
@@ -272,12 +272,12 @@
         // 上滑到顶部
         this.scrollToTop()
 
-        // 按照关键词搜索向导
+        // 按照关键词搜索导游
         touristApi.queryGuideByKeyword(
           this.searchWord,
           0,
           (res) => {
-            this.dLog('搜索向导列表成功', res)
+            this.dLog('搜索导游列表成功', res)
 
             this.searchHasMore = res.hasMoreGuide
 
@@ -286,7 +286,7 @@
             this.loading = false
           },
           () => {
-            this.showErrorRoast('搜索向导列表失败')
+            this.showErrorToast('搜索导游列表失败')
 
             this.loading = false
           }
@@ -307,7 +307,7 @@
         // 保留下上次最后的index
         let lastIndex = this.searchGuides.length
 
-        // 按照关键词搜索向导
+        // 按照关键词搜索导游
         touristApi.queryGuideByKeyword(
           this.searchWord,
           lastIndex,
@@ -321,7 +321,7 @@
             this.loading = false
           },
           (rej) => {
-            this.showErrorRoast('通过关键词搜索导游列表失败', rej)
+            this.showErrorToast('通过关键词搜索导游列表失败', rej)
 
             this.loading = false
           }

@@ -160,7 +160,7 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息
@@ -208,7 +208,7 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
             this.loading = false
           },
           () => {
-            this.showErrorRoast('搜索景点列表失败')
+            this.showErrorToast('搜索景点列表失败')
 
             this.loading = false
           }
@@ -219,7 +219,7 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
 
         // 非空检查
         if (!this.searchWord) {
-          this.showErrorRoast('请输入搜索关键词w')
+          this.showErrorToast('请输入搜索关键词w')
           return
         }
 
@@ -249,7 +249,7 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
             this.loading = false
           },
           (fai) => {
-            this.showErrorRoast('搜索景点列表失败', fai)
+            this.showErrorToast('搜索景点列表失败', fai)
 
             this.loading = false
           }
@@ -263,7 +263,7 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
         ) !== -1) {
           // 已经选过了
           const errMsg = '这个景点已经被你承包啦！'
-          this.showErrorRoast(errMsg)
+          this.showErrorToast(errMsg)
           return
         }
 
@@ -297,7 +297,7 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
 
         if (this.selectedSpots.length === 0) {
           const errMsg = '请至少选择一个景点'
-          this.showErrorRoast(errMsg)
+          this.showErrorToast(errMsg)
           return
         }
 

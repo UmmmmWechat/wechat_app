@@ -30,7 +30,7 @@
 
         <d-textarea
           label="留言"
-          :placeholder="message || '请给向导留个言吧'"
+          :placeholder="message || '请给导游留个言吧'"
           @input="handleInput"/>
 
         <button
@@ -89,7 +89,7 @@
     mounted () {
       this.guide = wx.getStorageSync(INVITE_GUIDE_INFO)
       if (!this.guide) {
-        const errMsg = '向导信息获取失败'
+        const errMsg = '导游信息获取失败'
         this.mountedError(errMsg)
         return
       }
@@ -176,7 +176,7 @@
         } else if (!this.travelTime) {
           errMsg = '请选择旅行时间w'
         } else {
-          errMsg = '跟向导说点啥邀请成功的机率更高哟w'
+          errMsg = '跟导游说点啥邀请成功的机率更高哟w'
           if (message) {
             message = message.trim();
             if (message.length !== 0) {

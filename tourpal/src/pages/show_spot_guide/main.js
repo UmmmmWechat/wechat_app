@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '向导'
+    navigationBarTitleText: '导游'
   }
 }

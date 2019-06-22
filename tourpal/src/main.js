@@ -25,7 +25,7 @@ export default {
       'pages/show_spot_guide/main',
       'pages/tourist_center/main',
 
-      /** 向导 */
+      /** 导游 */
       'pages/guide_sign_up/main',
       'pages/guide_main/main',
       'pages/guide_check_order/main',

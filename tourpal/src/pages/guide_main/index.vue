@@ -58,20 +58,20 @@
       this.hasMore = true
       this.loading = true
 
-      // 取得 向导ID
+      // 取得 导游ID
       this.guide.id = wx.getStorageSync(GUIDE_ID)
       if (!this.guide.id) {
-        const errMsg = '向导ID获取失败'
+        const errMsg = '导游ID获取失败'
 
         const url = `/${ROLE_SELECT}`
         this.dLog('跳转', url)
         wx.redirectTo({url})
 
-        this.showErrorRoast(errMsg)
+        this.showErrorToast(errMsg)
         return
       }
 
-      // 取得向导信息
+      // 取得导游信息
       this.getUserInfo()
     },
     methods: {
@@ -81,7 +81,7 @@
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息
@@ -96,29 +96,29 @@
         guideApi.queryUserInfo(
           this.guide.id,
           (res) => {
-            this.dLog('取得向导信息成功', res)
+            this.dLog('取得导游信息成功', res)
             this.guide = res
-            // 存储向导信息
+            // 存储导游信息
             wx.setStorage({
               key: GUIDE_INFO,
               data: this.guide,
               success: (suc) => {
-                // 存储向导信息成功
-                this.dLog('存储向导信息成功', suc)
+                // 存储导游信息成功
+                this.dLog('存储导游信息成功', suc)
                 this.loading = false
                 this.getOrders()
               }
             })
           },
           (rej) => {
-            const errMsg = '粗错啦QWQ没有找到你的向导信息\n请重新注册'
+            const errMsg = '粗错啦QWQ没有找到你的导游信息\n请重新注册'
             this.loading = false
 
             const url = `/${GUIDE_SIGN_UP}`
             this.dLog('跳转', url)
             wx.redirectTo({url})
 
-            this.showErrorRoast(errMsg, rej)
+            this.showErrorToast(errMsg, rej)
           }
         )
       },
@@ -151,13 +151,13 @@
           },
           (err) => {
             const errMsg = '粗错啦QWQ没找到你的邀请'
-            this.showErrorRoast(errMsg, err)
+            this.showErrorToast(errMsg, err)
 
             this.loading = false
           })
       },
       handleGuideNameClicked () {
-        this.dLog('跳转到向导的个人中心')
+        this.dLog('跳转到导游的个人中心')
         const url = `/${GUIDE_CENTER}`
         this.dLog('跳转', url)
         wx.switchTab({url})

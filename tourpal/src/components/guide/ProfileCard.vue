@@ -23,13 +23,13 @@
     data () {
       return {
         avatar: MOCK_USER_AVATAR_URL,
-        realName: '体验向导',
+        realName: '体验导游',
         guideId: '',
         componentName: 'ProfileCard'
       }
     },
     mounted () {
-      // 取得向导信息
+      // 取得导游信息
       const guide = wx.getStorageSync(GUIDE_INFO)
       this.guideId = wx.getStorageSync(GUIDE_ID)
 
@@ -42,12 +42,12 @@
           GuideApi.queryUserInfo(
             this.guideId,
             (res) => {
-              this.dLog('取得向导信息成功')
+              this.dLog('取得导游信息成功')
               this.setGuideInfo(res)
             },
             () => {
-              const errMsg = '取得向导信息失败'
-              this.showErrorRoast(errMsg)
+              const errMsg = '取得导游信息失败'
+              this.showErrorToast(errMsg)
             }
           )
         }
@@ -73,7 +73,7 @@
       dError (message, ...optionalParams) {
         console.error(this.componentName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息
@@ -89,7 +89,7 @@
         this.realName = guide.realName
         this.guideId = guide.id
 
-        // 存储更新向导信息
+        // 存储更新导游信息
         wx.setStorage({
           key: GUIDE_INFO,
           data: guide
@@ -98,7 +98,7 @@
       reLogin () {
         this.dLog('reLogin 方法调用')
 
-        // 取得向导ID失败
+        // 取得导游ID失败
         const url = `/${ROLE_SELECT}`
         this.dLog('跳转', url)
         wx.navigateTo({url})

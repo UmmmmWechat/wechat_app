@@ -90,7 +90,7 @@
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息
@@ -133,7 +133,7 @@
             })
           },
           (rej) => {
-            this.showErrorRoast('取得邀请列表失败', rej)
+            this.showErrorToast('取得邀请列表失败', rej)
             // this.loadingArray.splice(index, 1, false)
             this.refreshLoadingArray(index, false)
           }

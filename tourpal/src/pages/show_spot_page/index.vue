@@ -21,7 +21,7 @@
         spot: {}
       }
     },
-    mounted () {
+    beforeMount () {
       // 取得 Spot
       this.spot = wx.getStorageSync(CHECK_SPOT)
       if (!this.spot) {
@@ -29,7 +29,7 @@
         wx.navigateBack()
 
         // 未找到景点
-        this.showErrorRoast('粗错啦QWQ没找到你要的景点')
+        this.showErrorToast('粗错啦QWQ没找到你要的景点')
       }
     },
     methods: {
@@ -42,7 +42,7 @@
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息

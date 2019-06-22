@@ -61,9 +61,9 @@ export default {
 
               const message = suc.message
 
-              // 保存向导ID
+              // 保存导游ID
               wx.setStorageSync(constant.GUIDE_ID, suc.guideId)
-              this.dLog('保存向导ID成功')
+              this.dLog('保存导游ID成功')
 
               // 检查是否是 新的导游
               const isNewGuide = message === returnMessage.NOT_REGISTER
@@ -103,7 +103,7 @@ export default {
   },
 
   /**
-   * 新向导注册的方法
+   * 新导游注册的方法
    * @param {*} guide
    * @param {*} resolve
    * @param {*} reject
@@ -296,7 +296,7 @@ export default {
   },
 
   /**
-   * 修改向导信息的方法
+   * 修改导游信息的方法
    * @param {Object} guide
    * @param {*} resolve
    * @param {*} reject
@@ -304,7 +304,7 @@ export default {
   modifyUserInfo (guide, resolve, reject) {
     this.dLog('modify user info 方法', guide)
     if (httpRequest.isTestMode) {
-      console.log('mock 修改向导信息', guide)
+      console.log('mock 修改导游信息', guide)
       mockData.mockGuide[0].wechat = guide.wechat
       mockData.mockGuide[0].phone = guide.phone
       mockData.mockGuide[0].introduction = guide.introduction
@@ -338,7 +338,7 @@ export default {
   },
 
   /**
-   * 获取向导信息的方法
+   * 获取导游信息的方法
    * @param {*} id
    * @param {*} resolve
    * @param {*} reject

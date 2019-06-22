@@ -96,7 +96,7 @@
         // 跳回
         wx.navigateBack()
         // 显示提示信息
-        this.showErrorRoast(errMsg)
+        this.showErrorToast(errMsg)
 
         return
       }
@@ -111,7 +111,7 @@
       dError (message, ...optionalParams) {
         console.error(this.pageName, message, optionalParams)
       },
-      showErrorRoast (errMsg, ...fai) {
+      showErrorToast (errMsg, ...fai) {
         this.dError(errMsg, fai)
 
         // 输出提示信息

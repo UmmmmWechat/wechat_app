@@ -9,12 +9,14 @@
       <div id="body">
         <div>
           <span class="title-span">景点：</span>
-          <span class="link" @click="onSpotNameClicked">{{ spotName }}</span>
+          <span v-if="order.state === ongoing" class="link" @click="onSpotNameClicked">{{ spotName }}</span>
+          <span v-else>{{ spotName }}</span>
         </div>
 
         <div>
-          <span class="title-span">向导：</span>
-          <span class="link" @click="onGuideNameClicled">{{ guideName }}</span>
+          <span class="title-span">导游：</span>
+          <span v-if="order.state === ongoing" class="link" @click="onGuideNameClicled">{{ guideName }}</span>
+          <span v-else>{{ guideName }}</span>
         </div>
 
         <div><span class="title-span">邀请日期：</span>{{ computedCreatedDate }}</div>
@@ -132,22 +134,28 @@
         this.errorOccur = true
       }
 
-      commonApi.queryGuideById(
-        this.order.guideId,
-        (res) => {
-          this.guideName = res.realName
-          this.order.guide = res
-          if (!this.order.guide) {
-            onGetGuideFail(res)
-          }
-        },
-        onGetGuideFail
-      )
+      const onGetGuideSuc = (res) => {
+        this.guideName = res.realName
+        this.order.guide = res
+        if (!this.order.guide) {
+          onGetGuideFail(res)
+        }
+      };
 
       if (this.order.state === this.ongoing) {
-        const today = new Date().toLocaleDateString()
-        this.rateAble = today >= this.order.travelDate
-        this.rateAble = true
+        commonApi.queryGuideById(
+          this.order.guideId,
+          onGetGuideSuc,
+          onGetGuideFail
+        );
+        const today = Date.now();
+        this.rateAble = today >= new Date(this.order.travelDate).getTime()
+      } else {
+        commonApi.queryBasicGuideById(
+          this.order.guideId,
+          onGetGuideSuc,
+          onGetGuideFail
+        );
       }
     },
     methods: {
@@ -159,30 +167,17 @@
       },
       onSpotNameClicked (event) {
         this.dLog('onSpotNameClicked 方法响应', event)
-        wx.setStorage({
-          key: CHECK_SPOT,
-          data: this.order.spot,
-          success: (suc) => {
-            this.dLog('spot 保存成功', suc)
-
-            const url = `/${SHOW_SPOT_PAGE}`
-            this.dLog('跳转', url)
-            wx.navigateTo({url})
-          }
-        })
+        wx.setStorageSync(CHECK_SPOT, this.order.spot);
+        const url = `/${SHOW_SPOT_PAGE}`
+        this.dLog('跳转', url)
+        wx.navigateTo({url})
       },
       onGuideNameClicled (event) {
         this.dLog('onGuideNameClicled 方法响应', event)
-        wx.setStorage({
-          key: CHECK_GUIDE,
-          data: this.order.guide,
-          success: (suc) => {
-            this.dLog('guide 保存成功', suc)
-            const url = `/${SHOW_GUIDE_PAGE}`
-            this.dLog('跳转', url)
-            wx.navigateTo({url})
-          }
-        })
+        wx.setStorageSync(CHECK_GUIDE, this.order.guide);
+        const url = `/${SHOW_GUIDE_PAGE}`
+        this.dLog('跳转', url)
+        wx.navigateTo({url})
       },
       handleCancel () {
         wx.showModal({

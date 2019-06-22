@@ -26,7 +26,7 @@
     components: {DLoading, DNoMore, DTimeline},
     data () {
       return {
-        header: '向导履历',
+        header: '导游履历',
         events: [],
         guideId: '',
         loading: false,

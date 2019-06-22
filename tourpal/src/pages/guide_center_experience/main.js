@@ -6,7 +6,7 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '个人中心-向导履历',
+    navigationBarTitleText: '个人中心-导游履历',
     navigationBarTextStyle: 'white',
     navigationBarBackgroundColor: '#42b970'
   }
