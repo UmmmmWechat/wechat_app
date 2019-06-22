@@ -36,6 +36,27 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
       </div>
     </div>
 
+    <div id="btn-div">
+      <button
+        class="btn-wrapper"
+        size="mini"
+        @click="handleClearSearch">
+        清空搜索
+      </button>
+      <button
+        class="btn-wrapper"
+        size="mini"
+        @click="handleClearSelect">
+        清空所选
+      </button>
+      <button
+        size="mini"
+        class="btn-wrapper"
+        type="primary"
+        @click="handleSubmit">
+        确定选择
+      </button>
+    </div>
 
     <div id="result-list">
       <scroll-view
@@ -45,54 +66,34 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
         scroll-y
         :style="heightStyle"
         :scroll-top="scrollTop"
-        @scrolltolower="handleScrollToSearch">
-        <div>
-          <div
-            v-for="spot in spots"
-            :key="spot.id"
-            class="spot-item d-card">
+        @scrolltolower="handleGetMoreSpots">
+        <div
+          v-for="spot in spots"
+          :key="spot.id"
+          class="spot-item d-card">
+          <div>
             <div>
-              <div>
-                {{ spot.name }}
-              </div>
-              <div style="color: gray; font-size:0.8em;">
-                {{ spot.location.province + '-' + spot.location.city + '-' +spot.location.region }}
-              </div>
-              <div style="text-align:right; font-size: 0.8em;">
-                <a
-                  class="d-a"
-                  @click="handleSelectSpot(spot)">
-                  选择
-                </a>
-              </div>
+              {{ spot.name }}
+            </div>
+            <div style="color: gray; font-size:0.8em;">
+              {{ spot.location.province + '-' + spot.location.city }}
+            </div>
+            <div class="select-button-wrapper">
+              <button
+                class="btn-wrapper"
+                size="mini"
+                @click="handleSelectSpot(spot)">
+                选择
+              </button>
             </div>
           </div>
+        </div>
 
-          <div v-if="finishedLoading">
-            <d-loading :loading="loading"/>
-            <d-no-more :has-more="hasMore"/>
-            <!--TODO 不明-->
-            <!--<d-no-more :has-more="!hasMore || spots.length || loading || firstSearch"/>-->
-          </div>
+        <div v-if="finishedLoading">
+          <d-loading :loading="loading"/>
+          <d-no-more :has-more="hasMore"/>
         </div>
       </scroll-view>
-    </div>
-
-
-    <div id="btn-div">
-      <button
-        class="btn-wrapper"
-        size="mini"
-        @click="handleClearSearch">
-        清空
-      </button>
-      <button
-        size="mini"
-        class="btn-wrapper"
-        type="primary"
-        @click="handleSubmit">
-        确定
-      </button>
     </div>
   </div>
 </template>
@@ -176,8 +177,8 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
           this.selectedSpots = []
         }
       },
-      handleScrollToSearch (event) {
-        this.dLog('handleScrollToSearch 方法调用', event)
+      handleGetMoreSpots (event) {
+        this.dLog('handleGetMoreSpots 方法调用', event)
 
         if (this.loading) {
           this.dLog('加载中 return')
@@ -283,6 +284,12 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
           1
         )
       },
+      handleClearSelect () {
+        this.dLog('handleClearSelect 方法响应')
+
+        this.spots.push(...this.selectedSpots)
+        this.selectedSpots = [];
+      },
       handleSubmit () {
         this.dLog('handleSubmit 方法响应')
 
@@ -367,9 +374,20 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
     margin-bottom: 100px;
   }
 
+  .scroll {
+    height: 1200px;
+  }
+
   .spot-item {
     margin: 20px 0;
     padding: 20px;
+    border-bottom:thin solid rgba(0,0,0,0.1);
+  }
+
+  .select-button-wrapper {
+    text-align:right;
+    font-size: 0.8em;
+    margin-top: -2.8em;
   }
 
   .selected-item {
@@ -383,7 +401,9 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
     justify-content: flex-start;
     text-align: center;
 
-    font-size: 16px;
+    font-size: 30px;
+    height: 50px;
+    line-height: 50px;
   }
 
   #btn-div {
@@ -404,7 +424,7 @@ IMPORTANT!!!!!!!!! 请在其他页面 获得spots之后，将其存储清除，�
   }
 
   .spot-name-wrapper {
-    margin-right: 4px;
+    margin: 0 10px;
   }
 
   .btn-wrapper {

@@ -62,7 +62,8 @@
         touristIcon: touristIcon,
         TOURIST: "tourist",
         GUIDE: "guide",
-        selectedRole: ""
+        selectedRole: "",
+        isLoading: false
       }
     },
     methods: {
@@ -86,9 +87,11 @@
         this.selectedRole = role;
       },
       handleClickStart () {
-        switch (this.selectedRole) {
-          case this.GUIDE:
-            guideApi.logIn(
+        if (!this.isLoading) {
+          this.isLoading = true;
+          switch (this.selectedRole) {
+            case this.GUIDE:
+              guideApi.logIn(
                 (res) => {
                   // resolve
                   this.dLog('向导登录成功', res)
@@ -104,14 +107,17 @@
                     this.dLog('跳转', url)
                     wx.redirectTo({url})
                   }
+
+                  this.isLoading = false;
                 },
                 (fai) => {
                   this.showErrorToast('向导登录失败', fai)
+                  this.isLoading = false;
                 }
               )
-            break;
-          case this.TOURIST:
-            touristApi.logIn(
+              break;
+            case this.TOURIST:
+              touristApi.logIn(
                 (suc) => {
                   // resolve
                   this.dLog('游客登录成功', suc)
@@ -124,12 +130,19 @@
                       wx.setStorageSync(USER_TYPE, this.TOURIST)
                     }
                   })
+
+                  this.isLoading = false;
                 },
                 (fai) => {
                   this.showErrorToast('游客登录失败', fai)
+
+                  this.isLoading = false;
                 }
               )
-            break;
+              break;
+            default:
+              this.isLoading = false;
+          }
         }
       }
       // handleChooseTourist () {
