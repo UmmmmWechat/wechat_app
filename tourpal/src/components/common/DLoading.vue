@@ -1,6 +1,6 @@
 <!-- 加载中的波浪条组件 -->
 <template>
-  <div id="out" :style="{display:loading ? 'block' : 'none'}">
+  <div id="out" v-if="loading">
     <div class="item" id="rect1" :style="{backgroundColor: color}"></div>
     <div class="item" id="rect2" :style="{backgroundColor: color}"></div>
     <div class="item" id="rect3" :style="{backgroundColor: color}"></div>

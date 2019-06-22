@@ -2,7 +2,8 @@
 <template>
   <div
     id="no-more-item"
-    :style="{display: hasMore ? 'none' : 'block', color: color }">
+    v-if="!hasMore"
+    :style="{color: color}">
     已经加载全部啦~
   </div>
 </template>

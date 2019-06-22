@@ -11,6 +11,7 @@
       <d-input
         placeholder="用于实名登记检验"
         label="身份证号"
+        :type="'idcard'"
         @input="form.idCard = $event"/>
     </div>
 
@@ -38,6 +39,7 @@
       <d-input
         placeholder="用于游客联系"
         label="手机号"
+        :type="'number'"
         @input="form.phone = $event"/>
     </div>
 

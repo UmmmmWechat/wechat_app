@@ -28,7 +28,7 @@
           let sysInfo = wx.getSystemInfoSync()
           let windowHeight = sysInfo.windowHeight
           wx.setStorageSync(WINDOW_HEIGHT, windowHeight)
-          console.log(windowHeight)
+          console.log('windowHeight: ' + windowHeight)
         } catch (error) {
           console.log(error)
         }

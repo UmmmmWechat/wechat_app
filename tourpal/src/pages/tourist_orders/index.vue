@@ -1,12 +1,13 @@
 <template>
   <div>
-    <div id="search-wrapper" class="d-head">
+    <div id="search" class="d-head">
       <icon type="search" size="10" color="white"/>
       <div style="display:inline-block;width:90%;">
         <d-input
           placeholder="搜索邀请"
           confirm-type="search"
           :value="searchValue"
+          :placeholder-style="'color:rgba(255,255,255,0.9)'"
           @input="handleSearchInput"
           @on-focus="handleSearchFocus"
           @on-enter="handleResetSearch"/>
@@ -383,6 +384,11 @@
   .btn-wrapper {
     text-align: center;
     padding: 10px;
+  }
+
+  #search {
+    font-size: 0.8em;
+    margin-bottom: 20px;
   }
 
   .clear-btn {

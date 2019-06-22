@@ -11,9 +11,10 @@
     <div id="input-wrapper">
       <input
         id="d-input"
+        :type="type"
         :value="value"
         :placeholder="placeholder"
-        placeholder-style="color:rgba(0,0,0,0.3);"
+        :placeholder-style="placeholderStyle"
         @confirm="handleEnter"
         @input="handleInput"
         @focus="handleFocus"/>
@@ -24,9 +25,17 @@
 <script>
   export default {
     props: {
+      type: {
+        type: String,
+        default: 'text'
+      },
       placeholder: {
         type: String,
         default: ''
+      },
+      placeholderStyle: {
+        type: String,
+        default: 'color: rgba(0,0,0,0.3)'
       },
       value: {
         type: [String, Number]

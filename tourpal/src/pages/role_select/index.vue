@@ -10,9 +10,9 @@
         自由、可靠、免费的导游平台
       </div>
     </div>
-    <div class="divider"/>
+    <div class="divider" />
     <div class="card">
-      <div class="card-title">请选择一个角色</div>
+      <div class="card-title">请问您是</div>
       <div class="roles">
         <div class="role"
              v-bind:class="{'role-selected': selectedRole === GUIDE}"
@@ -200,20 +200,15 @@
     color: #464c5b;
   }
 
-  .title {
-
-  }
-
   .intro {
     font-size: 1.2em;
-    /*font-weight: bold;*/
   }
 
   .divider {
-    height: 1Px;
-    background-color: rgba(0,0,0,0.1);
-    width: 500px;
-    margin: 2em auto;
+    border-width: 0;
+    border-bottom: thin solid rgba(0,0,0,0.1);
+    width: calc(100vw - 3em);
+    margin: 1.5em;
   }
 
   .card {
@@ -222,6 +217,7 @@
 
   .card-title {
     color: #9ea7b4;
+    text-align: center;
   }
 
   .roles {
@@ -234,10 +230,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 1em;
+    margin: 1.5em;
     box-shadow: rgba(0,0,0,0.1) 0 0 10px;
     padding: 10px;
-    border: transparent 2px solid;
+    border: rgba(0,0,0,0.1) thin solid;
   }
 
   .role-selected {

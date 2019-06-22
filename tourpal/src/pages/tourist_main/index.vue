@@ -18,6 +18,7 @@
             placeholder="搜索景点"
             confirm-type="search"
             :value="searchValue"
+            :placeholder-style="'color:rgba(255,255,255,0.9)'"
             @input="handleSearchInput"
             @on-focus="handleSearchFocus"
             @on-enter="handleResetSearch"/>
@@ -42,8 +43,6 @@
       <div v-if="finishedLoading">
         <d-loading :loading="loading"/>
         <d-no-more :has-more="hasMore"/>
-        <!--TODO 不明-->
-        <!--<d-no-more :has-more="!hasMore || spots.length || loading"/>-->
       </div>
     </scroll-view>
 
@@ -84,8 +83,6 @@
         <div v-if="finishedLoading">
           <d-loading :loading="loading" :color="'white'"/>
           <d-no-more :has-more="searchHasMore" :color="'white'"/>
-          <!--TODO 不明-->
-          <!--<d-no-more :has-more="!searchHasMore || searchSpots.length || loading || firstSearch" :color="'white'"/>-->
         </div>
       </scroll-view>
     </section>
@@ -492,7 +489,6 @@
   }
 
   #search {
-    margin: 20px 0;
     font-size: 0.8em;
   }
 

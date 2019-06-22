@@ -40,7 +40,7 @@ export default {
       'pages/show_spot_page/main',
       'pages/show_guide_page/main',
 
-      '^pages/test/main',
+      'pages/test/main',
       'pages/z_test/main'
     ],
     window: {

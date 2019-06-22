@@ -38,27 +38,31 @@ export default {
 
           if (res.code) {
             // 发起网络请求
-            const onSuccess = (touristId) => {
-              // 成功的返回信息中包含 touristId
-              this.dLog('服务器端登录成功', touristId)
-
-              // 保存 游客ID
-              wx.setStorage({
-                key: constant.TOURIST_ID,
-                data: touristId,
-                success: () => {
-                  this.dLog('保存游客ID成功')
-                  resolve()
-                },
-                fail: () => {
-                  this.dLog('保存游客ID失败')
-                  reject()
-                }
-              })
-            }
             const onFail = (fai) => {
               this.dLog('服务器端登录失败', fai)
               reject()
+            }
+            const onSuccess = (res) => {
+              // 成功的返回信息中包含 touristId
+              this.dLog('服务器端登录成功', res)
+              const touristId = res.touristId;
+              if (touristId) {
+                // 保存 游客ID
+                wx.setStorage({
+                  key: constant.TOURIST_ID,
+                  data: touristId,
+                  success: () => {
+                    this.dLog('保存游客ID成功')
+                    resolve()
+                  },
+                  fail: () => {
+                    this.dLog('保存游客ID失败')
+                    reject()
+                  }
+                })
+              } else {
+                onFail(res);
+              }
             }
             httpRequest.dRequest(
               serverUrl.TOURIST_LOGIN, {

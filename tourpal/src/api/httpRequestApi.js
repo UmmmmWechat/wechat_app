@@ -1,4 +1,4 @@
-const BASE_URL = 'https://www.wenxiangdong.cn'
+const BASE_URL = 'http://106.14.178.184:3000'
 const POST = 'POST'
 const GET = 'GET'
 const dRequest = (url, data, method, onSuccess, onFail) => {

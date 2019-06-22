@@ -10,8 +10,6 @@ import calendarSelected from "../assets/image/tabbar/calendar-selected.png";
 import invitation from "../assets/image/tabbar/invitation.png";
 import invitationSelected from "../assets/image/tabbar/invitation_selected.png";
 
-console.log(home);
-
 export const TOURIST_HOME = {
   name: "tourist-main",
   label: "首页",
