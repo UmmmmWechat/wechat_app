@@ -5,6 +5,7 @@
     <Logo/>
     <div>
       <DRating v-bind:rating="3"/>
+      <DHot v-bind:hot="3000"/>
     </div>
 <!--    <DTabBar v-bind:tabs="tabs" v-bind:current="current"/>-->
 <!--    <GuideTabBar v-bind:current="guideCurrent"/>-->
@@ -21,9 +22,10 @@
   import TouristTabBar from "../../components/tourist/TouristTabBar";
   import DCalendar from "../../components/common/DCalendar";
   import DRating from "../../components/common/DRating";
+  import DHot from "../../components/common/DHot";
 
   export default {
-    components: {DCalendar, TouristTabBar, GuideTabBar, DTabBar, Logo, DDatePicker, DRating},
+    components: {DCalendar, TouristTabBar, GuideTabBar, DTabBar, Logo, DDatePicker, DRating, DHot},
     data () {
       return {
         tabs: [touristTabbarConfig.TOURIST_HOME, touristTabbarConfig.TOURIST_USER_CENTER],

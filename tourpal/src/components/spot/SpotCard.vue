@@ -17,7 +17,10 @@
     <div v-if="!mini" class="text-wrapper">
       <div class="text-item-wrapper">
         <span class="title-span">热度：</span>
-        <span>{{ spot.popularity }}</span>
+        <!-- <span>{{ spot.popularity }}</span> -->
+        <span>
+          <DHot v-bind:hot="spot.popularity"/>
+        </span>
       </div>
       <div class="text-item-wrapper">
         <span class="title-span">推荐指数：</span>
@@ -43,10 +46,12 @@
   import {D_SPOT_ID, D_SPOT_NAME} from '../../api/const/spotConst'
   import {SHOW_SPOT_GUIDE} from '../../pages/pages_url'
   import DRating from "../common/DRating"
+  import DHot from "../common/DHot"
 
   export default {
     components: {
-      DRating
+      DRating,
+      DHot
     },
     props: {
       mini: {
@@ -128,7 +133,7 @@
   }
 
   #btn-wrapper {
-    margin: -130px 0px 10px 10px;
+    margin: -50px 0px 10px 10px;
     padding: 40px;
     text-align: right;
   }
