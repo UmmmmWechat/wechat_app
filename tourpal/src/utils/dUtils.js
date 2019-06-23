@@ -33,7 +33,8 @@ export function formatDate (date) {
  * @returns {boolean}
  */
 export function validIdcard (code) {
-  if (code && code instanceof String) {
+  if (code) {
+    code = code.toString();
     const city = {
       11: '北京',
       12: '天津',
@@ -118,9 +119,13 @@ export function validIdcard (code) {
 }
 
 export function validTel (tel) {
-  return tel && tel instanceof String && (
-    /^(([0+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/.test(tel) ||
-    /^(\d{7,8})(-(\d{3,}))?$/.test(tel) ||
-    /^1([358]\d|4[57])\d{8}$/.test(tel)
-  );
+  if (tel) {
+    tel = tel.toString();
+    return /^(([0+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/.test(tel) ||
+      /^(\d{7,8})(-(\d{3,}))?$/.test(tel) ||
+      /^1([358]\d|4[57])\d{8}$/.test(tel)
+    ;
+  } else {
+    return false;
+  }
 }
