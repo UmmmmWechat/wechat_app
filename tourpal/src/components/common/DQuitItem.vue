@@ -26,15 +26,15 @@
   }
 
   .quit-item {
-    position: fixed;
     width: 100%;
-    bottom: 0;
-    padding: 30px 0;
+    padding: 30px 20px;
+
     color: #ff7f74;
     background-color: transparent;
-    text-align: center;
 
     border: 1px solid;
     border-color: rgba(0, 0, 0, 0.1) transparent;
+
+    margin-top: 50px;
   }
 </style>

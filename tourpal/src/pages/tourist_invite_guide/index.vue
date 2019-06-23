@@ -24,7 +24,7 @@
 
         <d-time-picker
           label="旅游时间"
-          :prompt="travelTime || '可预约早晚八点之间的时间'"
+          :prompt="travelTime || '预约时间'"
           @on-change="handleTimeChanged"
         />
 

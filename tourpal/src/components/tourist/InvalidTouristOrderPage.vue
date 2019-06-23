@@ -109,8 +109,9 @@
         }
 
         // 加载
-        // this.loadingArray[index] = true
-        this.loadingArray.splice(index, 1, true)
+        // this.loadingArray.splice(index, 1, true)
+        // this.loadingArray = [...this.loadingArray]
+        this.refreshLoadingArray(index, true)
 
         // 保留下上次最后的index
         let lastIndex = this.ordersArray[index].length
@@ -123,17 +124,28 @@
           (res) => {
             this.dLog('取得邀请列表成功', res)
 
-            this.hasMoreArray.splice(index, 1, res.hasMoreOrder)
-            this.loadingArray.splice(index, 1, false)
+            // this.hasMoreArray.splice(index, 1, res.hasMoreOrder)
+            this.refreshHasMoreArray(index, res.hasMoreOrder)
+            // this.loadingArray.splice(index, 1, false)
+            this.refreshLoadingArray(index, false)
             res.orderList.forEach((order) => {
               this.ordersArray[index].push(order)
             })
           },
           (rej) => {
             this.showErrorRoast('取得邀请列表失败', rej)
-            this.loadingArray.splice(index, 1, false)
+            // this.loadingArray.splice(index, 1, false)
+            this.refreshLoadingArray(index, false)
           }
         )
+      },
+      refreshLoadingArray (idx, val) {
+        this.loadingArray.splice(idx, 1, val)
+        this.loadingArray = [...this.loadingArray]
+      },
+      refreshHasMoreArray (idx, val) {
+        this.hasMoreArray.splice(idx, 1, val)
+        this.hasMoreArray = [...this.hasMoreArray]
       },
       handleChangeType (event) {
         this.current = event.target.value
