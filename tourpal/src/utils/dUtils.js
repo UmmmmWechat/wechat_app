@@ -77,7 +77,7 @@ export function validIdcard (code) {
     let pass = true
 
     // 验证身份证格式（6个地区编码，8位出生日期，3位顺序号，1位校验位）
-    if (!code || !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(code)) {
+    if (!code || !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(code)) {
       tip = '身份证号格式错误'
       pass = false
     } else if (!city[code.substr(0, 2)]) {
