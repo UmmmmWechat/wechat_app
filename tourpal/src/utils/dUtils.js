@@ -100,7 +100,7 @@ export function validIdcard (code) {
           wi = factor[i]
           sum += ai * wi
         }
-        if (parity[sum % 11] !== code[17]) {
+        if (parity[sum % 11] != code[17]) {
           tip = '校验位错误'
           pass = false
         }
