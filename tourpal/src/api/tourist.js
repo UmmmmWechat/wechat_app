@@ -76,6 +76,7 @@ export default {
         },
         fail: (fai) => {
           this.dLog('登录失败！', fai)
+          reject()
         }
       })
     }

@@ -10,6 +10,7 @@
             placeholder="搜索导游"
             confirm-type="search"
             :value="searchValue"
+            :placeholder-style="'color:rgba(255,255,255,0.9)'"
             @input="handleSearchInput"
             @on-focus="handleSearchFocus"
             @on-enter="handleResetSearch"/>
