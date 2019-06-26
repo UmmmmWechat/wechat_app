@@ -123,7 +123,7 @@ export function validTel (tel) {
     tel = tel.toString();
     return /^(([0+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/.test(tel) ||
       /^(\d{7,8})(-(\d{3,}))?$/.test(tel) ||
-      /^1([358]\d|4[57])\d{8}$/.test(tel)
+      /^1([38]\d|4[579]|5[012356789]|66|7[1235678]|9[189])\d{8}$/.test(tel)
     ;
   } else {
     return false;
