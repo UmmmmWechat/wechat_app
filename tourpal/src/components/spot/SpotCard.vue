@@ -10,11 +10,9 @@
       <div id="title-div">
         {{ spot.name }}
       </div>
-      <div v-if="!mini" id="content-div">
-        {{ spot.introduction }}
-      </div>
     </div>
-    <div v-if="!mini" class="text-wrapper">
+
+    <div v-if="!mini" id="hotAndRec" class="text-wrapper">
       <div class="text-item-wrapper">
         <span class="title-span">热度：</span>
         <!-- <span>{{ spot.popularity }}</span> -->
@@ -30,6 +28,16 @@
         </span>
       </div>
     </div>
+
+    <div class="text-wrapper">
+      <div v-if="!mini&&!brandFold" id="content-div">
+        {{ spot.introduction }}
+      </div>
+      <div @click="changeFoldState">
+        <span id="brandFold">{{brandFold?'详情':'收起'}}</span>
+      </div>
+    </div>
+
     <div
       v-if="!noAction"
       id="btn-wrapper">
@@ -49,6 +57,11 @@
   import DHot from "../common/DHot"
 
   export default {
+    // data () {
+    //   return {
+    //     brandFold: false
+    //   }
+    // },
     components: {
       DRating,
       DHot
@@ -65,6 +78,10 @@
       noAction: {
         type: Boolean,
         default: false
+      },
+      brandFold: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {
@@ -93,9 +110,13 @@
             })
           }
         })
+      },
+      changeFoldState () {
+        this.brandFold = !this.brandFold
       }
     }
   }
+
 </script>
 
 <style scoped>
@@ -114,9 +135,21 @@
     height: 500px;
   }
 
+  #brandFold{
+    float: left;
+    font-size: medium;
+    margin-top: 20px;
+    color:#42b970;
+  }
+
   .text-wrapper {
-    padding: 30px 40px;
+    padding: 20px 40px;
     background-color: #fff;
+  }
+
+  #hotAndRec{
+    margin-top: -40px;
+    padding-bottom: 10px;
   }
 
   #title-div {
@@ -130,11 +163,12 @@
   #content-div {
     text-align: justify;
     color: gray;
+    font-size: medium;
   }
 
   #btn-wrapper {
-    margin: -50px 0px 10px 10px;
-    padding: 40px;
+    margin: 0px 0px 10px 10px;
+    padding: 0px 40px 40px 40px;
     text-align: right;
   }
 
