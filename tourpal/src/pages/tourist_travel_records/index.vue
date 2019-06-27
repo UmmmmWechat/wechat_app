@@ -26,6 +26,7 @@
   import DTimeline from '../../components/common/DTimeline'
   import {WINDOW_HEIGHT} from '../../api/const/commonConst'
   import OrderState from '../../api/const/OrderState'
+import { TOURIST_ID } from '../../api/const/touristConst';
 
   export default {
     components: {
