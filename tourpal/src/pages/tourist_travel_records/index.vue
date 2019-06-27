@@ -55,8 +55,8 @@
       this.scrollHeight = wx.getStorageSync(WINDOW_HEIGHT)
       console.log('height', this.scrollHeight)
       // 获取touristId参数
-      // this.touristId = wx.getStorageSync(TOURIST_ID)
-      this.touristId = 1
+      this.touristId = wx.getStorageSync(TOURIST_ID)
+      // this.touristId = 1
       if (!this.touristId) {
         // 跳回
         wx.navigateBack()
